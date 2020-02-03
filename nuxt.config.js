@@ -1,5 +1,3 @@
-import colors from 'vuetify/es5/util/colors'
-
 export default {
   mode: 'spa',
   /*
@@ -26,18 +24,20 @@ export default {
   /*
    ** Global CSS
    */
-  css: [],
+  css: ['~/assets/scss/style.scss'],
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [],
+  // Vuetify is probably useless here and as a plugin
+  plugins: ['~plugins/vuetify.js', '~plugins/chartist.js'],
   /*
    ** Nuxt.js dev-modules
    */
   buildModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
     '@nuxtjs/eslint-module',
-    '@nuxtjs/vuetify'
+    '@nuxtjs/vuetify',
+    '@nuxtjs/moment'
   ],
   /*
    ** Nuxt.js modules
@@ -46,6 +46,16 @@ export default {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios'
   ],
+  /*
+   *  Global App-wide variables
+   *
+   */
+  env: {
+    config: {
+      apiUrl: 'https://v3.ubiqscan.io',
+      pollData: 30000 // interval to poll api, in ms
+    }
+  },
   /*
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
@@ -56,21 +66,9 @@ export default {
    ** https://github.com/nuxt-community/vuetify-module
    */
   vuetify: {
-    customVariables: ['~/assets/variables.scss'],
-    theme: {
-      dark: true,
-      themes: {
-        dark: {
-          primary: colors.blue.darken2,
-          accent: colors.grey.darken3,
-          secondary: colors.amber.darken3,
-          info: colors.teal.lighten1,
-          warning: colors.amber.base,
-          error: colors.deepOrange.accent4,
-          success: colors.green.accent3
-        }
-      }
-    }
+    treeShake: true,
+    customVariables: ['~/assets/scss/style.scss'],
+    optionsPath: '~plugins/vuetify.js'
   },
   /*
    ** Build configuration

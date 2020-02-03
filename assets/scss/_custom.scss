@@ -1,0 +1,442 @@
+html {
+  overflow: hidden;
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  overflow: auto;
+}
+
+.v-input__append-outer {
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 500;
+}
+
+//.v-application {
+//  font-family: $body-font-family, sans-serif !important;
+//  .title { // To pin point specific classes of some components
+//    font-family: $body-font-family, sans-serif !important;
+//  }
+//}
+
+//Override rally preset background
+//.theme--dark .v-application {
+//  background: #222;
+//}
+//.theme--dark .v-card {
+//  background-color: #111;
+//}
+
+//.bg-dark {
+//  background-color: #111 !important;
+//}
+//
+//.btn-secondary {
+//  color: #fff;
+//  background-color: #333;
+//  border-color: #333;
+//}
+//
+//
+//a {
+//  color: $highlight;
+//}
+//
+//a:hover {
+//  color: darken($highlight, 10%);
+//  text-decoration: none;
+//}
+//
+//.body {
+//  padding-top: 65px;
+//  min-height: calc(100vh - 228px); // view height - footer height
+//}
+//.form-inline .form-control {
+//  @media screen and (max-width: $break-small) {
+//    width: 100px;
+//  }
+//  @media screen and (min-width: $break-large) {
+//    width: 400px;
+//  }
+//}
+//
+.footer {
+  margin-top: 20px;
+  background-color: black;
+  color: $text1;
+  -webkit-box-shadow:$box-shadow1;
+  -moz-box-shadow:$box-shadow1;
+  box-shadow: $box-shadow1;
+}
+
+footer a {
+  color: $text1 !important;
+}
+
+footer a:hover {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+//
+//// cards
+//.card-header {
+//
+//  margin: -20px 15px 0;
+//  border-radius: 3px;
+//  padding: 15px;
+//  background-color: #111;
+//  color: rgba(255, 255, 255, 0.5);
+//  -webkit-box-shadow:0px 1px 4px 0px rgba(0, 0, 0, 0.14);
+//  -moz-box-shadow:0px 1px 4px 0px rgba(0, 0, 0, 0.14);
+//  box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.14);
+//
+//  @at-root{
+//    ul#{&}{
+//        margin: 0;
+//    }
+//  }
+//}
+//
+//.card {
+//  background-color: #333;
+//  border-radius: 3px;
+//  margin-top:10px;
+//  color: $text1;
+//  -webkit-box-shadow:0px 1px 4px 0px rgba(0, 0, 0, 0.14);
+//  -moz-box-shadow:0px 1px 4px 0px rgba(0, 0, 0, 0.14);
+//  box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.14);
+//}
+//
+//.card-dark {
+//  background-color: $grey3;
+//  color: $text1;
+//  margin-top: 0;
+//}
+//
+//.card-home .card-body {
+//  max-height:532px;
+//  overflow-y:auto;
+//}
+//
+//.top-notification {
+//  margin-top: 56px;
+//  border-radius: 3px;
+//  .notification-content {
+//    font: 14px "Courier New";
+//    font-weight: 400;
+//  }
+//}
+//
+//// tables
+//
+//.table {
+//  margin-bottom: 0px;
+//  border-radius: 3px;
+//}
+//
+//.table thead th {
+//  border-bottom: none;
+//  border-top: none;
+//  color: rgba(255,255,255,0.5);
+//}
+//
+//.table tbody tr:hover {
+//  background-color: $grey2;
+//  color: $text2;
+//  -webkit-box-shadow: $box-shadow2;
+//  -moz-box-shadow: $box-shadow2;
+//  box-shadow: $box-shadow2;
+//}
+//
+//.table tbody tr:hover td a {
+//  color: $text1;
+//}
+//
+//.table tbody tr.b-table-details:hover {
+//  background-color: inherit;
+//}
+//
+//.table td {
+//  vertical-align: middle;
+//  color: $text1;
+//}
+//
+//.table td {
+//  border-top: 1px solid $grey2;
+//}
+//
+//// pagination
+//
+//.btn-secondary {
+//  border-radius: 3px;
+//  color: $text1;
+//  background-color: $grey3;
+//  border-color: $grey3;
+//  -webkit-box-shadow:$box-shadow1;
+//  -moz-box-shadow:$box-shadow1;
+//  box-shadow: $box-shadow1;
+//}
+//
+//.btn-secondary:hover {
+//  background-color: $grey3;
+//  border-color: $highlight;
+//  color: $text1;
+//}
+//
+//page-item, .pagination-datatables li, .pagination li {
+//  margin-right: 4px;
+//  -webkit-box-shadow:$box-shadow1;
+//  -moz-box-shadow:$box-shadow1;
+//  box-shadow: $box-shadow1;
+//}
+//
+//.page-link, .page-item.disabled .page-link {
+//  border-radius: 3px;
+//  color: $text1;
+//  background-color: $grey3;
+//  border-color: $grey3;
+//}
+//
+//.page-link:hover {
+//  background-color: $grey3;
+//  border-color: $highlight;
+//  color: $text1;
+//}
+//
+//.page-link:focus {
+//  background-color: $grey3;
+//  border-color: $highlight;
+//  box-shadow: none;
+//}
+//
+//.page-link.btn-primary {
+//  color: $text2;
+//  background-color: $highlight !important;
+//  border-color: $highlight !important;
+//}
+//
+//
+//// breadcrumb
+//.breadcrumb {
+//  border-radius: 3px;
+//  color: $text1;
+//  background-color: $grey3;
+//  border-color: $grey3;
+//  -webkit-box-shadow:$box-shadow1;
+//  -moz-box-shadow:$box-shadow1;
+//  box-shadow: $box-shadow1;
+//}
+//
+//.btn-breadcrumb {
+//  top: 7px;
+//  position: absolute;
+//  right: 25px;
+//  padding: 0;
+//  border: none;
+//  -webkit-box-shadow:none;
+//  -moz-box-shadow:none;
+//  box-shadow: none;
+//}
+//.btn-breadcrumb:hover {
+//  color: $highlight;
+//}
+//
+//.btn-breadcrumb:focus {
+//  border: none;
+//  color: $text1;
+//  -webkit-box-shadow:none;
+//  -moz-box-shadow:none;
+//  box-shadow: none;
+//}
+//
+//.block-card {
+//  padding: 15px;
+//}
+//
+//.card-row {
+//  margin-bottom: 10px;
+//  color: $text1;
+//}
+//
+//// social
+//.social {
+//  list-style-type: none;
+//  padding: 0;
+//}
+//
+//.social>li {
+//  margin-bottom: 6px;
+//}
+//
+//.social>li>a>span {
+//  width: 15px;
+//}
+//
+//.card-input-data {
+//  background-color: $grey2;
+//}
+//
+//pre {
+//  color: $text1;
+//}
+//
+//.input-dropdown {
+//  margin-top:5px;
+//}
+//
+//.input-dropdown>button {
+//  background-color: $grey2;
+//}
+//
+//.tx-badge {
+//  width: 30px;
+//  text-align: center;
+//}
+//
+//.tab-table-card {
+//  border-radius: 0 0 3px 3px;
+//  margin-top: 1px;
+//  color: $text1;
+//}
+//
+//.tav-card {
+//  border-radius: 0 0 3px 3px;
+//  margin-top: 0px;
+//}
+//
+//.nav-tabs>li.nav-item>.nav-link.active {
+//  background-color: $grey3;
+//  border-color: $grey3;
+//  color: #fff;
+//}
+//
+//.nav-item .nav-link {
+//  color: $text1 !important;
+//}
+//
+//.nav-item .nav-link:hover {
+//  color: rgba(255, 255, 255, 0.75) !important;
+//}
+//
+//ul.nav-tabs {
+//  border-bottom: 1px solid $grey3;
+//}
+//
+//.account-txn-tabs {
+//  margin-top: 15px;
+//}
+//
+//hr {
+//  margin: 5px 0px;
+//}
+//
+//// dropdowns
+//.dropdown-menu {
+//  background-color: $grey2;
+//}
+//
+//.dropdown-item {
+//  color: $text1;
+//}
+//
+//.dropdown-item>span {
+//  width: 20px;
+//  text-align: center;
+//}
+//
+//.dropdown-item.active, .dropdown-item.active:hover, .dropdown-item:active {
+//  background-color: $highlight;
+//  color: #fff;
+//}
+//
+//.dropdown-item:hover, .dropdown-item:focus {
+//  color: $text1;
+//  background-color: $grey3;
+//  border-color: $highlight;
+//  outline: none;
+//}
+//
+//.dropdown-divider {
+//  border-top: 1px solid $text1;
+//}
+//
+//// scrollbars
+//
+//::-webkit-scrollbar
+//{
+//  width: 4px;  /* for vertical scrollbars */
+//  height: 4px; /* for horizontal scrollbars */
+//  border-radius: 3px;
+//}
+//
+//::-webkit-scrollbar-track
+//{
+//  background: $grey2;
+//}
+//
+//::-webkit-scrollbar-thumb
+//{
+//  background: $highlight;
+//  border-radius: 3px;
+//}
+//
+//// list group
+//
+//.list-group-item {
+//  background-color: #222;
+//}
+//
+//// leaflet controls
+//
+//.leaflet-bar a {
+//  background-color: #222 !important;
+//  border: 0px !important;
+//  color: #00ea90 !important;
+//}
+//
+//.leaflet-container .leaflet-control-attribution {
+//    background: #fff;
+//    background-color: #222 !important;
+//}
+//.leaflet-container a {
+//    color: #00ea90 !important;
+//}
+//
+//.nested-col-grid {
+//  display: inline-grid;
+//  grid-template-columns: 1fr 1fr;
+//  grid-template-rows: auto;
+//  grid-column-gap: 5px;
+//}
+//
+//.nested-row-grid {
+//  display: inline-grid;
+//  grid-template-rows: auto auto;
+//  justify-items: center;
+//  align-items: center;
+//}
+//
+//.code {
+//  font: 12px "Courier New", Helvetica, Arial, sans-serif;
+//}
+//
+//.modal-content {
+//  background-color: #333;
+//  color: #00ea90;
+//  & .modal-header, & .modal-footer {
+//    border-color: #272727;
+//  }
+//}
+//
+//.form-control {
+//  background-color: #333;
+//  border-color: #272727;
+//  &:focus {
+//    background-color: #1d1d1d;
+//    border: 0;
+//    box-shadow: unset;
+//  }
+//}

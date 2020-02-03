@@ -1,0 +1,59 @@
+// colors
+
+$ubiq-green:              #00ea90 !default; // ubiq green
+
+//$highlight:                $ubiq-green;
+
+$grey1:                    #111 !default;
+$grey2:                    #222 !default;
+$grey3:                    #333 !default;
+$grey4:                    #444 !default;
+
+$text1:                    rgba(255, 255, 255, 0.5) !default;
+$text2:                    #fff !default;
+$code:                     #ccc !default;
+
+$box-shadow1:              0px 1px 4px 0px rgba(0, 0, 0, 0.14);
+$box-shadow2:              0px 1px 4px 0px rgba(0, 0, 0, 0.24);
+$box-shadow3:              0px 1px 4px 0px rgba(0, 0, 0, 0.5);
+
+// @media
+$break-small:              320px;
+$break-large:              1200px;
+
+//------------------------------------//
+//    Vuetify rally preset override   //
+//------------------------------------//
+
+$material-dark: ( background: #222, cards: #111);
+$body-font-family: ("Courier New", Helvetica, Arial, sans-serif);
+$heading-font-family: ("Courier New", Helvetica, Arial, sans-serif);
+
+$headings: (
+      'h1': ( weight: medium ),
+      'h2': ( weight: medium ),
+      'h3': ( weight: medium ),
+      'h4': ( weight: medium ),
+      'h5': ( weight: medium ),
+      'h6': ( weight: medium ),
+    );
+
+
+//------------------------------------//
+//     Chartist variables override    //
+//------------------------------------//
+
+$ct-grid-color: rgb(165, 165, 165) !default;
+$ct-grid-dasharray: 0px !default;
+$ct-grid-width: 0px !default;
+$ct-grid-background-fill: none !default;
+
+// Text styles for labels
+$ct-text-color: rgb(165, 165, 165) !default;
+$ct-text-size: 0.75rem !default;
+$ct-text-align: flex-start !default;
+$ct-text-justify: flex-start !default;
+$ct-text-line-height: 1;
+
+
+

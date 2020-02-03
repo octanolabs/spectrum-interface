@@ -1,75 +1,268 @@
 <template>
-  <v-layout column justify-center align-center>
-    <v-flex xs12 sm8 md6>
-      <div class="text-center">
-        <logo />
-        <vuetify-logo />
-      </div>
-      <v-card>
-        <v-card-title class="headline">
-          Welcome to the Vuetify + Nuxt.js template
-        </v-card-title>
-        <v-card-text>
-          <p>
-            Vuetify is a progressive Material Design component framework for
-            Vue.js. It was designed to empower developers to create amazing
-            applications.
-          </p>
-          <p>
-            For more information on Vuetify, check out the
-            <a href="https://vuetifyjs.com" target="_blank"> documentation </a>.
-          </p>
-          <p>
-            If you have questions, please join the official
-            <a href="https://chat.vuetifyjs.com/" target="_blank" title="chat">
-              discord </a
-            >.
-          </p>
-          <p>
-            Find a bug? Report it on the github
-            <a
-              href="https://github.com/vuetifyjs/vuetify/issues"
-              target="_blank"
-              title="contribute"
-            >
-              issue board </a
-            >.
-          </p>
-          <p>
-            Thank you for developing with Vuetify and I look forward to bringing
-            more exciting features in the future.
-          </p>
-          <div class="text-xs-right">
-            <em><small>&mdash; John Leider</small></em>
-          </div>
-          <hr class="my-3" />
-          <a href="https://nuxtjs.org/" target="_blank">
-            Nuxt Documentation
-          </a>
-          <br />
-          <a href="https://github.com/nuxt/nuxt.js" target="_blank">
-            Nuxt GitHub
-          </a>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn color="primary" nuxt to="/inspire">
-            Continue
-          </v-btn>
-        </v-card-actions>
+  <div class="page-grid">
+    <v-card dark class="stats">
+      <v-row>
+        <v-col cols="12">
+          <v-card-title>
+            <img
+              src="../assets/logo-circle.svg"
+              width="50"
+              height="50"
+              style="margin-top:-20px;"
+            />
+            <br />
+            <span style="display:inline-block; margin-left: 10px">
+              <small>
+                MARKET CAP OF ${{ marketcap }} MILLION
+                <br />
+                ${{ priceUSD }} @ {{ priceBTC }} BTC/UBQ
+              </small>
+            </span>
+          </v-card-title>
+        </v-col>
+        <v-col cols="12">
+          <v-card-text align="bottom">
+            <v-row style="padding:15px 15px 0 15px">
+              <div>
+                <h2 style="margin-bottom:0px;">LAST BLOCK</h2>
+                <h4>{{ latestBlock }} ({{ summary.blocktime }}s)</h4>
+              </div>
+              <div class="text-right mr-0 ml-auto">
+                <h2 style="margin-bottom:0px;">TRANSACTIONS</h2>
+                <h4>{{ summary.txnCount }}</h4>
+              </div>
+            </v-row>
+            <v-row style="padding:0px 15px">
+              <div>
+                <h3 style="margin-bottom:0px;">Hash Rate</h3>
+                <h4>{{ summary.hashrate }} GH/s</h4>
+              </div>
+              <div class="text-right mr-0 ml-auto">
+                <h3 style="margin-bottom:0px;">Network Difficulty</h3>
+                <h4>{{ summary.difficulty }} TH</h4>
+              </div>
+            </v-row>
+          </v-card-text>
+        </v-col>
+      </v-row>
+    </v-card>
+    <v-card dark class="chart">
+      <v-card-title> <h6>14 day Ubiq transaction history</h6> </v-card-title>
+      <v-card-text>
+        <LineChart :chart-data="chartData" max-height="200px" />
+      </v-card-text>
+    </v-card>
+    <div class="blocks">
+      <v-card class="card-home">
+        <strong slot="header">Blocks</strong>
+        <div v-for="(item, index) in summary.blocks" :key="index">
+          <PreviewBlock :info="item" />
+          <hr style="margin:5px 0 3px 0;" />
+        </div>
       </v-card>
-    </v-flex>
-  </v-layout>
+    </div>
+    <div class="txns">
+      <v-card class="card-home">
+        <strong slot="header">Transactions</strong>
+        <div v-for="(item, index) in summary.txns" :key="index">
+          <PreviewTxn :info="item" />
+        </div>
+      </v-card>
+    </div>
+
+    <!--    <v-row justify-md="center" style="max-height: 400px">-->
+    <!--      <v-col md="5">-->
+    <!--        <v-card dark>-->
+    <!--          <v-row>-->
+    <!--            <v-col cols="12">-->
+    <!--              <v-card-title>-->
+    <!--                <img-->
+    <!--                  src="../assets/logo-circle.svg"-->
+    <!--                  width="50"-->
+    <!--                  height="50"-->
+    <!--                  style="margin-top:-20px;"-->
+    <!--                />-->
+    <!--                <br />-->
+    <!--                <span style="display:inline-block; margin-left: 10px">-->
+    <!--                  <small>-->
+    <!--                    MARKET CAP OF ${{ marketcap }} MILLION-->
+    <!--                    <br />-->
+    <!--                    ${{ priceUSD }} @ {{ priceBTC }} BTC/UBQ-->
+    <!--                  </small>-->
+    <!--                </span>-->
+    <!--              </v-card-title>-->
+    <!--            </v-col>-->
+    <!--            <v-col cols="12">-->
+    <!--              <v-card-text align="bottom">-->
+    <!--                <v-row style="padding:15px 15px 0 15px">-->
+    <!--                  <div>-->
+    <!--                    <h2 style="margin-bottom:0px;">LAST BLOCK</h2>-->
+    <!--                    <h4>{{ latestBlock }} ({{ summary.blocktime }}s)</h4>-->
+    <!--                  </div>-->
+    <!--                  <div class="text-right mr-0 ml-auto">-->
+    <!--                    <h2 style="margin-bottom:0px;">TRANSACTIONS</h2>-->
+    <!--                    <h4>{{ summary.txnCount }}</h4>-->
+    <!--                  </div>-->
+    <!--                </v-row>-->
+    <!--                <v-row style="padding:0px 15px">-->
+    <!--                  <div>-->
+    <!--                    <h3 style="margin-bottom:0px;">Hash Rate</h3>-->
+    <!--                    <h4>{{ summary.hashrate }} GH/s</h4>-->
+    <!--                  </div>-->
+    <!--                  <div class="text-right mr-0 ml-auto">-->
+    <!--                    <h3 style="margin-bottom:0px;">Network Difficulty</h3>-->
+    <!--                    <h4>{{ summary.difficulty }} TH</h4>-->
+    <!--                  </div>-->
+    <!--                </v-row>-->
+    <!--              </v-card-text>-->
+    <!--            </v-col>-->
+    <!--          </v-row>-->
+    <!--        </v-card>-->
+    <!--      </v-col>-->
+    <!--      <v-col md="5">-->
+    <!--        <v-card class="text-center card-dark">-->
+    <!--          <h6>14 day Ubiq transaction history</h6>-->
+    <!--          <LineChart :chart-data="chartData" options="{height:'50%'}" />-->
+    <!--        </v-card>-->
+    <!--      </v-col>-->
+    <!--    </v-row>-->
+    <!--    <v-row justify-md="center" style="margin-top:20px;">-->
+    <!--      <v-col md="5" class="d-none d-md-block">-->
+    <!--        <v-card class="card-home">-->
+    <!--          <strong slot="header">Blocks</strong>-->
+    <!--          <div v-for="(item, index) in summary.blocks" :key="index">-->
+    <!--            <PreviewBlock :info="item" />-->
+    <!--            <hr style="margin:5px 0 3px 0;" />-->
+    <!--          </div>-->
+    <!--        </v-card>-->
+    <!--      </v-col>-->
+    <!--      <v-col md="5" class="d-none d-md-block">-->
+    <!--        <v-card class="card-home">-->
+    <!--          <strong slot="header">Transactions</strong>-->
+    <!--          <div v-for="(item, index) in summary.txns" :key="index">-->
+    <!--            <PreviewTxn :info="item" />-->
+    <!--          </div>-->
+    <!--        </v-card>-->
+    <!--      </v-col>-->
+    <!--    </v-row>-->
+  </div>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
-import VuetifyLogo from '~/components/VuetifyLogo.vue'
+import LineChart from '../components/charts/Line'
+import common from '../scripts/common'
+import PreviewTxn from '../components/PreviewTxn.vue'
+import PreviewBlock from '../components/PreviewBlock.vue'
 
 export default {
   components: {
-    Logo,
-    VuetifyLogo
+    LineChart,
+    PreviewTxn,
+    PreviewBlock
+  },
+  data() {
+    return {
+      errors: [],
+      chartOptions: {
+        scales: {
+          xAxes: [
+            {
+              display: false
+            }
+          ],
+          yAxes: [
+            {
+              ticks: {
+                min: 0
+              },
+              fontColor: 'rgba(255,255,255,0.5)'
+            }
+          ]
+        },
+        legend: {
+          display: false
+        },
+        responsive: true,
+        maintainAspectRatio: false
+      }
+    }
+  },
+  computed: {
+    stats() {
+      return this.$store.state.stats
+    },
+    summary() {
+      return this.$store.state.summary
+    },
+    latestBlock() {
+      return this.stats.latestBlock.number
+    },
+    priceUSD() {
+      return parseFloat(this.stats.price.usd).toFixed(4)
+    },
+    priceBTC() {
+      return this.stats.price.btc
+    },
+    marketcap() {
+      return (
+        common.mulFiat(
+          common.fromWei(this.stats.supply),
+          this.stats.price.usd,
+          2
+        ) / 1000000
+      ).toFixed(2)
+    },
+    chartData() {
+      return {
+        labels: this.stats.txnCounts.labels.slice(-14),
+        series: [
+          {
+            data: this.stats.txnCounts.data.slice(-14)
+          }
+        ]
+      }
+    }
+  },
+  fetch({ store }) {
+    store.dispatch('fetchIndexState')
+    store.dispatch('fetchChainSummary')
+  },
+  created() {
+    const self = this
+    this.loop = setInterval(function() {
+      self.now = self.$moment
+      self.$store.dispatch('fetchIndexState')
+      self.$store.dispatch('fetchChainSummary')
+    }, process.env.config.pollData)
   }
 }
 </script>
+
+<style>
+.page-grid {
+  display: grid;
+  grid-template-columns: 0.2fr 1fr 1fr 0.2fr;
+  grid-template-rows: 0.25fr 1fr;
+  width: 100%;
+  grid-gap: 20px;
+
+  /*grid-template-rows: 30px 40% 40% 30px;*/
+  grid-template-areas:
+    '. stats chart .'
+    '. blocks txns .';
+}
+
+.stats {
+  grid-area: stats;
+}
+.chart {
+  grid-area: chart;
+  height: 100%;
+}
+.blocks {
+  grid-area: blocks;
+}
+.txns {
+  grid-area: txns;
+}
+</style>
