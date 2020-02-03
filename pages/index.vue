@@ -242,7 +242,7 @@ export default {
 .page-grid {
   display: grid;
   grid-template-columns: 0.2fr 1fr 1fr 0.2fr;
-  grid-template-rows: 0.25fr 1fr;
+  grid-template-rows: auto 1fr;
   width: 100%;
   grid-gap: 20px;
 

@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    <v-col cols="2">
+    <v-col cols="4">
       <v-card>
         <v-card-text>
           <div class="d-flex flex-column">

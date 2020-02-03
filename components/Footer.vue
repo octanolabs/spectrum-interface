@@ -1,5 +1,5 @@
 <template>
-  <v-footer class="footer" app>
+  <v-footer absolute app>
     <v-card color="transparent" width="100%">
       <v-card-text>
         <v-row>
