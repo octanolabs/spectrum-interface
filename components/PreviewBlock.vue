@@ -1,9 +1,10 @@
 <template>
-  <v-row>
-    <v-col cols="4">
-      <v-card>
+  <v-row align="center" style="height: 105px;">
+    <v-spacer></v-spacer>
+    <v-col cols="2">
+      <v-card light>
         <v-card-text>
-          <div class="d-flex flex-column">
+          <div class="d-flex flex-column align-center">
             <span> Block {{ number }} </span>
             <span>
               <small>{{ timeSince }}</small>
@@ -12,7 +13,9 @@
         </v-card-text>
       </v-card>
     </v-col>
-    <v-col>
+    <v-spacer></v-spacer>
+
+    <v-col cols="9">
       <v-row>
         <strong
           >Mined By

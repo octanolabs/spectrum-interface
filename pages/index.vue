@@ -1,50 +1,47 @@
 <template>
   <div class="page-grid">
-    <v-card dark class="stats">
-      <v-row>
-        <v-col cols="12">
-          <v-card-title>
-            <img
-              src="../assets/logo-circle.svg"
-              width="50"
-              height="50"
-              style="margin-top:-20px;"
-            />
+    <v-card dark class="stats d-flex flex-column justify-end">
+      <v-card-title>
+        <img
+          src="../assets/logo-circle.svg"
+          width="50"
+          height="50"
+          style="margin-top:-20px;"
+        />
+        <span style="display:inline-block; margin-left: 10px">
+          <small>
+            MARKET CAP OF ${{ marketcap }} MILLION
             <br />
-            <span style="display:inline-block; margin-left: 10px">
-              <small>
-                MARKET CAP OF ${{ marketcap }} MILLION
-                <br />
-                ${{ priceUSD }} @ {{ priceBTC }} BTC/UBQ
-              </small>
-            </span>
-          </v-card-title>
-        </v-col>
-        <v-col cols="12">
-          <v-card-text align="bottom">
-            <v-row style="padding:15px 15px 0 15px">
-              <div>
-                <h2 style="margin-bottom:0px;">LAST BLOCK</h2>
-                <h4>{{ latestBlock }} ({{ summary.blocktime }}s)</h4>
-              </div>
-              <div class="text-right mr-0 ml-auto">
-                <h2 style="margin-bottom:0px;">TRANSACTIONS</h2>
-                <h4>{{ summary.txnCount }}</h4>
-              </div>
-            </v-row>
-            <v-row style="padding:0px 15px">
-              <div>
-                <h3 style="margin-bottom:0px;">Hash Rate</h3>
-                <h4>{{ summary.hashrate }} GH/s</h4>
-              </div>
-              <div class="text-right mr-0 ml-auto">
-                <h3 style="margin-bottom:0px;">Network Difficulty</h3>
-                <h4>{{ summary.difficulty }} TH</h4>
-              </div>
-            </v-row>
-          </v-card-text>
-        </v-col>
-      </v-row>
+            ${{ priceUSD }} @ {{ priceBTC }} BTC/UBQ
+          </small>
+        </span>
+      </v-card-title>
+      <v-spacer></v-spacer>
+      <v-card-text>
+        <v-row>
+          <v-col cols="4" class="d-flex justify-space-between">
+            <div>
+              <h2 style="margin-bottom:0px;">LAST BLOCK</h2>
+              <h4>{{ latestBlock }} ({{ summary.blocktime }}s)</h4>
+            </div>
+            <div>
+              <h2 style="margin-bottom:0px;">TRANSACTIONS</h2>
+              <h4>{{ summary.txnCount }}</h4>
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="4" class="d-flex justify-space-between">
+            <div>
+              <h3 style="margin-bottom:0px;">Hash Rate</h3>
+              <h4>{{ summary.hashrate }} GH/s</h4>
+            </div>
+            <div class="">
+              <h3 style="margin-bottom:0px;">Network Difficulty</h3>
+              <h4>{{ summary.difficulty }} TH</h4>
+            </div>
+          </v-col>
+        </v-row>
+      </v-card-text>
     </v-card>
     <v-card dark class="chart">
       <v-card-title> <h6>14 day Ubiq transaction history</h6> </v-card-title>
@@ -53,98 +50,33 @@
       </v-card-text>
     </v-card>
     <div class="blocks">
-      <v-card class="card-home">
+      <v-card>
+        <v-card-title>
+          <h3>
+            Latest Blocks
+          </h3>
+        </v-card-title>
         <strong slot="header">Blocks</strong>
-        <div v-for="(item, index) in summary.blocks" :key="index">
+        <template v-for="item in summary.blocks">
           <PreviewBlock :info="item" />
           <hr style="margin:5px 0 3px 0;" />
-        </div>
+        </template>
       </v-card>
     </div>
     <div class="txns">
-      <v-card class="card-home">
+      <v-card>
+        <v-card-title>
+          <h3>
+            Latest Transactions
+          </h3>
+        </v-card-title>
         <strong slot="header">Transactions</strong>
-        <div v-for="(item, index) in summary.txns" :key="index">
+        <template v-for="item in summary.txns">
           <PreviewTxn :info="item" />
-        </div>
+          <hr style="margin:5px 0 3px 0;" />
+        </template>
       </v-card>
     </div>
-
-    <!--    <v-row justify-md="center" style="max-height: 400px">-->
-    <!--      <v-col md="5">-->
-    <!--        <v-card dark>-->
-    <!--          <v-row>-->
-    <!--            <v-col cols="12">-->
-    <!--              <v-card-title>-->
-    <!--                <img-->
-    <!--                  src="../assets/logo-circle.svg"-->
-    <!--                  width="50"-->
-    <!--                  height="50"-->
-    <!--                  style="margin-top:-20px;"-->
-    <!--                />-->
-    <!--                <br />-->
-    <!--                <span style="display:inline-block; margin-left: 10px">-->
-    <!--                  <small>-->
-    <!--                    MARKET CAP OF ${{ marketcap }} MILLION-->
-    <!--                    <br />-->
-    <!--                    ${{ priceUSD }} @ {{ priceBTC }} BTC/UBQ-->
-    <!--                  </small>-->
-    <!--                </span>-->
-    <!--              </v-card-title>-->
-    <!--            </v-col>-->
-    <!--            <v-col cols="12">-->
-    <!--              <v-card-text align="bottom">-->
-    <!--                <v-row style="padding:15px 15px 0 15px">-->
-    <!--                  <div>-->
-    <!--                    <h2 style="margin-bottom:0px;">LAST BLOCK</h2>-->
-    <!--                    <h4>{{ latestBlock }} ({{ summary.blocktime }}s)</h4>-->
-    <!--                  </div>-->
-    <!--                  <div class="text-right mr-0 ml-auto">-->
-    <!--                    <h2 style="margin-bottom:0px;">TRANSACTIONS</h2>-->
-    <!--                    <h4>{{ summary.txnCount }}</h4>-->
-    <!--                  </div>-->
-    <!--                </v-row>-->
-    <!--                <v-row style="padding:0px 15px">-->
-    <!--                  <div>-->
-    <!--                    <h3 style="margin-bottom:0px;">Hash Rate</h3>-->
-    <!--                    <h4>{{ summary.hashrate }} GH/s</h4>-->
-    <!--                  </div>-->
-    <!--                  <div class="text-right mr-0 ml-auto">-->
-    <!--                    <h3 style="margin-bottom:0px;">Network Difficulty</h3>-->
-    <!--                    <h4>{{ summary.difficulty }} TH</h4>-->
-    <!--                  </div>-->
-    <!--                </v-row>-->
-    <!--              </v-card-text>-->
-    <!--            </v-col>-->
-    <!--          </v-row>-->
-    <!--        </v-card>-->
-    <!--      </v-col>-->
-    <!--      <v-col md="5">-->
-    <!--        <v-card class="text-center card-dark">-->
-    <!--          <h6>14 day Ubiq transaction history</h6>-->
-    <!--          <LineChart :chart-data="chartData" options="{height:'50%'}" />-->
-    <!--        </v-card>-->
-    <!--      </v-col>-->
-    <!--    </v-row>-->
-    <!--    <v-row justify-md="center" style="margin-top:20px;">-->
-    <!--      <v-col md="5" class="d-none d-md-block">-->
-    <!--        <v-card class="card-home">-->
-    <!--          <strong slot="header">Blocks</strong>-->
-    <!--          <div v-for="(item, index) in summary.blocks" :key="index">-->
-    <!--            <PreviewBlock :info="item" />-->
-    <!--            <hr style="margin:5px 0 3px 0;" />-->
-    <!--          </div>-->
-    <!--        </v-card>-->
-    <!--      </v-col>-->
-    <!--      <v-col md="5" class="d-none d-md-block">-->
-    <!--        <v-card class="card-home">-->
-    <!--          <strong slot="header">Transactions</strong>-->
-    <!--          <div v-for="(item, index) in summary.txns" :key="index">-->
-    <!--            <PreviewTxn :info="item" />-->
-    <!--          </div>-->
-    <!--        </v-card>-->
-    <!--      </v-col>-->
-    <!--    </v-row>-->
   </div>
 </template>
 
@@ -238,7 +170,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 .page-grid {
   display: grid;
   grid-template-columns: 0.2fr 1fr 1fr 0.2fr;
@@ -250,6 +182,17 @@ export default {
   grid-template-areas:
     '. stats chart .'
     '. blocks txns .';
+
+  @include for-phone-only {
+    grid-template-columns: 0.05fr auto 0.05fr;
+    grid-template-rows: auto auto auto auto;
+
+    grid-template-areas:
+      '. stats  .'
+      '. chart .'
+      '. blocks .'
+      '. txns .';
+  }
 }
 
 .stats {

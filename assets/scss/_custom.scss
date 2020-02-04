@@ -1,3 +1,19 @@
+@mixin for-phone-only {
+  @media (max-width: 599px) { @content; }
+}
+@mixin for-tablet-portrait-up {
+  @media (min-width: 600px) { @content; }
+}
+@mixin for-tablet-landscape-up {
+  @media (min-width: 900px) { @content; }
+}
+@mixin for-desktop-up {
+  @media (min-width: 1200px) { @content; }
+}
+@mixin for-big-desktop-up {
+  @media (min-width: 1800px) { @content; }
+}
+
 html {
   overflow: hidden;
   height: 100%;
@@ -14,6 +30,11 @@ body {
 }
 h1, h2, h3, h4, h5, h6 {
   font-weight: 500;
+}
+
+hr {
+  margin: 5px 0px;
+  border: 1px solid rgba(43, 43, 43, 0.2);
 }
 
 //.v-application {

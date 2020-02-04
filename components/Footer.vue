@@ -1,10 +1,10 @@
 <template>
-  <v-footer absolute app>
+  <v-footer inset app>
     <v-card color="transparent" width="100%">
       <v-card-text>
         <v-row>
           <v-col cols="6"
-            ><div style="display:inline-block;width:280px;">
+            ><div style="display:inline-block;width:320px;">
               <img
                 src="../assets/poweredby.png"
                 style="height:50px;margin:0 auto 5px auto;"
@@ -66,10 +66,10 @@
         </v-row>
       </v-card-text>
       <v-spacer></v-spacer>
-      <v-card-text>
+      <v-card width="100%">
         <v-row justify="space-around">
           <a href="https://ubiqsmart.com" target="_blank">
-            Ubiqsmart © 2018 (C)
+            Ubiqsmart © {{ $moment().format('YYYY') }} (C)
           </a>
           <nuxt-link
             :to="{
@@ -79,7 +79,7 @@
             >Donations 0xa126d20e4424ff3f611670c129b931ad3eb60433</nuxt-link
           >
         </v-row>
-      </v-card-text>
+      </v-card>
     </v-card>
   </v-footer>
 </template>

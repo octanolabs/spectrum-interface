@@ -33,7 +33,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 .ct-series-a .ct-line {
   /* Set the colour of this series line */
   stroke: #00ea90;

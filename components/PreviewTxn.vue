@@ -1,31 +1,39 @@
 <template>
-  <div style="color: rgba(255, 255, 255, 0.5);padding:12px 15px 0;">
-    <v-row>
-      <strong
-        >TX#
-        <nuxt-link :to="{ name: 'Transaction', params: { hash: hash.full } }">{{
-          hash.short
-        }}</nuxt-link
-        >...</strong
-      >
-    </v-row>
-    <v-row>
-      <label
-        >From
-        <nuxt-link :to="{ name: 'Address', params: { hash: from.full } }">{{
-          from.short
-        }}</nuxt-link>
-        To
-        <nuxt-link :to="{ name: 'Address', params: { hash: to.full } }">{{
-          to.short
-        }}</nuxt-link></label
-      >
-    </v-row>
-    <v-row>
-      <label>Amount {{ value }} UBQ</label>
-    </v-row>
-    <hr style="margin:5px 0 4px 0;" />
-  </div>
+  <v-row align="center" style="height: 105px;">
+    <v-spacer></v-spacer>
+    <v-col cols="2">
+      <v-card light>
+        <v-card-text>
+          <div class="d-flex flex-column align-center">
+            <label>Amount</label>
+            <label>{{ value }} UBQ</label>
+          </div>
+        </v-card-text>
+      </v-card>
+    </v-col>
+    <v-spacer></v-spacer>
+    <v-col cols="9">
+      <div class="d-flex flex-column">
+        <strong
+          >TX#
+          <nuxt-link
+            :to="{ name: 'Transaction', params: { hash: hash.full } }"
+            >{{ hash.short }}</nuxt-link
+          >...</strong
+        >
+        <label
+          >From
+          <nuxt-link :to="{ name: 'Address', params: { hash: from.full } }">{{
+            from.short
+          }}</nuxt-link>
+          To
+          <nuxt-link :to="{ name: 'Address', params: { hash: to.full } }">{{
+            to.short
+          }}</nuxt-link></label
+        >
+      </div>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
