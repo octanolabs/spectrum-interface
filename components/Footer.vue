@@ -4,7 +4,7 @@
       <v-card-text>
         <v-row>
           <v-col cols="6"
-            ><div style="display:inline-block;width:320px;">
+            ><div style="display:inline-block;width:350px;">
               <img
                 src="../assets/poweredby.png"
                 style="height:50px;margin:0 auto 5px auto;"
@@ -66,7 +66,7 @@
         </v-row>
       </v-card-text>
       <v-spacer></v-spacer>
-      <v-card width="100%">
+      <v-card color="transparent" width="100%">
         <v-row justify="space-around">
           <a href="https://ubiqsmart.com" target="_blank">
             Ubiqsmart © {{ $moment().format('YYYY') }} (C)

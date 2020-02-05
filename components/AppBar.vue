@@ -1,43 +1,65 @@
 <template>
   <v-app-bar color="black" dark app>
-    <v-app-bar-nav-icon>
-      <img src="../assets/logo.svg" width="26" height="26" />
-    </v-app-bar-nav-icon>
+    <v-row align="center" justify="end">
+      <v-col cols="4" class="d-flex align-center">
+        <v-app-bar-nav-icon>
+          <nuxt-link to="/">
+            <img src="../assets/logo.svg" width="26" height="26" />
+          </nuxt-link>
+        </v-app-bar-nav-icon>
+        <v-toolbar-title>
+          <nuxt-link to="/" style="color: #fff; text-decoration: none">
+            Ubiqscan
+          </nuxt-link>
+        </v-toolbar-title>
+      </v-col>
+      <v-spacer></v-spacer>
+      <v-col cols="2">
+        <v-text-field
+          dense
+          right
+          hide-details
+          type="text"
+          label="Search by Address / Txhash / Block"
+          style="max-width: 400px"
+        >
+          <template
+            v-slot:append-outer
+            style="margin-bottom: 0; margin-top: 0;"
+          >
+            <v-btn small block type="submit">
+              <v-icon dark>mdi-magnify</v-icon> Search
+            </v-btn>
+          </template>
+        </v-text-field>
+      </v-col>
+      <v-spacer></v-spacer>
+      <v-col cols="4" align-self="end">
+        <v-item-group class="d-flex justify-end align-center">
+          <v-btn @click="toggleToolbar('NODE MAP')" text>NODE MAP</v-btn>
+          <v-btn @click="toggleToolbar('CHARTS')" text>CHARTS</v-btn>
+          <v-btn @click="toggleToolbar('BLOCKCHAIN')" text>BLOCKCHAIN</v-btn>
+          <v-btn @click="toggleToolbar('TOKENS')" text>TOKENS</v-btn>
+          <v-btn @click="toggleToolbar('MISC')" text>MISC</v-btn>
+          <v-btn v-if="!expandToolbar" fab text>
+            <v-icon key="1">mdi-chevron-up</v-icon>
+          </v-btn>
+          <v-btn v-else @click="toggleToolbar('')" fab text>
+            <v-icon key="2" color="primary">mdi-chevron-down</v-icon>
+          </v-btn>
+        </v-item-group>
+      </v-col>
+    </v-row>
 
-    <v-toolbar-title>Ubiqscan</v-toolbar-title>
-
-    <v-spacer></v-spacer>
-
-    <v-text-field
-      dense
-      right
-      hide-details
-      type="text"
-      label="Search by Address / Txhash / Block"
-      style="max-width: 400px"
-    >
-      <template v-slot:append-outer style="margin-bottom: 0; margin-top: 0;">
-        <v-btn small block type="submit">
-          <v-icon dark>mdi-magnify</v-icon> Search
-        </v-btn>
-      </template>
-    </v-text-field>
-
-    <v-spacer></v-spacer>
-
-    <v-menu right bottom>
-      <template v-slot:activator="{ on }">
-        <v-btn v-on="on" icon>
-          <v-icon>mdi-dots-vertical</v-icon>
-        </v-btn>
-      </template>
-
-      <v-list>
-        <v-list-item v-for="n in 5" :key="n" @click="() => {}">
-          <v-list-item-titxle>Option {{ n }}</v-list-item-titxle>
-        </v-list-item>
-      </v-list>
-    </v-menu>
+    <template v-slot:extension v-if="expandToolbar">
+      <v-toolbar flat color="transparent">
+        <v-toolbar-items>
+          <v-list-item v-for="(item, idx) in toolbarItems" :key="idx">
+            {{ item }}
+          </v-list-item>
+        </v-toolbar-items>
+      </v-toolbar>
+    </template>
   </v-app-bar>
 
   <!--  <b-navbar toggleable="md" type="dark" variant="dark" fixed="top">-->
@@ -130,10 +152,51 @@ export default {
   data() {
     return {
       search: '',
-      errors: []
+      errors: [],
+      activeToolbarItem: '',
+      expandToolbar: false
+    }
+  },
+  computed: {
+    toolbarItems() {
+      switch (this.activeToolbarItem) {
+        case 'NODE MAP':
+          return ['Node map']
+        case 'CHARTS':
+          return ['Charts']
+        case 'BLOCKCHAIN':
+          return [
+            'View Txns',
+            'View Pending Txns',
+            'View Blocks',
+            'View Uncles',
+            'Forked Blocks'
+          ]
+        case 'TOKENS':
+          return ['View Tokens', 'View Token Transfers']
+        case 'MISC':
+          return ['Network Stats']
+      }
+      return ['']
     }
   },
   methods: {
+    toggleToolbar(item = '') {
+      if (item !== '') {
+        if (item !== this.activeToolbarItem) {
+          // Expand toolbar
+          this.expandToolbar = true
+          this.activeToolbarItem = item
+        } else {
+          // Collapse toolbar
+          this.expandToolbar = false
+          this.activeToolbarItem = ''
+        }
+      } else {
+        this.activeToolbarItem = item
+        this.expandToolbar = false
+      }
+    },
     submitSearch(str) {
       // remove whitespace
       str = str.replace(/\s/g, '')

@@ -19,7 +19,7 @@
       <v-spacer></v-spacer>
       <v-card-text>
         <v-row>
-          <v-col cols="4" class="d-flex justify-space-between">
+          <v-col cols="4" class="text-left">
             <div>
               <h2 style="margin-bottom:0px;">LAST BLOCK</h2>
               <h4>{{ latestBlock }} ({{ summary.blocktime }}s)</h4>
@@ -30,12 +30,12 @@
             </div>
           </v-col>
           <v-spacer></v-spacer>
-          <v-col cols="4" class="d-flex justify-space-between">
+          <v-col cols="4" class="text-right">
             <div>
               <h3 style="margin-bottom:0px;">Hash Rate</h3>
               <h4>{{ summary.hashrate }} GH/s</h4>
             </div>
-            <div class="">
+            <div>
               <h3 style="margin-bottom:0px;">Network Difficulty</h3>
               <h4>{{ summary.difficulty }} TH</h4>
             </div>
@@ -43,40 +43,46 @@
         </v-row>
       </v-card-text>
     </v-card>
-    <v-card dark class="chart">
+    <v-card class="chart">
       <v-card-title> <h6>14 day Ubiq transaction history</h6> </v-card-title>
       <v-card-text>
         <LineChart :chart-data="chartData" max-height="200px" />
       </v-card-text>
     </v-card>
-    <div class="blocks">
-      <v-card>
-        <v-card-title>
-          <h3>
-            Latest Blocks
-          </h3>
-        </v-card-title>
-        <strong slot="header">Blocks</strong>
-        <template v-for="item in summary.blocks">
-          <PreviewBlock :info="item" />
-          <hr style="margin:5px 0 3px 0;" />
+    <v-card class="blocks">
+      <v-card-title>
+        <h3>
+          Latest Blocks
+        </h3>
+      </v-card-title>
+      <v-simple-table height="575px">
+        <template v-slot:default>
+          <tbody>
+            <template v-for="item in summary.blocks">
+              <PreviewBlock :info="item" />
+              <hr style="margin:5px 0 3px 0;" />
+            </template>
+          </tbody>
         </template>
-      </v-card>
-    </div>
-    <div class="txns">
-      <v-card>
-        <v-card-title>
-          <h3>
-            Latest Transactions
-          </h3>
-        </v-card-title>
-        <strong slot="header">Transactions</strong>
-        <template v-for="item in summary.txns">
-          <PreviewTxn :info="item" />
-          <hr style="margin:5px 0 3px 0;" />
+      </v-simple-table>
+    </v-card>
+    <v-card class="txns">
+      <v-card-title>
+        <h3>
+          Latest Transactions
+        </h3>
+      </v-card-title>
+      <v-simple-table height="575px">
+        <template v-slot:default>
+          <tbody>
+            <template v-for="item in summary.txns">
+              <PreviewTxn :info="item" />
+              <hr style="margin:5px 0 3px 0;" />
+            </template>
+          </tbody>
         </template>
-      </v-card>
-    </div>
+      </v-simple-table>
+    </v-card>
   </div>
 </template>
 
@@ -200,7 +206,6 @@ export default {
 }
 .chart {
   grid-area: chart;
-  height: 100%;
 }
 .blocks {
   grid-area: blocks;
