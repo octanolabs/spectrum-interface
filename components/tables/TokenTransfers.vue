@@ -1,8 +1,8 @@
 <template>
   <v-row>
-    <b-col md="12">
+    <v-col md="12">
       <nav style="margin-right:-4px;">
-        <b-pagination
+        <v-pagination
           :total-rows="getRowCount(items)"
           :per-page="perPage"
           v-model="currentPage"
@@ -18,7 +18,7 @@
           {{ formatNumber(total) }} token transfers</span
         >
         <hr />
-        <b-table
+        <v-data-table
           :items="items"
           :fields="fields"
           :current-page="currentPage"
@@ -55,10 +55,10 @@
           <div slot="contract" slot-scope="data">
             {{ getName(data.value) }}
           </div>
-        </b-table>
+        </v-data-table>
       </b-card>
       <nav style="margin-right:-4px;margin-top:15px;">
-        <b-pagination
+        <v-pagination
           :total-rows="getRowCount(items)"
           :per-page="perPage"
           v-model="currentPage"
@@ -68,7 +68,7 @@
           next-text="Next"
         />
       </nav>
-    </b-col>
+    </v-col>
   </v-row>
 </template>
 

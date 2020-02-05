@@ -1,8 +1,8 @@
 <template>
   <v-row>
-    <b-col md="12">
+    <v-col md="12">
       <nav style="margin-right:-4px;">
-        <b-pagination
+        <v-pagination
           :total-rows="getRowCount(items)"
           :per-page="perPage"
           v-model="currentPage"
@@ -13,7 +13,7 @@
         />
       </nav>
       <b-card no-body>
-        <b-table
+        <v-data-table
           @row-hovered="dbg"
           :items="items"
           :fields="fields"
@@ -88,10 +88,10 @@
               {{ data.detailsShowing ? 'Hide' : 'Show' }} Details
             </b-button>
           </div>
-        </b-table>
+        </v-data-table>
       </b-card>
       <nav style="margin-right:-4px;margin-top:15px;">
-        <b-pagination
+        <v-pagination
           :total-rows="getRowCount(items)"
           :per-page="perPage"
           v-model="currentPage"
@@ -101,7 +101,7 @@
           next-text="Next"
         />
       </nav>
-    </b-col>
+    </v-col>
   </v-row>
 </template>
 

@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    <b-col md="12">
+    <v-col md="12">
       <b-table
         :items="items"
         :fields="fields"
@@ -10,40 +10,37 @@
         stacked="sm"
       >
         <div slot="hash" slot-scope="data">
-          <nuxt-link
-            :to="{ name: 'Transaction', params: { hash: data.value } }"
+          <nuxt-link :to="{ name: 'Transaction', params: { hash: data.value } }"
             >{{ data.value.substring(0, 17) }}...</nuxt-link
           >
         </div>
         <div slot="blockNumber" slot-scope="data">
-          <nuxt-link
-            :to="{ name: 'Block', params: { number: data.value } }"
-            >{{ data.value }}</nuxt-link
-          >
+          <nuxt-link :to="{ name: 'Block', params: { number: data.value } }">{{
+            data.value
+          }}</nuxt-link>
         </div>
         <div slot="timestamp" slot-scope="data">
           ~{{ calcTime(data.value) }}
         </div>
         <div slot="from" slot-scope="data">
-          <nuxt-link
-            :to="{ name: 'Address', params: { hash: data.value } }"
-            >{{ getAddressTag(data.value) }}</nuxt-link
-          ><b-badge v-if="address === data.value" class="tx-badge pull-right"
-            >OUT</b-badge
-          ><b-badge v-else class="tx-badge pull-right">IN</b-badge>
+          <nuxt-link :to="{ name: 'Address', params: { hash: data.value } }">{{
+            getAddressTag(data.value)
+          }}</nuxt-link
+          ><v-badge v-if="address === data.value" class="tx-badge pull-right"
+            >OUT</v-badge
+          ><v-badge v-else class="tx-badge pull-right">IN</v-badge>
         </div>
         <div slot="to" slot-scope="data">
-          <nuxt-link
-            :to="{ name: 'Address', params: { hash: data.value } }"
-            >{{ getAddressTag(data.value) }}</nuxt-link
-          >
+          <nuxt-link :to="{ name: 'Address', params: { hash: data.value } }">{{
+            getAddressTag(data.value)
+          }}</nuxt-link>
         </div>
         <div slot="value" slot-scope="data">{{ fromWei(data.value) }} UBQ</div>
         <div slot="txFee" slot-scope="data">
           {{ calcTxFee(data.item.gasUsed, data.item.gasPrice) }} UBQ
         </div>
       </b-table>
-    </b-col>
+    </v-col>
   </v-row>
 </template>
 

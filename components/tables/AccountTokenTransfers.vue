@@ -1,8 +1,8 @@
 <template>
   <v-row>
-    <b-col md="12">
+    <v-col md="12">
       <b-card no-body>
-        <b-table
+        <v-data-table
           :items="items"
           :fields="fields"
           class="mb-0"
@@ -23,14 +23,14 @@
             <nuxt-link
               :to="{ name: 'Address', params: { hash: data.value } }"
               >{{ getAddressTag(data.value) }}</nuxt-link
-            ><b-badge
+            ><v-badge
               v-if="address === data.value && badge === true"
               class="tx-badge pull-right"
-              >OUT</b-badge
-            ><b-badge
+              >OUT</v-badge
+            ><v-badge
               v-else-if="address !== data.value && badge === true"
               class="tx-badge pull-right"
-              >IN</b-badge
+              >IN</v-badge
             >
           </div>
           <div slot="to" slot-scope="data">
@@ -45,9 +45,9 @@
           <div slot="contract" slot-scope="data">
             {{ getName(data.value) }}
           </div>
-        </b-table>
+        </v-data-table>
       </b-card>
-    </b-col>
+    </v-col>
   </v-row>
 </template>
 

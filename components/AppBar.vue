@@ -14,7 +14,7 @@
         </v-toolbar-title>
       </v-col>
       <v-spacer></v-spacer>
-      <v-col cols="2">
+      <v-col cols="3">
         <v-text-field
           dense
           right
@@ -53,10 +53,16 @@
 
     <template v-slot:extension v-if="expandToolbar">
       <v-toolbar flat color="transparent">
-        <v-toolbar-items>
-          <v-list-item v-for="(item, idx) in toolbarItems" :key="idx">
-            {{ item }}
-          </v-list-item>
+        <v-toolbar-items style="width:100%">
+          <v-row align-content="center">
+            <v-col
+              v-for="(item, idx) in toolbarItems"
+              :key="idx"
+              class="text-center"
+            >
+              {{ item }}
+            </v-col>
+          </v-row>
         </v-toolbar-items>
       </v-toolbar>
     </template>
@@ -180,7 +186,18 @@ export default {
       return ['']
     }
   },
+  created() {
+    console.log(this.$router)
+  },
   methods: {
+    getRoutes(path = '') {
+      this.$router.options.routes.forEach((route) => {
+        this.items.push({
+          name: route.name,
+          path: route.path
+        })
+      })
+    },
     toggleToolbar(item = '') {
       if (item !== '') {
         if (item !== this.activeToolbarItem) {
