@@ -36,8 +36,7 @@
       <v-spacer></v-spacer>
       <v-col cols="4" align-self="end">
         <v-item-group class="d-flex justify-end align-center">
-          <v-btn @click="toggleToolbar('NODE MAP')" text>NODE MAP</v-btn>
-          <v-btn @click="toggleToolbar('CHARTS')" text>CHARTS</v-btn>
+          <v-btn @click="toggleToolbar('ANALYTICS')" text>ANALYTICS</v-btn>
           <v-btn @click="toggleToolbar('BLOCKCHAIN')" text>BLOCKCHAIN</v-btn>
           <v-btn @click="toggleToolbar('TOKENS')" text>TOKENS</v-btn>
           <v-btn @click="toggleToolbar('MISC')" text>MISC</v-btn>
@@ -60,7 +59,12 @@
               :key="idx"
               class="text-center"
             >
-              {{ item }}
+              <a v-if="item.text === 'Network Stats'" :href="item.path">{{
+                item.text
+              }}</a>
+              <nuxt-link :to="item.path" v-else>
+                {{ item.text }}
+              </nuxt-link>
             </v-col>
           </v-row>
         </v-toolbar-items>
@@ -166,28 +170,34 @@ export default {
   computed: {
     toolbarItems() {
       switch (this.activeToolbarItem) {
-        case 'NODE MAP':
-          return ['Node map']
-        case 'CHARTS':
-          return ['Charts']
+        case 'ANALYTICS':
+          return [
+            { path: '/charts', text: 'Charts' },
+            { path: '/map', text: 'Node map' }
+          ]
         case 'BLOCKCHAIN':
           return [
-            'View Txns',
-            'View Pending Txns',
-            'View Blocks',
-            'View Uncles',
-            'Forked Blocks'
+            { path: '/tranactions/latest', text: 'View Txns' },
+            { path: '/tranactions/pending', text: 'View Pending Txns' },
+            { path: '/blocks', text: 'View Blocks' },
+            { path: '/uncles', text: 'View Uncles' },
+            { path: '/forkedBlocks', text: 'Forked Blocks (Reorgs)' }
           ]
         case 'TOKENS':
-          return ['View Tokens', 'View Token Transfers']
+          return [
+            { path: '/tokens', text: 'View Tokens' },
+            { path: '/tokentransfers', text: 'View Token Transfers' }
+          ]
         case 'MISC':
-          return ['Network Stats']
+          return [{ path: 'https://ubiq.darcr.us', text: 'Network Stats' }]
       }
       return ['']
     }
   },
   created() {
-    console.log(this.$router)
+    this.$router.options.routes.forEach((route) => {
+      console.log(route)
+    })
   },
   methods: {
     getRoutes(path = '') {
