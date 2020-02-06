@@ -1,5 +1,5 @@
 import axios from 'axios'
-import common from '../scripts/common'
+import common from '~/scripts/common'
 
 export const state = () => ({
   stats: {

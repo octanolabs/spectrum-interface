@@ -177,8 +177,8 @@ export default {
           ]
         case 'BLOCKCHAIN':
           return [
-            { path: '/tranactions/latest', text: 'View Txns' },
-            { path: '/tranactions/pending', text: 'View Pending Txns' },
+            { path: '/transactions/latest', text: 'View Txns' },
+            { path: '/transactions/pending', text: 'View Pending Txns' },
             { path: '/blocks', text: 'View Blocks' },
             { path: '/uncles', text: 'View Uncles' },
             { path: '/forkedBlocks', text: 'Forked Blocks (Reorgs)' }
@@ -215,12 +215,13 @@ export default {
           this.expandToolbar = true
           this.activeToolbarItem = item
         } else {
-          // Collapse toolbar
+          // If the same item is clicked again, collapse toolbar
           this.expandToolbar = false
           this.activeToolbarItem = ''
         }
       } else {
-        this.activeToolbarItem = item
+        // If item is empty string, collapse toolbar
+        this.activeToolbarItem = ''
         this.expandToolbar = false
       }
     },

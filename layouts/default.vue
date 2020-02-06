@@ -15,8 +15,8 @@
         <nuxt></nuxt>
       </v-container>
     </v-content>
-
-    <Footer />
+    <!--    remove footer for dev-->
+    <!--    <Footer />-->
   </v-app>
 </template>
 
@@ -25,12 +25,12 @@
 // import axios from 'axios'
 // import addresses from '../scripts/addresses'
 import AppBar from '../components/AppBar'
-import Footer from '../components/Footer'
+// import Footer from '../components/Footer'
 
 export default {
   components: {
-    AppBar,
-    Footer
+    AppBar
+    // Footer
   }
 }
 </script>

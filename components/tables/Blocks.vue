@@ -12,7 +12,7 @@
           next-text="Next"
         />
       </nav>
-      <b-card no-body>
+      <v-card>
         <span style="margin:15px 15px 5px 15px;"
           >Latest {{ formatNumber(items.length) }} blocks from a total of
           {{ formatNumber(total) }}</span
@@ -67,7 +67,7 @@
             {{ fromWei(addTxFees(data.value, data.item.txFees)) }} UBQ
           </div>
         </v-data-table>
-      </b-card>
+      </v-card>
       <nav style="margin-right:-4px;margin-top:15px;">
         <v-pagination
           :total-rows="getRowCount(items)"

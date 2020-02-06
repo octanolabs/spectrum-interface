@@ -32,52 +32,45 @@
               >
               <hr style="margin: 5px 0px" /></div
           ></v-col>
-          <v-col cols="3"
-            ><h6>Social <span class="fa fa-users" /></h6>
-            <hr style="margin: 5px 0px" />
-            <ul class="social">
-              <li>
-                <a href="https://twitter.com/ubiqsmart.com" target="_blank"
-                  ><span class="fa fa-twitter" /> Twitter</a
-                >
-              </li>
-              <li>
-                <a href="https://discord.gg/HF6vEGF" target="_blank"
-                  ><span class="fa fa-users" /> Discord</a
-                >
-              </li>
-              <li>
-                <a href="https://github.com/ubiq/" target="_blank"
-                  ><span class="fa fa-github-alt" /> Github</a
-                >
-              </li>
-              <li>
-                <a href="https://www.reddit.com/r/Ubiq/" target="_blank"
-                  ><span class="fa fa-reddit" /> Reddit</a
-                >
-              </li>
-              <li>
-                <a href="https://blog.ubiqsmart.com" target="_blank"
-                  ><span class="fa fa-medium" /> Blog</a
-                >
-              </li>
-            </ul></v-col
-          >
         </v-row>
       </v-card-text>
       <v-spacer></v-spacer>
       <v-card color="transparent" width="100%">
         <v-row justify="space-around">
-          <a href="https://ubiqsmart.com" target="_blank">
-            Ubiqsmart © {{ $moment().format('YYYY') }} (C)
-          </a>
-          <nuxt-link
-            :to="{
-              name: 'Address',
-              params: { hash: '0xa126d20e4424ff3f611670c129b931ad3eb60433' }
-            }"
-            >Donations 0xa126d20e4424ff3f611670c129b931ad3eb60433</nuxt-link
+          <v-col>
+            <a href="https://ubiqsmart.com" target="_blank">
+              Ubiqsmart © {{ $moment().format('YYYY') }} (C)
+            </a>
+          </v-col>
+          <v-col>
+            <div class="social">
+              <!--              <h6>Social <v-icon>mdi-users</v-icon></h6>-->
+              <a href="https://twitter.com/ubiqsmart.com" target="_blank"
+                ><v-icon>mdi-twitter</v-icon></a
+              >
+              <a href="https://discord.gg/HF6vEGF" target="_blank"
+                ><v-icon>mdi-discord</v-icon></a
+              >
+              <a href="https://github.com/ubiq/" target="_blank"
+                ><v-icon>mdi-github-circle</v-icon></a
+              >
+              <a href="https://www.reddit.com/r/Ubiq/" target="_blank"
+                ><v-icon>mdi-reddit</v-icon></a
+              >
+              <a href="https://blog.ubiqsmart.com" target="_blank"
+                ><v-icon>mdi-medium</v-icon></a
+              >
+            </div></v-col
           >
+          <v-col>
+            <nuxt-link
+              :to="{
+                name: 'Address',
+                params: { hash: '0xa126d20e4424ff3f611670c129b931ad3eb60433' }
+              }"
+              >Donations 0xa126d20e4424ff3f611670c129b931ad3eb60433</nuxt-link
+            >
+          </v-col>
         </v-row>
       </v-card>
     </v-card>
