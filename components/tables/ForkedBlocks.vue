@@ -25,25 +25,21 @@
           hover
           striped
         >
-          <div slot="number" slot-scope="data">
+          <div slot="number">
             <nuxt-link
               :to="{ name: 'Block', params: { number: data.value } }"
               >{{ data.value }}</nuxt-link
             >
           </div>
-          <div slot="timestamp" slot-scope="data">
-            ~{{ calcTime(data.value) }}
-          </div>
-          <div slot="miner" slot-scope="data">
+          <div slot="timestamp">~{{ calcTime(data.value) }}</div>
+          <div slot="miner">
             <nuxt-link
               :to="{ name: 'Address', params: { hash: data.value } }"
               >{{ getAddressTag(data.value) }}</nuxt-link
             >
           </div>
-          <div slot="blockReward" slot-scope="data">
-            {{ fromWei(data.value) }} UBQ
-          </div>
-          <div slot="row-details" slot-scope="data">
+          <div slot="blockReward">{{ fromWei(data.value) }} UBQ</div>
+          <div slot="row-details">
             <div class="nested-col-grid">
               <div class="">
                 <span class="code">Hash: {{ data.item.hash }}</span>
@@ -83,7 +79,7 @@
               </div>
             </div>
           </div>
-          <div slot="showDetails" slot-scope="data">
+          <div slot="showDetails">
             <b-button @click.stop="fetchBlock(data)" size="sm" class="mr-2">
               {{ data.detailsShowing ? 'Hide' : 'Show' }} Details
             </b-button>

@@ -12,11 +12,11 @@ export const mutations = {
 }
 
 export const actions = {
-  fetchBlocks({ commit }) {
-    axios
-      .get(process.env.config.apiUrl + '/latestblocks/1000')
-      .then((response) => {
-        commit('SET_BLOCKS', response.data)
-      })
+  async fetchBlocks({ commit }) {
+    const { data } = await axios.get(
+      process.env.config.apiUrl + '/latestblocks/1000'
+    )
+
+    commit('SET_BLOCKS', data)
   }
 }

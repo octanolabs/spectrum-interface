@@ -1,21 +1,17 @@
 <template>
   <v-row justify="center">
-    <v-col md="10">
-      <v-breadcrumbs>
-        <v-breadcrumbs-item :to="{ name: 'Home' }">Home</v-breadcrumbs-item>
-        <v-breadcrumbs-item active>Blocks</v-breadcrumbs-item>
-        <v-btn
-          nuxt
-          :class="{
-            fa: true,
-            'fa-refresh': true,
-            'fa-spin': refreshing,
-            'btn-breadcrumb': true
-          }"
-          v-on:click="fetch()"
-        ></v-btn>
-      </v-breadcrumbs>
-      <v-data-table :items="blocks" :headers="headers">
+    <v-col cols="10">
+      <ubiq-table
+        :items="blocksStore.blocks"
+        :headers="headers"
+        :loading="loading"
+        @refresh="refresh"
+        item-key="number"
+      >
+        <template v-slot:topMessage>
+          Showing {{ formatNumber(blocksStore.blocks.length) }} blocks from a
+          total {{ formatNumber(blocksStore.total) }} blocks
+        </template>
         <template v-slot:item.number="data">
           <nuxt-link :to="{ name: 'Block', params: { number: data.value } }">{{
             data.value
@@ -53,69 +49,87 @@
           {{ fromWei(addTxFees(data.value, data.item.txFees)) }}
           UBQ
         </template>
-      </v-data-table>
+      </ubiq-table>
     </v-col>
   </v-row>
 </template>
 
 <script>
-// import BlocksTable from '~/components/tables/Blocks.vue'
+import ubiqTable from '~/components/UbiqTable.vue'
 import common from '~/scripts/common'
 import addresses from '~/scripts/addresses'
 
 export default {
   name: 'Blocks',
-  // components: {
-  //   BlocksTable
-  // },
+  components: {
+    ubiqTable
+  },
   data() {
     return {
-      refreshing: false,
+      loading: false,
       headers: [
         {
           text: 'Height',
-          value: 'number'
+          value: 'number',
+          sortable: false
         },
         {
           text: 'Txns',
-          value: 'transactions'
+          value: 'transactions',
+          sortable: false
         },
         {
           text: 'Uncles',
-          value: 'uncles'
+          value: 'uncles',
+          sortable: false
         },
         {
           text: 'Miner',
-          value: 'miner'
+          value: 'miner',
+          sortable: false
         },
         {
           text: 'GasUsed',
-          value: 'gasUsed'
+          value: 'gasUsed',
+          sortable: false
         },
         {
           text: 'GasLimit',
-          value: 'gasLimit'
+          value: 'gasLimit',
+          sortable: false
         },
         {
           text: 'Avg.GasPrice',
-          value: 'avgGasPrice'
+          value: 'avgGasPrice',
+          sortable: false
         },
         {
           text: 'Reward',
-          value: 'blockReward'
+          value: 'blockReward',
+          sortable: false
         }
       ]
     }
   },
   computed: {
-    blocks() {
-      return this.$store.state.blocks.blocks
+    blocksStore() {
+      return this.$store.state.blocks
     }
   },
-  fetch({ store }) {
-    store.dispatch('blocks/fetchBlocks')
+  async fetch({ store }) {
+    await store.dispatch('blocks/fetchBlocks')
+  },
+  created() {
+    setTimeout(() => {
+      this.refresh()
+    }, 60000)
   },
   methods: {
+    async refresh() {
+      this.loading = true
+      await this.$store.dispatch('blocks/fetchBlocks')
+      this.loading = false
+    },
     getRowCount(items) {
       return items.length
     },

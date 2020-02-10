@@ -52,7 +52,7 @@ export default {
    */
   env: {
     config: {
-      apiUrl: 'https://v3.ubiqscan.io',
+      apiUrl: 'http://185.243.113.40:8181/v2',
       pollData: 30000 // interval to poll api, in ms
     }
   },
