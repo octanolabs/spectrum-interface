@@ -58,7 +58,14 @@ const functions = {
     'set_coin_minimum_trade(string token, uint256 the_minimum_trade)',
   '0xeca6e42d': 'set_minimum_trade(uint256 the_minimum_trade)',
   '0xf29f7b1b': 'remove_coin(uint256 index)',
-  '0xf780d867': 'add_coin(string coin, string name, address base, uint8 digits)'
+  '0xf780d867':
+    'add_coin(string coin, string name, address base, uint8 digits)',
+  // tornado.cash
+  '0xb214faa5': 'deposit(bytes32 _commitment)',
+  '0x21a0adb6':
+    'withdraw(bytes _proof, bytes32 _root, bytes32 _nullifierHash, address _recipient, address _relayer, uint256 _fee, unit256 _refund)',
+  '0x97fc007c': 'updateVerifier(address _newVerifier)',
+  '0x06394c9b': 'changeOperator(address _newOperator)'
 }
 
 const events = {
@@ -93,7 +100,12 @@ const events = {
   // trex controller
   '0xef4c8685': 'LogNewWallet(address receiver)',
   '0xa64da754':
-    'LogSweep(index_topic_1 address from, index_topic_2 address to, index_topic_3 address token, uint256 amount)'
+    'LogSweep(index_topic_1 address from, index_topic_2 address to, index_topic_3 address token, uint256 amount)',
+  // tornado
+  '0xa945e51e':
+    'Deposit(index_topic_1 bytes32 commitment, uint32 leafIndex, uint256 timestamp)',
+  '0xe9e508ba':
+    'Withdrawal(address to, bytes32 nullifierHash, index_topic_1 address relayer, uint256 fee)'
 }
 
 export default {
@@ -132,5 +144,13 @@ export default {
       })
     })
     return logs
+  },
+  tokenTransferSuccess(txnLogs) {
+    const eventId = txnLogs[0].topics[0].substr(0, 10).toLowerCase()
+    if (events[eventId]) {
+      return true
+    } else {
+      return false
+    }
   }
 }
