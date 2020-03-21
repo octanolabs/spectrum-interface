@@ -14,7 +14,7 @@
               'btn-breadcrumb': true
             }"
             v-on:click="fetch()"
-          ></b-button>
+          />
         </nuxt-link>
       </v-breadcrumbs>
       <v-card no-body class="block-card">
@@ -24,14 +24,14 @@
           </v-col>
           <v-col md="9">
             <nuxt-link :to="{ name: 'Block', params: { number: number - 1 } }"
-              ><span class="fa fa-arrow-left icon-left"></span
-            ></nuxt-link>
+              ><span class="fa fa-arrow-left icon-left"
+            /></nuxt-link>
             {{ block.number }}
             <nuxt-link
               v-if="fromHead > 0"
               :to="{ name: 'Block', params: { number: number - -1 } }"
-              ><span class="fa fa-arrow-right icon-right"></span
-            ></nuxt-link>
+              ><span class="fa fa-arrow-right icon-right"
+            /></nuxt-link>
           </v-col>
         </v-row>
         <v-row class="card-row">
@@ -179,7 +179,6 @@ import common from '~/scripts/common'
 
 export default {
   name: 'Block',
-  props: ['number'],
   data() {
     return {
       refreshing: false,
@@ -199,6 +198,12 @@ export default {
       },
       immediate: true
     }
+  },
+  fetch({ store }) {
+    store.dispatch('fetchIndexState')
+  },
+  created() {
+    this.fetch()
   },
   methods: {
     fetch() {

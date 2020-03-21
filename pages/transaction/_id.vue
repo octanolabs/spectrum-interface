@@ -17,7 +17,7 @@
               'btn-breadcrumb': true
             }"
             v-on:click="fetch()"
-          ></b-button>
+          />
         </v-breadcrumbs-link>
       </v-breadcrumbs>
       <b-tabs class="account-txn-tabs">

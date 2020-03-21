@@ -152,14 +152,24 @@ export default {
     },
     chartData() {
       return {
-        labels: this.stats.txnCounts.labels.slice(-14),
+        labels: [],
         series: [
           {
-            data: this.stats.txnCounts.data.slice(-14)
+            data: []
           }
         ]
       }
     }
+    // chartData() {
+    //   return {
+    //     labels: this.stats.txnCounts.labels.slice(-14),
+    //     series: [
+    //       {
+    //         data: this.stats.txnCounts.data.slice(-14)
+    //       }
+    //     ]
+    //   }
+    // }
   },
   fetch({ store }) {
     store.dispatch('fetchIndexState')

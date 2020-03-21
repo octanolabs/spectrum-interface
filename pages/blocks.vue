@@ -13,16 +13,17 @@
           total {{ formatNumber(blocksStore.total) }} blocks
         </template>
         <template v-slot:item.number="data">
-          <nuxt-link :to="{ name: 'Block', params: { number: data.value } }">{{
-            data.value
-          }}</nuxt-link>
+          <nuxt-link
+            :to="{ name: 'block-number', params: { number: data.value } }"
+            >{{ data.value }}</nuxt-link
+          >
         </template>
         <template v-slot:item.transactions="data">
           <template v-if="data.value !== 0">
             <nuxt-link
               :to="{
-                name: 'Transactions',
-                params: { type: 'block', blockNumber: data.item.number }
+                name: 'transactions-type',
+                params: { type: 'latest' }
               }"
               >{{ data.value }}</nuxt-link
             >
