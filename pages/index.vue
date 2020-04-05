@@ -58,9 +58,11 @@
       <v-simple-table height="575px">
         <template v-slot:default>
           <tbody>
-            <template v-for="item in summary.blocks">
-              <PreviewBlock :info="item" />
-              <hr style="margin:5px 0 3px 0;" />
+            <template v-for="(item, idx) in summary.blocks">
+              <div :key="idx">
+                <PreviewBlock :info="item" />
+                <hr style="margin:5px 0 3px 0;" />
+              </div>
             </template>
           </tbody>
         </template>
@@ -75,9 +77,11 @@
       <v-simple-table height="575px">
         <template v-slot:default>
           <tbody>
-            <template v-for="item in summary.txns">
-              <PreviewTxn :info="item" />
-              <hr style="margin:5px 0 3px 0;" />
+            <template v-for="(item, idx) in summary.txns">
+              <div :key="idx">
+                <PreviewTxn :info="item" />
+                <hr style="margin:5px 0 3px 0;" />
+              </div>
             </template>
           </tbody>
         </template>
@@ -97,6 +101,10 @@ export default {
     LineChart,
     PreviewTxn,
     PreviewBlock
+  },
+  middleware({ store }) {
+    store.dispatch('fetchIndexState')
+    store.dispatch('fetchChainSummary')
   },
   data() {
     return {
@@ -170,10 +178,6 @@ export default {
     //     ]
     //   }
     // }
-  },
-  fetch({ store }) {
-    store.dispatch('fetchIndexState')
-    store.dispatch('fetchChainSummary')
   },
   created() {
     const self = this

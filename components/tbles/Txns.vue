@@ -3,9 +3,9 @@
     <v-col md="12">
       <nav style="margin-right:-4px;">
         <v-pagination
+          v-model="currentPage"
           :total-rows="getRowCount(items)"
           :per-page="perPage"
-          v-model="currentPage"
           size="md"
           align="right"
           prev-text="Prev"
@@ -74,9 +74,9 @@
       </b-card>
       <nav style="margin-right:-4px;margin-top:15px;">
         <v-pagination
+          v-model="currentPage"
           :total-rows="getRowCount(items)"
           :per-page="perPage"
-          v-model="currentPage"
           size="md"
           align="right"
           prev-text="Prev"
@@ -93,15 +93,25 @@ import addresses from '../../scripts/addresses'
 export default {
   props: {
     items: {
-      type: Array
+      type: Array,
+      required: true,
+      default: () => {
+        return []
+      }
     },
     pending: {
       type: Boolean,
-      default: false
+      required: true,
+      default: () => {
+        return false
+      }
     },
     block: {
       type: Boolean,
-      default: false
+      required: false,
+      default: () => {
+        return false
+      }
     },
     blockNumber: {
       type: Number,
@@ -113,29 +123,38 @@ export default {
   },
   data: () => {
     return {
-      currentPage: 1,
-      perPage: 25,
-      totalRows: 0,
-      fields: {
-        hash: {
-          label: 'TxHash'
+      headers: [
+        {
+          text: 'Txhash',
+          value: 'hash',
+          sortable: false
         },
-        blockNumber: {
-          label: 'Block'
+        {
+          text: 'Block',
+          value: 'blockNumber',
+          sortable: false
         },
-        from: {
-          label: 'From'
+        {
+          text: 'From',
+          value: 'from',
+          sortable: false
         },
-        to: {
-          label: 'To'
+        {
+          text: 'To',
+          value: 'to',
+          sortable: false
         },
-        value: {
-          label: 'Value'
+        {
+          text: 'Value',
+          value: 'value',
+          sortable: false
         },
-        fee: {
-          label: 'TxFee'
+        {
+          text: 'Txfee',
+          value: 'txFee',
+          sortable: false
         }
-      }
+      ]
     }
   },
   methods: {

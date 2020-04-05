@@ -9,7 +9,8 @@
     />-->
 
     <!-- Sizes your content based upon application components -->
-    <v-content>
+    <!-- AppBar's smooth reflow doesn't play nice with nuxt's auto resizing shenanigans, this padding makes it so the content under the appbar is not moved-->
+    <v-content style="padding-top: 112px">
       <!-- Provides the application the proper gutter -->
       <v-container fluid>
         <nuxt></nuxt>

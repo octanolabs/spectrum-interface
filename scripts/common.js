@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js'
 import util from 'ethereumjs-util'
 import utf8 from 'utf8'
+import moment from 'moment'
 
 export default {
   fromWei(value) {
@@ -87,5 +88,13 @@ export default {
   },
   toChecksumAddress(address) {
     return util.toChecksumAddress(address)
+  },
+  calcTime(timestamp) {
+    return (
+      moment().to(timestamp * 1000) +
+      ' (' +
+      moment.utc(timestamp * 1000).format('lll') +
+      ' UTC)'
+    )
   }
 }

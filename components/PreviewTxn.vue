@@ -17,7 +17,7 @@
         <strong
           >TX#
           <nuxt-link
-            :to="{ name: 'Transaction', params: { hash: hash.full } }"
+            :to="{ name: 'transaction-hash', params: { hash: hash.full } }"
             >{{ hash.short }}</nuxt-link
           >...</strong
         >
@@ -41,7 +41,15 @@ import common from '../scripts/common.js'
 import addresses from '../scripts/addresses.js'
 
 export default {
-  props: ['info'],
+  props: {
+    info: {
+      type: Object,
+      required: true,
+      default: () => {
+        return {}
+      }
+    }
+  },
   data() {
     return {
       hash: {},

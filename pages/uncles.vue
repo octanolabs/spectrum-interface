@@ -12,7 +12,7 @@
               'fa-spin': refreshing,
               'btn-breadcrumb': true
             }"
-            v-on:click="fetch()"
+            @click="fetch()"
           ></b-button>
         </v-breadcrumbs-link>
       </v-breadcrumbs>
@@ -23,7 +23,7 @@
 
 <script>
 import axios from 'axios'
-import UnclesTable from '~/components/tables/Uncles.vue'
+import UnclesTable from '~/components/tbles/Uncles.vue'
 
 export default {
   name: 'Blocks',

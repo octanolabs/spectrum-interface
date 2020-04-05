@@ -68,16 +68,20 @@ export const actions = {
       .get(process.env.config.apiUrl + '/status')
       .then((res) => {
         d = { ...res.data }
+        return axios.get('https://api.cryptonator.com/api/ticker/ubq-btc')
+      })
+      .then((res) => {
+        price.btc = res.data.ticker.price
+
         return axios.get('https://api.coindesk.com/v1/bpi/currentprice.json')
       })
       .then((res) => {
-        price.btc = d.price
         price.eur = common.mulFiat(
-          d.price,
+          price.btc,
           res.data.bpi.EUR.rate.replace(',', '')
         )
         price.usd = common.mulFiat(
-          d.price,
+          price.btc,
           res.data.bpi.USD.rate.replace(',', '')
         )
         commit('SET_STATS', { ...d, price })

@@ -1,13 +1,13 @@
 <template>
   <v-row justify="center">
     <v-col cols="10">
-      <ubiq-table
+      <table-view
         :items="forkedBlocksStore.reorgs"
         :headers="headers"
         :loading="loading"
-        @refresh="refresh"
-        :showExpand="true"
+        :show-expand="true"
         item-key="number"
+        @refresh="refresh"
       >
         <template v-slot:topMessage>
           Showing latest {{ forkedBlocksStore.reorgs.length }} forked blocks
@@ -68,11 +68,11 @@
           </v-row>
         </template>
         <template v-slot:item.data-table-expand="data">
-          <b-button @click.stop="fetchBlock(data)" size="sm" class="mr-2">
+          <b-button size="sm" class="mr-2" @click.stop="fetchBlock(data)">
             {{ data.detailsShowing ? 'Hide' : 'Show' }} Details
           </b-button>
         </template>
-      </ubiq-table>
+      </table-view>
     </v-col>
   </v-row>
 </template>
@@ -81,11 +81,15 @@
 import axios from 'axios'
 import common from '../scripts/common'
 import addresses from '../scripts/addresses'
-import ubiqTable from '~/components/UbiqTable.vue'
+import tableView from '~/components/util/TableView.vue'
 
 export default {
   components: {
-    ubiqTable
+    tableView
+  },
+  async fetch({ store }) {
+    await store.dispatch('reorgs/fetchReorgs')
+    store.dispatch('reorgs/fetchCanonicalBlocks')
   },
   data() {
     return {
@@ -126,10 +130,6 @@ export default {
     forkedBlocksStore() {
       return this.$store.state.reorgs
     }
-  },
-  async fetch({ store }) {
-    await store.dispatch('reorgs/fetchReorgs')
-    store.dispatch('reorgs/fetchCanonicalBlocks')
   },
   created() {
     setTimeout(() => {

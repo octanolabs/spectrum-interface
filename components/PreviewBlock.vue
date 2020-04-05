@@ -28,8 +28,8 @@
         <label
           ><nuxt-link
             :to="{
-              name: 'Transactions',
-              params: { type: 'block', blockNumber: number }
+              name: 'block-id-action',
+              params: { id: number, action: 'transactions' }
             }"
             >{{ txns }} txns</nuxt-link
           ></label
@@ -46,7 +46,15 @@
 import addresses from '../scripts/addresses'
 import rewards from '../scripts/rewards'
 export default {
-  props: ['info'],
+  props: {
+    info: {
+      type: Object,
+      required: true,
+      default: () => {
+        return {}
+      }
+    }
+  },
   data() {
     return {
       hash: '',
