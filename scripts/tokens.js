@@ -82,6 +82,12 @@ const tokens = {
     decimals: 0,
     display: true
   },
+  '0x20e3dd746ddf519b23ffbbb6da7a5d33ea6349d6': {
+    name: 'Sphere',
+    symbol: 'SPHR',
+    decimals: 8,
+    display: true
+  },
   '0xbc3e373d2b24faf1dfe5b3f3acff9d66a7b48869': {
     name: 'WorldBit Token',
     symbol: 'WBT',
