@@ -1,7 +1,7 @@
 <template>
   <!--  Datacard is a helper component to visualize Objects (blocks, tx, etc). Optionally tabs can be specified to split up content.
         It receives an object that is passed to all the slots.
-        the component should be passed scoped slots, name like this:
+        the component should be passed scoped slots, named like this:
         <template v-slot:[tab].[slotName].[key]></template>
         slotName can be anything at all
         key slot is optional as the default content for the key slots will be a normalized string from slot name
@@ -11,7 +11,7 @@
     <v-card-title>
       <breadcrumbSpinner :loading="loading" @refresh="$emit('refresh')" />
     </v-card-title>
-    <v-card-text class="body-1">
+    <v-card-text class="body-2">
       <v-tabs>
         <v-tab v-for="tab in tabSlots()" :key="tab">
           {{ tab | toSentenceCaseText }}

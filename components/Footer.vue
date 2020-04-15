@@ -1,5 +1,5 @@
 <template>
-  <v-footer inset app>
+  <v-footer inset app absolute>
     <v-card color="transparent" width="100%">
       <v-card-text>
         <v-row>
@@ -52,7 +52,7 @@
                 ><v-icon>mdi-discord</v-icon></a
               >
               <a href="https://github.com/ubiq/" target="_blank"
-                ><v-icon>mdi-github-circle</v-icon></a
+                ><v-icon>mdi-github</v-icon></a
               >
               <a href="https://www.reddit.com/r/Ubiq/" target="_blank"
                 ><v-icon>mdi-reddit</v-icon></a

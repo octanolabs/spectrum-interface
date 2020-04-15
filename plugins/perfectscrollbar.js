@@ -1,4 +1,6 @@
-import Vuebar from 'vuebar'
+import PerfectScrollbar from 'vue2-perfect-scrollbar'
 import Vue from 'vue'
 
-Vue.use(Vuebar)
+// styles are imported and tweaked in styles.scss
+
+Vue.use(PerfectScrollbar, { options: { wheelSpeed: 0.5 } })

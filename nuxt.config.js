@@ -29,7 +29,12 @@ export default {
    ** Plugins to load before mounting the App
    */
   // Vuetify is probably useless here and as a plugin
-  plugins: ['~plugins/vuetify.js', '~plugins/chartist.js'],
+  plugins: [
+    '~plugins/vuetify.js',
+    '~plugins/chartist.js',
+    '~plugins/perfectscrollbar.js',
+    '~plugins/smoothreflow.js'
+  ],
   /*
    ** Nuxt.js dev-modules
    */
@@ -52,6 +57,7 @@ export default {
    */
   env: {
     config: {
+      // apiUrl: 'http://185.243.113.40:8181/v2',
       apiUrl: 'http://185.243.113.40:8181/v2',
       rpcUrl: 'https://rpc1.ubiqscan.io/',
       pollData: 30000 // interval to poll api, in ms
@@ -69,7 +75,7 @@ export default {
    ** https://github.com/nuxt-community/vuetify-module
    */
   vuetify: {
-    treeShake: true,
+    // treeShake: true,
     customVariables: ['~/assets/scss/style.scss'],
     optionsPath: '~plugins/vuetify.js'
   },

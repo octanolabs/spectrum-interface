@@ -27,6 +27,8 @@
     </v-toolbar-title>
 
     <v-spacer />
+    <v-spacer />
+    <v-spacer />
 
     <v-text-field
       dense
@@ -43,6 +45,7 @@
       </template>
     </v-text-field>
 
+    <v-spacer />
     <v-spacer />
 
     <v-item-group class="d-flex justify-end align-center">

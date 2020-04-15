@@ -1,92 +1,108 @@
 <template>
-  <div class="page-grid">
-    <v-card dark class="stats d-flex flex-column justify-end">
-      <v-card-title>
-        <img
-          src="../assets/logo-circle.svg"
-          width="50"
-          height="50"
-          style="margin-top:-20px;"
-        />
-        <span style="display:inline-block; margin-left: 10px">
-          <small>
-            MARKET CAP OF ${{ marketcap }} MILLION
-            <br />
-            ${{ priceUSD }} @ {{ priceBTC }} BTC/UBQ
-          </small>
-        </span>
-      </v-card-title>
-      <v-spacer></v-spacer>
-      <v-card-text>
-        <v-row>
-          <v-col cols="4" class="text-left">
-            <div>
-              <h2 style="margin-bottom:0px;">LAST BLOCK</h2>
-              <h4>{{ latestBlock }} ({{ summary.blocktime }}s)</h4>
-            </div>
-            <div>
-              <h2 style="margin-bottom:0px;">TRANSACTIONS</h2>
-              <h4>{{ summary.txnCount }}</h4>
-            </div>
-          </v-col>
+  <div class="body-2">
+    <v-row justify="center">
+      <v-col sm="7" md="10" lg="5">
+        <v-card
+          style="height: 100%"
+          dark
+          class=" d-flex flex-column justify-end"
+        >
+          <v-card-title>
+            <img
+              src="../assets/logo-circle.svg"
+              width="50"
+              height="50"
+              style="margin-top:-20px;"
+            />
+            <span style="display:inline-block; margin-left: 10px">
+              <small>
+                MARKET CAP OF ${{ marketcap }} MILLION
+                <br />
+                ${{ priceUSD }} @ {{ priceBTC }} BTC/UBQ
+              </small>
+            </span>
+          </v-card-title>
           <v-spacer></v-spacer>
-          <v-col cols="4" class="text-right">
-            <div>
-              <h3 style="margin-bottom:0px;">Hash Rate</h3>
-              <h4>{{ summary.hashrate }} GH/s</h4>
-            </div>
-            <div>
-              <h3 style="margin-bottom:0px;">Network Difficulty</h3>
-              <h4>{{ summary.difficulty }} TH</h4>
-            </div>
-          </v-col>
-        </v-row>
-      </v-card-text>
-    </v-card>
-    <v-card class="chart">
-      <v-card-title> <h6>14 day Ubiq transaction history</h6> </v-card-title>
-      <v-card-text>
-        <LineChart :chart-data="chartData" max-height="200px" />
-      </v-card-text>
-    </v-card>
-    <v-card class="blocks">
-      <v-card-title>
-        <h3>
-          Latest Blocks
-        </h3>
-      </v-card-title>
-      <v-simple-table height="575px">
-        <template v-slot:default>
-          <tbody>
-            <template v-for="(item, idx) in summary.blocks">
-              <div :key="idx">
+          <v-card-text>
+            <v-row>
+              <v-col cols="4" class="text-left">
+                <div>
+                  <h2 style="margin-bottom:0px;">LAST BLOCK</h2>
+                  <h4>{{ latestBlock }} ({{ summary.blocktime }}s)</h4>
+                </div>
+                <div>
+                  <h2 style="margin-bottom:0px;">TRANSACTIONS</h2>
+                  <h4>{{ summary.txnCount }}</h4>
+                </div>
+              </v-col>
+              <v-spacer></v-spacer>
+              <v-col cols="4" class="text-right">
+                <div>
+                  <h3 style="margin-bottom:0px;">Hash Rate</h3>
+                  <h4>{{ summary.hashrate }} GH/s</h4>
+                </div>
+                <div>
+                  <h3 style="margin-bottom:0px;">Network Difficulty</h3>
+                  <h4>{{ summary.difficulty }} TH</h4>
+                </div>
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col sm="7" md="10" lg="5">
+        <v-card class="">
+          <v-card-title>
+            <h6>14 day Ubiq transaction history</h6>
+          </v-card-title>
+          <v-card-text>
+            <LineChart :chart-data="chartData" max-height="200px" />
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col sm="7" md="10" lg="5">
+        <v-card class="">
+          <v-card-title>
+            <h3>
+              Latest Blocks
+            </h3>
+          </v-card-title>
+          <perfect-scrollbar>
+            <v-list max-height="545px">
+              <v-list-item
+                v-for="(item, idx) in summary.blocks"
+                :key="idx"
+                three-line
+              >
                 <PreviewBlock :info="item" />
                 <hr style="margin:5px 0 3px 0;" />
-              </div>
-            </template>
-          </tbody>
-        </template>
-      </v-simple-table>
-    </v-card>
-    <v-card class="txns">
-      <v-card-title>
-        <h3>
-          Latest Transactions
-        </h3>
-      </v-card-title>
-      <v-simple-table height="575px">
-        <template v-slot:default>
-          <tbody>
-            <template v-for="(item, idx) in summary.txns">
-              <div :key="idx">
+              </v-list-item>
+            </v-list>
+          </perfect-scrollbar>
+        </v-card>
+      </v-col>
+      <v-col sm="7" md="10" lg="5">
+        <v-card class="">
+          <v-card-title>
+            <h3>
+              Latest Transactions
+            </h3>
+          </v-card-title>
+          <perfect-scrollbar>
+            <v-list max-height="545px">
+              <v-list-item
+                v-for="(item, idx) in summary.txns"
+                :key="idx"
+                two-line
+              >
                 <PreviewTxn :info="item" />
                 <hr style="margin:5px 0 3px 0;" />
-              </div>
-            </template>
-          </tbody>
-        </template>
-      </v-simple-table>
-    </v-card>
+              </v-list-item>
+            </v-list>
+          </perfect-scrollbar>
+        </v-card>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -160,10 +176,40 @@ export default {
     },
     chartData() {
       return {
-        labels: [],
+        labels: [
+          '25/3',
+          '26/3',
+          '27/3',
+          '28/3',
+          '29/3',
+          '30/3',
+          '31/3',
+          '1/4',
+          '2/4',
+          '3/4',
+          '4/4',
+          '5/4',
+          '6/4',
+          '7/4'
+        ],
         series: [
           {
-            data: []
+            data: [
+              2124,
+              2178,
+              2115,
+              1798,
+              2021,
+              2049,
+              2054,
+              2037,
+              2137,
+              2005,
+              1947,
+              1949,
+              2098,
+              2084
+            ]
           }
         ]
       }
@@ -226,5 +272,16 @@ export default {
 }
 .txns {
   grid-area: txns;
+}
+
+.ct-series-a .ct-line {
+  stroke: $ubiq-green;
+  stroke-width: 5px;
+}
+
+.ct-series-a .ct-point {
+  stroke: $ubiq-green;
+  stroke-width: 10px;
+  stroke-linecap: round;
 }
 </style>

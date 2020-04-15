@@ -14,6 +14,90 @@
   @media (min-width: 1800px) { @content; }
 }
 
+/////////////////////////////////////////////////////////////
+/////////        perfect-scrollbar styles        ////////////
+/////////////////////////////////////////////////////////////
+
+/*
+ * Scrollbar thumb styles
+ */
+
+.ps__rail-x {
+  height:6px;
+  border-radius: 6px;
+  bottom: 2px;
+
+  &:hover, &:focus, &.ps--clicking, .ps__thumb-x {
+    .ps__thumb-x {
+      background-color: $grey2;
+      width: 4px;
+    }
+  }
+
+  &.ps--active-x {
+    display: block;
+    background-color: transparent;
+  }
+
+}
+
+.ps__rail-y {
+  width:6px;
+  border-radius: 6px;
+  right: 2px;
+
+  &:hover, &:focus, &.ps--clicking, .ps__thumb-y {
+    .ps__thumb-y {
+      background-color: $grey2;
+      width: 4px;
+    }
+  }
+
+  &.ps--active-y {
+    display: block;
+    background-color: transparent;
+
+  }
+}
+
+.ps__thumb-x {
+  background-color: $ubiq-green;
+  height: 4px;
+  bottom: 1px;
+}
+
+.ps__thumb-y {
+  background-color: $ubiq-green;
+  width: 4px;
+  right: 1px;
+}
+
+.ps:hover > .ps__rail-x,
+.ps:hover > .ps__rail-y,
+.ps--focus > .ps__rail-x,
+.ps--focus > .ps__rail-y,
+.ps--scrolling-x > .ps__rail-x,
+.ps--scrolling-y > .ps__rail-y {
+  opacity: 0.6;
+}
+
+.ps .ps__rail-x:hover,
+.ps .ps__rail-y:hover,
+.ps .ps__rail-x:focus,
+.ps .ps__rail-y:focus,
+.ps .ps__rail-x.ps--clicking,
+.ps .ps__rail-y.ps--clicking {
+  background-color: $grey4;
+  opacity: 0.9;
+}
+
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+
+// We want the scrollbar to appear on the layout view, so we must set all of its parents to be as high as the browser window
+// and also hide their scrollbars
+
 html {
   overflow: hidden;
   height: 100%;
@@ -21,7 +105,15 @@ html {
 
 body {
   height: 100%;
-  overflow: auto;
+  overflow: hidden;
+}
+
+#__nuxt {
+  height: 100%;
+}
+
+#__layout {
+  height: 100%;
 }
 
 a {
