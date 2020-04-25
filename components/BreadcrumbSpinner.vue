@@ -1,17 +1,9 @@
 <template>
   <v-row style="margin: 0">
     <v-col cols="10">
-      <v-breadcrumbs>
-        <v-breadcrumbs-item
-          ><nuxt-link to="/">Home</nuxt-link></v-breadcrumbs-item
-        >
-        <template v-for="(item, idx) in pathItems">
-          <div :key="idx">
-            <v-breadcrumbs-item>/</v-breadcrumbs-item>
-            <v-breadcrumbs-item active>{{ item }}</v-breadcrumbs-item>
-          </div>
-        </template>
-      </v-breadcrumbs>
+      <v-breadcrumbs
+        :items="[{ text: 'Home', to: '/' }, ...pathItems]"
+      ></v-breadcrumbs>
     </v-col>
     <v-spacer></v-spacer>
     <v-col cols="2" class="d-flex justify-end align-center">
@@ -56,11 +48,26 @@ export default {
       const path = this.$route.fullPath
       const pathItems = []
 
-      path.split('/').forEach((v) => {
-        pathItems.push(v.charAt(0).toUpperCase() + v.slice(1))
-      })
+      const split = path.split('/')
 
-      pathItems.shift()
+      // .forEach((v) => {
+      //   pathItems.push(v.charAt(0).toUpperCase() + v.slice(1))
+      // })
+
+      for (const [index, item] of split.entries()) {
+        if (index > 0) {
+          const pathItem = {
+            text: item.charAt(0).toUpperCase() + item.slice(1),
+            to: split.slice(0, index + 1).join('/')
+          }
+
+          pathItems.push(pathItem)
+        }
+      }
+
+      // const items = pathItems.map((item) => {
+      //   return { text: item.charAt(0).toUpperCase() + item.slice(1), to: '' }
+      // })
 
       return pathItems
     }

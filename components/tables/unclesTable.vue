@@ -14,13 +14,18 @@
       {{ calcTime(timestamp) }}
     </template>
     <template v-slot:item.blockNumber="{ value: blockNumber }">
-      <nuxt-link :to="{ name: 'block-id-action', params: { id: blockNumber } }">
+      <nuxt-link :to="{ name: 'block-id', params: { id: blockNumber } }">
         {{ blockNumber }}
       </nuxt-link>
     </template>
     <template v-slot:item.number="{ value: number, item: { hash } }">
       <nuxt-link :to="{ name: 'uncle-hash', params: { hash: hash } }">{{
         number
+      }}</nuxt-link>
+    </template>
+    <template v-slot:item.hash="{ item: { hash } }">
+      <nuxt-link :to="{ name: 'uncle-hash', params: { hash: hash } }">{{
+        hash
       }}</nuxt-link>
     </template>
     <template v-slot:item.miner="{ value: miner }">
@@ -74,6 +79,8 @@ export default {
         { text: 'Block Height', value: 'blockNumber' },
 
         { text: 'Uncle Number', value: 'number' },
+
+        { text: 'Uncle Hash', value: 'hash' },
 
         { text: 'Age', value: 'timestamp' },
 

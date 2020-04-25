@@ -14,7 +14,7 @@
     <template v-else v-slot:topMessage>
       Showing {{ formatNumber(transactions.length) }} pending transactions
     </template>
-    <template v-slot:item.timestamp="data">
+    <template v-if="!pending" v-slot:item.timestamp="data">
       {{ $moment.unix(data.value).format('lll') }}
     </template>
     <template v-slot:item.hash="{ value: txHash }">
@@ -25,7 +25,7 @@
     <template v-slot:item.blockNumber="{ value: blockNo }">
       <span v-if="pending">pending</span>
       <nuxt-link v-else :to="{ name: 'block-id', params: { id: blockNo } }">
-        {{ blockNumber }}
+        {{ blockNo }}
       </nuxt-link>
     </template>
     <template v-slot:item.from="{ value: sender }">
@@ -114,11 +114,6 @@ export default {
     headers() {
       let headers = [
         {
-          text: 'Timestamp',
-          value: 'timestamp',
-          sortable: false
-        },
-        {
           text: 'Txhash',
           value: 'hash',
           sortable: false
@@ -157,6 +152,11 @@ export default {
       } else {
         headers = [
           ...headers,
+          {
+            text: 'Timestamp',
+            value: 'timestamp',
+            sortable: false
+          },
           {
             text: 'Txfee',
             value: 'txFee',

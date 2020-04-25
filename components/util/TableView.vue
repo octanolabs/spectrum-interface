@@ -5,10 +5,7 @@
     :headers="headers"
     :loading="loading"
     :options="options"
-    :show-expand="showExpand"
-    :single-expand="showExpand"
     :item-key="itemKey"
-    calculate-widths
   >
     <template v-slot:top>
       <breadcrumb-spinner :loading="loading" @refresh="$emit('refresh')" />
@@ -18,9 +15,9 @@
         </v-card-text>
       </v-card>
     </template>
-    <template v-for="(_, slot) of $scopedSlots" v-slot:[slot]="scope"
-      ><slot :name="slot" v-bind="scope"
-    /></template>
+    <template v-for="(_, slot) of $scopedSlots" v-slot:[slot]="scope">
+      <slot :name="slot" v-bind="scope" />
+    </template>
   </v-data-table>
 </template>
 
@@ -65,22 +62,11 @@ export default {
         }
       }
     },
-    showExpand: {
-      type: Boolean,
-      default: () => {
-        return false
-      }
-    },
     loading: {
       type: Boolean,
       default: () => {
         return false
       }
-    }
-  },
-  data() {
-    return {
-      expanded: {}
     }
   },
   methods: {

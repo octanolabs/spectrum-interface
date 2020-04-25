@@ -1,19 +1,21 @@
 <template>
+  <!--  TODO: add to table: when forked block is included as uncle-->
   <v-row justify="center">
     <v-col cols="10">
-      <table-view
-        :items="forkedBlocksStore.reorgs"
+      <expansion-table
+        :items="forkedBlocks"
         :headers="headers"
-        :loading="loading"
-        :show-expand="true"
-        item-key="number"
-        @refresh="refresh"
+        :loading="$fetchState.pending"
+        @refresh="$fetch()"
       >
         <template v-slot:topMessage>
-          Showing latest {{ forkedBlocksStore.reorgs.length }} forked blocks
+          Showing {{ forkedBlocks.length }} forked blocks. Due to the way block
+          propagation works, this is just a view from the go-ubiq node this
+          spectrum instance is using, and doesn't reflect the entire state of
+          the network.
         </template>
         <template v-slot:item.number="data">
-          <nuxt-link :to="{ name: 'Block', params: { number: data.value } }">{{
+          <nuxt-link :to="{ name: 'block-id', params: { id: data.value } }">{{
             data.value
           }}</nuxt-link>
         </template>
@@ -25,135 +27,115 @@
             getAddressTag(data.value)
           }}</nuxt-link>
         </template>
-        <template v-slot:item.blockReward="data">
-          {{ fromWei(data.value) }} UBQ
+        <template v-slot:item.includedAsUncle="data">
+          <template v-if="data.value">yes</template>
+          <template v-else>no</template>
         </template>
-        <template v-slot:expanded-item="data">
-          <v-row>
-            <v-col>
-              <span class="code">Hash: {{ data.item.hash }}</span>
+        <template v-slot:expanded-item="{ item }">
+          <v-row justify="space-around">
+            <v-col lg="6" sm="8">
+              <span>Forked Block:</span>
+              <hr />
+              <span class="code">Hash: {{ item.hash }}</span>
               <br />
               <span class="code">Miner:</span>
-              <nuxt-link
-                :to="{ name: 'Address', params: { hash: data.item.miner } }"
-                >{{ getAddressTag(data.item.miner) }}</nuxt-link
-              >
+              <nuxt-link :to="{ name: 'Address', params: { hash: item.miner } }"
+                >{{ getAddressTag(item.miner) }}
+              </nuxt-link>
               <br />
-              <span class="code">Nonce: {{ data.item.nonce }}</span>
+              <span class="code">Nonce: {{ item.nonce }}</span>
             </v-col>
-            <v-col>
-              <span class="code">Canonical chain hash:</span>
+            <v-col lg="6" sm="8">
+              <span>Canonical Chain:</span>
+              <hr />
+              <span class="code">Hash:</span>
               <nuxt-link
                 :to="{
-                  name: 'Block',
-                  params: { number: data.item.canonicalblock.number }
+                  name: 'block-id',
+                  params: { id: item.canonicalblock.number }
                 }"
               >
-                {{ data.item.canonicalblock.hash }}</nuxt-link
-              >
+                {{ item.canonicalblock.hash.substring(0, 32) }}...
+              </nuxt-link>
               <br />
               <span class="code">Miner:</span>
               <nuxt-link
                 :to="{
                   name: 'Address',
-                  params: { hash: data.item.canonicalblock.miner }
+                  params: { hash: item.canonicalblock.miner }
                 }"
-                >{{ getAddressTag(data.item.canonicalblock.miner) }}</nuxt-link
               >
+                {{ getAddressTag(item.canonicalblock.miner) }}
+              </nuxt-link>
               <br />
-              <span class="code"
-                >Nonce: {{ data.item.canonicalblock.nonce }}</span
+              <span class="code">Nonce: {{ item.canonicalblock.nonce }}</span>
+            </v-col>
+          </v-row>
+          <v-row v-if="item.includedAsUncle">
+            <v-col>
+              <hr />
+              Included as uncle
+              <nuxt-link
+                :to="{ name: 'uncle-hash', params: { hash: item.hash } }"
               >
+                {{ item.hash.substring(0, 17) }}...
+              </nuxt-link>
             </v-col>
           </v-row>
         </template>
-        <template v-slot:item.data-table-expand="data">
-          <b-button size="sm" class="mr-2" @click.stop="fetchBlock(data)">
-            {{ data.detailsShowing ? 'Hide' : 'Show' }} Details
-          </b-button>
-        </template>
-      </table-view>
+        <!--        <template v-slot:item.data-table-expand>-->
+        <!--          <v-icon>mdi-arrow-expand-vertical</v-icon>-->
+        <!--        </template>-->
+      </expansion-table>
     </v-col>
   </v-row>
 </template>
 
 <script>
-import axios from 'axios'
 import common from '../scripts/common'
 import addresses from '../scripts/addresses'
-import tableView from '~/components/util/TableView.vue'
+import expansionTable from '~/components/util/ExpansionTable'
 
 export default {
   components: {
-    tableView
+    expansionTable
   },
-  async fetch({ store }) {
-    await store.dispatch('reorgs/fetchReorgs')
-    store.dispatch('reorgs/fetchCanonicalBlocks')
+  async fetch() {
+    await this.$store.dispatch('forkedblocks/fetchForkedBlocks')
   },
   data() {
     return {
-      loading: false,
       headers: [
         {
           text: 'Height',
           value: 'number'
         },
         {
-          text: 'Age',
+          text: 'Miner',
+          value: 'miner'
+        },
+        {
+          text: 'Seen',
           value: 'timestamp'
         },
         {
-          text: 'Txns',
-          value: 'transactions'
-        },
-        {
-          text: 'Uncles',
-          value: 'uncles'
-        },
-        {
-          text: 'GasLimit',
-          value: 'gasLimit'
-        },
-        {
-          text: 'Reward',
-          value: 'blockReward'
-        },
-        {
-          text: '',
-          value: 'data-table-expand'
+          text: 'Included as Uncle',
+          value: 'includedAsUncle'
         }
       ]
     }
   },
   computed: {
-    forkedBlocksStore() {
-      return this.$store.state.reorgs
+    forkedBlocks() {
+      return this.$store.state.forkedblocks.forkedblocks
     }
   },
   created() {
     setTimeout(() => {
-      this.refresh()
+      this.$fetch()
     }, 60000)
   },
   methods: {
-    async refresh() {
-      this.loading = true
-      await this.$store.dispatch('reorgs/fetchReorgs')
-      this.loading = false
-    },
-    fetchBlock(data) {
-      if (data.item.canonicalblock === undefined) {
-        axios
-          .get(process.env.config.apiUrl + `/block/${data.item.number}`)
-          .then((response) => {
-            data.item.canonicalblock = response.data
-            data.toggleDetails()
-          })
-      } else {
-        data.toggleDetails()
-      }
-    },
     getRowCount(items) {
       return items.length
     },

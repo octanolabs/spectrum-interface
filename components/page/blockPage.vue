@@ -1,4 +1,5 @@
 <template>
+  <!--  TODO: add optional tab that lists uncles included in block-->
   <data-view :item="block">
     <template v-slot:block.number.key>
       Height:
@@ -112,12 +113,6 @@ export default {
       default: () => {
         return {}
       }
-    }
-  },
-  data() {
-    return {
-      refreshing: false,
-      isBlock: false
     }
   },
   computed: {
