@@ -4,7 +4,11 @@ import utf8 from 'utf8'
 import moment from 'moment'
 
 export default {
-  fromWei(value) {
+  fromWei(value, roundTo = -1) {
+    if (roundTo !== -1) {
+      BigNumber.config({ DECIMAL_PLACES: roundTo })
+    }
+
     return new BigNumber(value).div(1000000000000000000).toString()
   },
   fromWeiToGwei(value) {
@@ -96,5 +100,29 @@ export default {
       moment.utc(timestamp * 1000).format('lll') +
       ' UTC)'
     )
+  },
+  calcAvgBlocktime(blocks) {
+    const blocktimes = []
+
+    let avgBlockTime = 0
+    let hashrate = 0
+
+    let sum = 0
+    let count = 0
+
+    blocks.forEach((block) => {
+      if (blocks[count + 1]) {
+        const btime = block.timestamp - blocks[count + 1].timestamp
+        blocktimes.push(btime)
+        sum += btime
+        count += 1
+      }
+    })
+    avgBlockTime = sum / blocktimes.length
+
+    // estimate hashrate based on avg blocktime (GH/s)
+    hashrate = (blocks[0].difficulty / avgBlockTime / 1000000000).toFixed(2)
+
+    return { avgBlockTime, hashrate }
   }
 }

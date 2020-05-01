@@ -4,7 +4,7 @@
       {{ 'Event Logs (' + eventLogs.length + ')' }}
     </v-card-title>
     <!-- leave this gross indentation for correct formatting inside pre -->
-    <v-card-text class="overline">
+    <v-card-text class="body-2">
       <pre>
 <strong>Transaction Receipt Event Logs</strong>
 <p v-for="(item, index) in eventLogs" :key="index">

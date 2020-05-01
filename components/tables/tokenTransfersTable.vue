@@ -3,6 +3,7 @@
     :items="transfers"
     :headers="headers"
     item-key="hash"
+    v-bind="$attrs"
     :loading="loading"
     @refresh="$emit('refresh')"
   >
@@ -12,7 +13,7 @@
     </template>
     <template v-slot:item.hash="{ value: txHash }">
       <nuxt-link :to="{ name: 'transaction-hash', params: { hash: txHash } }">
-        {{ txHash.substring(0, 17) }}...
+        {{ txHash.substring(0, 23) }}...
       </nuxt-link>
     </template>
     <template v-slot:item.timestamp="{ value: timestamp }">
@@ -24,18 +25,40 @@
         v-if="fromAddress === '0x0000000000000000000000000000000000000000'"
         style="color: #00ea90"
       >
-        Newly minted Tokens
+        <v-menu transition="scale-transition" origin="bottom-left">
+          <template v-slot:activator="{ on }">
+            <v-icon color="primary" small v-on="on"
+              >mdi-information-outline</v-icon
+            >
+          </template>
+          <v-card flat>
+            <v-card-text class="text-wrap">
+              <div class="d-block" style="width: 250px">
+                Token transfers coming from
+                0x0000000000000000000000000000000000000000 are actually newly
+                minted tokens from the token contract.
+              </div>
+            </v-card-text>
+          </v-card>
+        </v-menu>
+        <nuxt-link
+          :to="{ to: 'account-address', params: { address: fromAddress } }"
+        >
+          {{ getAddressTag(fromAddress) }}
+        </nuxt-link>
       </span>
       <nuxt-link
         v-else
-        :to="{ name: 'Address', params: { hash: fromAddress } }"
+        :to="{ name: 'account-address', params: { address: fromAddress } }"
       >
         {{ getAddressTag(fromAddress) }}
       </nuxt-link>
       <v-icon color="#333333">mdi-play</v-icon>
     </template>
     <template v-slot:item.to="{ value: toAddress }">
-      <nuxt-link :to="{ name: 'Address', params: { hash: toAddress } }">
+      <nuxt-link
+        :to="{ name: 'account-address', params: { address: toAddress } }"
+      >
         {{ getAddressTag(toAddress) }}
       </nuxt-link>
     </template>
@@ -44,7 +67,11 @@
     </template>
 
     <template v-slot:item.contract="{ value: contractAddress }">
-      {{ getName(contractAddress) }}
+      <nuxt-link
+        :to="{ name: 'account-address', params: { address: contractAddress } }"
+      >
+        {{ getName(contractAddress) }}
+      </nuxt-link>
     </template>
   </table-view>
 </template>
@@ -120,7 +147,7 @@ export default {
       return items.length
     },
     getAddressTag(hash) {
-      return addresses.getAddressTag(hash) || hash.substring(0, 17) + '...'
+      return addresses.getAddressTag(hash) || hash.substring(0, 23) + '...'
     },
     calcTime(timestamp) {
       return this.$moment().to(timestamp * 1000)

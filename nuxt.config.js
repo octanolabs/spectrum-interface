@@ -33,7 +33,9 @@ export default {
     '~plugins/vuetify.js',
     '~plugins/chartist.js',
     '~plugins/perfectscrollbar.js',
-    '~plugins/smoothreflow.js'
+    '~plugins/smoothreflow.js',
+    '~plugins/notifications.js',
+    '~plugins/qrcode.js'
   ],
   /*
    ** Nuxt.js dev-modules
@@ -57,8 +59,7 @@ export default {
    */
   env: {
     config: {
-      // apiUrl: 'http://185.243.113.40:8181/v2',
-      apiUrl: 'http://185.243.113.40:8181/v2',
+      apiUrl: 'http://185.243.113.40:8181/v3',
       rpcUrl: 'https://rpc1.ubiqscan.io/',
       pollData: 30000 // interval to poll api, in ms
     }

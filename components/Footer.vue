@@ -65,8 +65,10 @@
           <v-col>
             <nuxt-link
               :to="{
-                name: 'Address',
-                params: { hash: '0xa126d20e4424ff3f611670c129b931ad3eb60433' }
+                name: 'account-address',
+                params: {
+                  address: '0xa126d20e4424ff3f611670c129b931ad3eb60433'
+                }
               }"
               >Donations 0xa126d20e4424ff3f611670c129b931ad3eb60433</nuxt-link
             >

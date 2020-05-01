@@ -67,18 +67,11 @@
               Latest Blocks
             </h3>
           </v-card-title>
-          <perfect-scrollbar>
-            <v-list max-height="545px">
-              <v-list-item
-                v-for="(item, idx) in summary.blocks"
-                :key="idx"
-                three-line
-              >
-                <PreviewBlock :info="item" />
-                <hr style="margin:5px 0 3px 0;" />
-              </v-list-item>
-            </v-list>
-          </perfect-scrollbar>
+          <preview-list max-height="545px" :items="summary.blocks">
+            <template v-slot:default="item">
+              <preview-block :info="item"></preview-block>
+            </template>
+          </preview-list>
         </v-card>
       </v-col>
       <v-col sm="7" md="10" lg="5">
@@ -88,18 +81,11 @@
               Latest Transactions
             </h3>
           </v-card-title>
-          <perfect-scrollbar>
-            <v-list max-height="545px">
-              <v-list-item
-                v-for="(item, idx) in summary.txns"
-                :key="idx"
-                two-line
-              >
-                <PreviewTxn :info="item" />
-                <hr style="margin:5px 0 3px 0;" />
-              </v-list-item>
-            </v-list>
-          </perfect-scrollbar>
+          <preview-list max-height="545px" :items="summary.txns">
+            <template v-slot:default="item">
+              <preview-txn :info="item"></preview-txn>
+            </template>
+          </preview-list>
         </v-card>
       </v-col>
     </v-row>
@@ -109,11 +95,13 @@
 <script>
 import LineChart from '../components/charts/Line'
 import common from '../scripts/common'
-import PreviewTxn from '../components/PreviewTxn.vue'
-import PreviewBlock from '../components/PreviewBlock.vue'
+import PreviewTxn from '../components/util/misc/PreviewTxn.vue'
+import PreviewBlock from '../components/util/misc/PreviewBlock.vue'
+import PreviewList from '../components/util/PreviewList'
 
 export default {
   components: {
+    PreviewList,
     LineChart,
     PreviewTxn,
     PreviewBlock

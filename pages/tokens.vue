@@ -1,103 +1,38 @@
 <template>
   <v-row justify="center">
     <v-col cols="10">
-      <expansion-table :items="items" :headers="headers">
-        <template v-slot:expansion="item">
-          hello, i am an expansion panel, and this is my item {{ item }}
-        </template>
-      </expansion-table>
+      <tokens-table :tokens="getTokens()" />
     </v-col>
   </v-row>
 </template>
 
 <script>
-import ExpansionTable from '~/components/util/ExpansionTable'
+import tokensTable from '~/components/tables/tokensTable'
+import tokens from '~/scripts/tokens'
 
 export default {
   components: {
-    ExpansionTable
+    tokensTable
   },
-  data() {
-    return {
-      items: [
-        {
-          test1: '1',
-          test2: '2',
-          test3: '3'
-        },
-        {
-          test1: '12',
-          test2: '23',
-          test3: '34'
-        },
-        {
-          test1: '1',
-          test2: '2',
-          test3: '3'
-        },
-        {
-          test1: '12',
-          test2: '23',
-          test3: '34'
-        },
-        {
-          test1: '1',
-          test2: '2',
-          test3: '3'
-        },
-        {
-          test1: '12',
-          test2: '23',
-          test3: '34'
-        },
-        {
-          test1: '1',
-          test2: '2',
-          test3: '3'
-        },
-        {
-          test1: '12',
-          test2: '23',
-          test3: '34'
-        },
-        {
-          test1: '1',
-          test2: '2',
-          test3: '3'
-        },
-        {
-          test1: '12',
-          test2: '23',
-          test3: '34'
-        },
-        {
-          test1: '1',
-          test2: '2',
-          test3: '3'
-        },
-        {
-          test1: '12',
-          test2: '23',
-          test3: '34'
+  methods: {
+    getTokens() {
+      const tks = tokens.getTokens()
+      const result = []
+
+      for (const address of Object.keys(tks)) {
+        if (tks[address].display) {
+          const token = {
+            name: tks[address].name,
+            symbol: tks[address].symbol,
+            decimals: tks[address].decimals,
+            address
+          }
+
+          result.push(token)
         }
-      ],
-      headers: [
-        {
-          value: 'test1',
-          text: 'first',
-          sortable: false
-        },
-        {
-          value: 'test2',
-          text: 'second',
-          sortable: false
-        },
-        {
-          value: 'test3',
-          text: 'third',
-          sortable: false
-        }
-      ]
+      }
+
+      return result
     }
   }
 }

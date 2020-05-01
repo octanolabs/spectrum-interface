@@ -1,7 +1,11 @@
 <template>
   <v-data-table hide-default-header :items="items" :headers="headers">
     <template v-slot:top>
-      <breadcrumb-spinner :loading="loading" @refresh="$emit('refresh')" />
+      <breadcrumb-spinner
+        v-bind="$attrs"
+        :loading="loading"
+        @refresh="$emit('refresh')"
+      />
       <v-card>
         <v-card-text>
           <slot name="topMessage"></slot>
@@ -29,7 +33,17 @@
         </v-expansion-panels>
       </thead>
     </template>
-    <template v-slot:body="{ items: tableitems, headers: tableheaders }">
+
+    <template v-if="loading" v-slot:body="{ pagination: { itemsPerPage } }">
+      <tbody>
+        <v-skeleton-loader
+          style="padding: 16px 16px 0;"
+          :type="`list-item-two-line@${itemsPerPage}`"
+        />
+      </tbody>
+    </template>
+
+    <template v-else v-slot:body="{ items: tableitems, headers: tableheaders }">
       <v-expansion-panels flat hover>
         <v-expansion-panel
           v-for="(item, rowIndex) in tableitems"
@@ -61,7 +75,7 @@
 </template>
 
 <script>
-import BreadcrumbSpinner from '~/components/BreadcrumbSpinner.vue'
+import BreadcrumbSpinner from '~/components/util/BreadcrumbSpinner.vue'
 
 export default {
   components: {

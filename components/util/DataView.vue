@@ -1,36 +1,53 @@
 <template>
-  <!--  Datacard is a helper component to visualize Objects (blocks, tx, etc). Optionally tabs can be specified to split up content.
+  <!--  DataView is a helper component to visualize Objects (blocks, tx, etc). Optionally tabs can be specified to split up content.
         It receives an object that is passed to all the slots.
         the component should be passed scoped slots, named like this:
         <template v-slot:[tab].[slotName].[key]></template>
         slotName can be anything at all
         key slot is optional as the default content for the key slots will be a normalized string from slot name
+        a slot which has for name just the tab identifier ( v-slot:[tab]) will just outlet all content to tab without adding layout
+        any slot named "hr" will add an horizontal ruler
         -->
 
   <v-card>
     <v-card-title>
-      <breadcrumbSpinner :loading="loading" @refresh="$emit('refresh')" />
+      <breadcrumbSpinner v-bind="$attrs" no-loading />
     </v-card-title>
     <v-card-text class="body-2">
-      <v-tabs>
-        <v-tab v-for="tab in tabSlots()" :key="tab">
+      <v-tabs show-arrows :value="activeTab">
+        <v-tab v-for="tab in tabSlots()" :key="tab" :href="`#${tab}`">
           {{ tab | toSentenceCaseText }}
         </v-tab>
-        <v-tab-item v-for="tab in tabSlots()" :key="tab" eager>
-          <v-row justify="center">
-            <v-col cols="10">
+        <v-tab-item v-for="tab in tabSlots()" :key="tab" :value="tab" eager>
+          <v-row justify="center" grow>
+            <!-- If the selected tab has at least one slot, use normal layout-->
+            <v-col v-if="slotsWithTab(tab).length > 0" cols="10">
               <v-row v-for="slot of slotsWithTab(tab)" :key="slot">
-                <v-col cols="3">
-                  <slot v-bind="item" :name="slot + '.key'">
-                    {{
-                      slot | stripTabAndKey | toSentenceCaseText | capitalize
-                    }}:
-                  </slot>
-                </v-col>
-                <v-col cols="8">
-                  <slot v-bind="item" :name="slot" />
-                </v-col>
+                <template v-if="slot.includes('.hr')">
+                  <v-col cols="12">
+                    <slot :name="slot">
+                      <hr />
+                    </slot>
+                  </v-col>
+                </template>
+                <template v-else>
+                  <v-col cols="4">
+                    <slot v-bind="item" :name="slot + '.key'">
+                      {{
+                        slot | stripTabAndKey | toSentenceCaseText | capitalize
+                      }}:
+                    </slot>
+                  </v-col>
+                  <v-col cols="8">
+                    <slot v-bind="item" :name="slot" />
+                  </v-col>
+                </template>
               </v-row>
+            </v-col>
+
+            <!-- Else, dump all content with no layout-->
+            <v-col v-else cols="11">
+              <slot :name="tab" v-bind="item"></slot>
             </v-col>
           </v-row>
         </v-tab-item>
@@ -40,7 +57,7 @@
 </template>
 
 <script>
-import breadcrumbSpinner from '~/components/BreadcrumbSpinner.vue'
+import breadcrumbSpinner from '~/components/util/BreadcrumbSpinner.vue'
 
 export default {
   components: {
@@ -70,18 +87,15 @@ export default {
   },
   props: {
     item: {
-      type: Object,
+      type: [Object, Array],
       required: true,
       default: () => {
         return { test: 'default' }
       }
     },
-    loading: {
-      type: Boolean,
-      required: false,
-      default: () => {
-        return false
-      }
+    activeTab: {
+      type: String,
+      default: () => ''
     }
   },
   methods: {
@@ -100,22 +114,21 @@ export default {
       for (const i of Object.keys(this.$scopedSlots).filter(
         (s) => !s.includes('default')
       )) {
-        // Destructure and remove first elem that refers to tabs
+        // Destructure each slot and check if there are tabs without slots
         const [tab, slot, ,] = i.split('.')
 
-        s[`${tab}.${slot}`] = null
+        if (slot !== undefined) {
+          s[`${tab}.${slot}`] = null
+        }
       }
       return Object.keys(s)
     },
     slotsWithTab(selectedTab) {
-      return this.slots()
-        .map((s) => {
-          const [tab, , ,] = s.split('.')
+      return this.slots().filter((s) => {
+        const [tab, ,] = s.split('.')
 
-          return [tab, s]
-        })
-        .filter(([tab, ,]) => tab.includes(selectedTab))
-        .map(([, slot]) => slot)
+        return tab === selectedTab
+      })
     }
   }
 }

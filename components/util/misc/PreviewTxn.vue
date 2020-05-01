@@ -18,27 +18,32 @@
           >TX#
           <nuxt-link
             :to="{ name: 'transaction-hash', params: { hash: hash.full } }"
-            >{{ hash.short }}</nuxt-link
-          >...</strong
-        >
-        <label
-          >From
-          <nuxt-link :to="{ name: 'Address', params: { hash: from.full } }">{{
-            from.short
-          }}</nuxt-link>
+          >
+            {{ hash.short }}...
+          </nuxt-link>
+        </strong>
+        <label>
+          From
+          <nuxt-link
+            :to="{ name: 'account-address', params: { address: from.full } }"
+          >
+            {{ from.short }}
+          </nuxt-link>
           To
-          <nuxt-link :to="{ name: 'Address', params: { hash: to.full } }">{{
-            to.short
-          }}</nuxt-link></label
-        >
+          <nuxt-link
+            :to="{ name: 'account-address', params: { address: to.full } }"
+          >
+            {{ to.short }}
+          </nuxt-link>
+        </label>
       </div>
     </v-col>
   </v-row>
 </template>
 
 <script>
-import common from '../scripts/common.js'
-import addresses from '../scripts/addresses.js'
+import common from '../../../scripts/common.js'
+import addresses from '../../../scripts/addresses.js'
 
 export default {
   props: {
@@ -76,7 +81,7 @@ export default {
         addresses.getAddressTag(this.info.to) ||
         this.info.to.substring(0, 17) + '...'
     }
-    this.value = common.fromWei(this.info.value)
+    this.value = common.fromWei(this.info.value, 4)
   }
 }
 </script>

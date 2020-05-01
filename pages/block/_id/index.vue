@@ -1,9 +1,11 @@
 <template>
   <v-row justify="center">
-    <v-col cols="6">
+    <v-col lg="8" md="10" sm="12">
       <blockPage
         :latest-block="this.$store.state.stats.latestBlock"
         :block="block"
+        :transactions="transactions"
+        :open-transactions="openTransactions"
       />
     </v-col>
   </v-row>
@@ -33,14 +35,31 @@ export default {
       method = `/blockbyhash/`
     }
 
-    const { data } = await axios.get(
-      process.env.config.apiUrl + method + this.$route.params.id
-    )
-    this.block = data
+    const { data } = await axios
+      .get(process.env.config.apiUrl + method + this.$route.params.id)
+      .then((response) => {
+        this.block = response.data
+
+        return axios.get(
+          process.env.config.apiUrl + `/block/${response.data.number}/txns`
+        )
+      })
+
+    this.transactions = data
   },
   data() {
     return {
-      block: {}
+      block: {},
+      transactions: []
+    }
+  },
+  computed: {
+    openTransactions() {
+      const query = this.$route.query
+      if (query.show === 'transactions') {
+        return true
+      }
+      return false
     }
   },
   fetchOnServer: false,

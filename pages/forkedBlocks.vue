@@ -3,16 +3,16 @@
   <v-row justify="center">
     <v-col cols="10">
       <expansion-table
-        :items="forkedBlocks"
+        :items="store.forkedBlocks"
         :headers="headers"
         :loading="$fetchState.pending"
         @refresh="$fetch()"
       >
         <template v-slot:topMessage>
-          Showing {{ forkedBlocks.length }} forked blocks. Due to the way block
-          propagation works, this is just a view from the go-ubiq node this
-          spectrum instance is using, and doesn't reflect the entire state of
-          the network.
+          Showing {{ store.total }} of {{ store.forkedBlocks.length }} forked
+          blocks. Due to the way block propagation works, this is just a view
+          from the go-ubiq node this spectrum instance is using, and doesn't
+          reflect the entire state of the network.
         </template>
         <template v-slot:item.number="data">
           <nuxt-link :to="{ name: 'block-id', params: { id: data.value } }">{{
@@ -23,9 +23,10 @@
           ~{{ calcTime(data.value) }}
         </template>
         <template v-slot:item.miner="data">
-          <nuxt-link :to="{ name: 'Address', params: { hash: data.value } }">{{
-            getAddressTag(data.value)
-          }}</nuxt-link>
+          <nuxt-link
+            :to="{ name: 'account-address', params: { address: data.value } }"
+            >{{ getAddressTag(data.value) }}</nuxt-link
+          >
         </template>
         <template v-slot:item.includedAsUncle="data">
           <template v-if="data.value">yes</template>
@@ -33,19 +34,23 @@
         </template>
         <template v-slot:expanded-item="{ item }">
           <v-row justify="space-around">
-            <v-col lg="6" sm="8">
+            <v-col lg="7" sm="8">
               <span>Forked Block:</span>
               <hr />
               <span class="code">Hash: {{ item.hash }}</span>
               <br />
               <span class="code">Miner:</span>
-              <nuxt-link :to="{ name: 'Address', params: { hash: item.miner } }"
+              <nuxt-link
+                :to="{
+                  name: 'account-address',
+                  params: { address: item.miner }
+                }"
                 >{{ getAddressTag(item.miner) }}
               </nuxt-link>
               <br />
               <span class="code">Nonce: {{ item.nonce }}</span>
             </v-col>
-            <v-col lg="6" sm="8">
+            <v-col lg="5" sm="8">
               <span>Canonical Chain:</span>
               <hr />
               <span class="code">Hash:</span>
@@ -83,9 +88,6 @@
             </v-col>
           </v-row>
         </template>
-        <!--        <template v-slot:item.data-table-expand>-->
-        <!--          <v-icon>mdi-arrow-expand-vertical</v-icon>-->
-        <!--        </template>-->
       </expansion-table>
     </v-col>
   </v-row>
@@ -97,6 +99,7 @@ import addresses from '../scripts/addresses'
 import expansionTable from '~/components/util/ExpansionTable'
 
 export default {
+  name: 'ForkedBlocks',
   components: {
     expansionTable
   },
@@ -126,8 +129,8 @@ export default {
     }
   },
   computed: {
-    forkedBlocks() {
-      return this.$store.state.forkedblocks.forkedblocks
+    store() {
+      return this.$store.state.forkedblocks
     }
   },
   created() {

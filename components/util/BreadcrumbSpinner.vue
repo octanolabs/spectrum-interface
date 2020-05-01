@@ -1,12 +1,13 @@
 <template>
   <v-row style="margin: 0">
-    <v-col cols="10">
+    <v-col cols="11">
       <v-breadcrumbs
+        v-if="!noBreadcrumbs"
         :items="[{ text: 'Home', to: '/' }, ...pathItems]"
       ></v-breadcrumbs>
     </v-col>
     <v-spacer></v-spacer>
-    <v-col cols="2" class="d-flex justify-end align-center">
+    <v-col v-if="!noLoading" cols="1" class="d-flex justify-end align-center">
       <v-btn
         :disabled="loading"
         :loading="loading"
@@ -28,27 +29,31 @@
 </template>
 
 <script>
+import addresses from '../../scripts/addresses'
+
 export default {
   props: {
-    // load: {
-    //   type: Boolean,
-    //   default: () => {
-    //     return false
-    //   }
-    // },
     loading: {
       type: Boolean,
-      default: () => {
-        return false
-      }
+      default: false
+    },
+    noLoading: {
+      type: Boolean,
+      default: false
+    },
+    noBreadcrumbs: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
     pathItems() {
-      const path = this.$route.fullPath
+      const route = this.$route
       const pathItems = []
 
-      const split = path.split('/')
+      const split = route.fullPath
+        .split('/')
+        .filter((item) => !item.includes('?'))
 
       // .forEach((v) => {
       //   pathItems.push(v.charAt(0).toUpperCase() + v.slice(1))
@@ -62,6 +67,14 @@ export default {
           }
 
           pathItems.push(pathItem)
+        }
+      }
+
+      if (route.name === 'account-address') {
+        const addressName = addresses.getAddressTag(route.params.address)
+        if (addressName !== null) {
+          pathItems[pathItems.length - 1].text =
+            pathItems[pathItems.length - 1].text + ` (${addressName})`
         }
       }
 

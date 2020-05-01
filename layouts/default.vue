@@ -2,12 +2,7 @@
   <perfect-scrollbar style="height: 100%">
     <v-app>
       <AppBar />
-      <!--<notifications
-            position="top left"
-            class="top-notification"
-            group="normal"
-            width="100%"
-           />-->
+      <notifications position="bottom right" group="normal" />
 
       <!-- Sizes your content based upon application components -->
       <!-- AppBar's smooth reflow doesn't play nice with nuxt's auto resizing shenanigans, this padding makes it so the content under the appbar is not moved-->

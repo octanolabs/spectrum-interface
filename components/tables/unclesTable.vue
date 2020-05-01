@@ -4,6 +4,7 @@
     :headers="headers"
     :loading="loading"
     item-key="hash"
+    v-bind="$attrs"
     @refresh="$emit('refresh')"
   >
     <template v-slot:topMessage>
@@ -29,7 +30,7 @@
       }}</nuxt-link>
     </template>
     <template v-slot:item.miner="{ value: miner }">
-      <nuxt-link :to="{ name: 'Address', params: { hash: miner } }">
+      <nuxt-link :to="{ name: 'account-address', params: { address: miner } }">
         {{ getAddressTag(miner) }}
       </nuxt-link>
     </template>

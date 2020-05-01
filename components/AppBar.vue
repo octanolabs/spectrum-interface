@@ -30,20 +30,24 @@
     <v-spacer />
     <v-spacer />
 
-    <v-text-field
-      dense
-      right
-      hide-details
-      type="text"
-      label="Search by Address / Txhash / Block"
-      style="max-width: 400px"
-    >
-      <template v-slot:append-outer style="margin-bottom: 0; margin-top: 0;">
-        <v-btn small block type="submit">
+    <v-input hide-details>
+      <v-text-field
+        v-model="search"
+        hide-details
+        dense
+        right
+        type="text"
+        label="Search by Address / Txhash / Block"
+        style="max-width: 400px"
+        @keydown="handleEvent"
+      >
+      </v-text-field>
+      <template v-slot:append style="margin-bottom: 0; margin-top: 0;">
+        <v-btn small block type="submit" @click="handleEvent">
           <v-icon dark>mdi-magnify</v-icon> Search
         </v-btn>
       </template>
-    </v-text-field>
+    </v-input>
 
     <v-spacer />
     <v-spacer />
@@ -60,20 +64,6 @@
     </v-item-group>
 
     <template v-if="expandToolbar" v-slot:extension>
-      <!--          <div class="d-flex align-center justify-space-around">-->
-      <!--            <div-->
-      <!--              v-for="(item, idx) in toolbarItems"-->
-      <!--              :key="idx"-->
-      <!--              class="d-inline-flex text-center"-->
-      <!--            >-->
-      <!--              <a v-if="item.text === 'Network Stats'" :href="item.path">{{-->
-      <!--                item.text-->
-      <!--              }}</a>-->
-      <!--              <nuxt-link v-else :to="item.path">-->
-      <!--                {{ item.text }}-->
-      <!--              </nuxt-link>-->
-      <!--            </div>-->
-      <!--          </div>-->
       <v-row align-content="center">
         <v-col
           v-for="(item, idx) in toolbarItems"
@@ -96,8 +86,9 @@
 import axios from 'axios'
 import smoothReflow from 'vue-smooth-reflow'
 import common from '../scripts/common'
-import Tokens from '../scripts/tokens'
+
 // import navbarModal from './misc/navbarmodal'
+
 export default {
   name: 'Navbar',
   // components: {
@@ -142,11 +133,6 @@ export default {
   mounted() {
     this.$smoothReflow()
   },
-  created() {
-    this.$router.options.routes.forEach((route) => {
-      console.log(route)
-    })
-  },
   methods: {
     getRoutes(path = '') {
       this.$router.options.routes.forEach((route) => {
@@ -155,6 +141,15 @@ export default {
           path: route.path
         })
       })
+    },
+    handleEvent(e) {
+      if (e instanceof KeyboardEvent) {
+        if (e.code === 'Enter' || e.key === 'Enter') {
+          this.submitSearch(this.search)
+        }
+      } else if (e instanceof MouseEvent) {
+        this.submitSearch(this.search)
+      }
     },
     toggleToolbar(item = '') {
       if (item !== '') {
@@ -176,31 +171,24 @@ export default {
     submitSearch(str) {
       // remove whitespace
       str = str.replace(/\s/g, '')
+
       const address = new RegExp(/^0x[0-9a-fA-F]{40}$/i)
       const hash = new RegExp(/^0x[0-9a-fA-F]{64}$/i)
+
       if (address.test(str)) {
         // matches address format
-        if (Tokens.getToken(str.toLowerCase())) {
-          // matches token hash
-          this.$router.push({
-            name: 'Token',
-            params: { hash: str.toLowerCase() }
-          })
-          this.search = ''
-        } else {
-          // must be an account/contract
-          this.$router.push({
-            name: 'Address',
-            params: { hash: str.toLowerCase() }
-          })
-          this.search = ''
-        }
+
+        this.$router.push({
+          name: 'account-address',
+          params: { address: str.toLowerCase() }
+        })
+        this.search = ''
       } else if (hash.test(str)) {
-        console.log('search: is hash')
         // is block or txn hash
         // check if block hash
+
         axios
-          .post(this.$store.state.rpc, {
+          .post(process.env.config.rpcUrl, {
             jsonrpc: '2.0',
             method: 'eth_getBlockByHash',
             params: [str, false],
@@ -210,16 +198,16 @@ export default {
             if (response.data.result) {
               // is block hash
               this.$router.push({
-                name: 'Block',
+                name: 'block-id',
                 params: {
-                  number: common.hexToDecimal(response.data.result.number)
+                  id: common.hexToDecimal(response.data.result.number)
                 }
               })
               this.search = ''
             } else {
               // check if txn hash
               axios
-                .post(this.$store.state.rpc, {
+                .post(process.env.config.rpcUrl, {
                   jsonrpc: '2.0',
                   method: 'eth_getTransactionByHash',
                   params: [str],
@@ -229,13 +217,13 @@ export default {
                   if (response.data.result) {
                     // is txn hash
                     this.$router.push({
-                      name: 'Transaction',
+                      name: 'transaction-hash',
                       params: { hash: str.toLowerCase() }
                     })
                     this.search = ''
                   } else {
                     // hash is not valid txn or block hash
-                    console.log('Search: invalid block/txn hash')
+
                     this.$notify({
                       group: 'normal',
                       text:
@@ -255,7 +243,7 @@ export default {
           })
       } else if (!isNaN(parseFloat(str)) && isFinite(str)) {
         // is potential block number
-        this.$router.push({ name: 'Block', params: { number: str } })
+        this.$router.push({ name: 'block-id', params: { id: str } })
         this.search = ''
       } else {
         this.$notify({

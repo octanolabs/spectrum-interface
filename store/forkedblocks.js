@@ -1,26 +1,29 @@
 import axios from 'axios'
 export const state = () => ({
-  forkedblocks: []
+  forkedBlocks: [],
+  total: 0
 })
 
 export const mutations = {
-  SET_FORKEDBLOCKS(state, forkedblocks) {
-    state.forkedblocks = forkedblocks
+  SET_FORKEDBLOCKS(state, { forkedBlocks, total }) {
+    state.forkedBlocks = forkedBlocks
+    state.total = total
   }
 }
 
 export const actions = {
   async fetchForkedBlocks({ commit }) {
-    const { data } = await axios.get(
-      process.env.config.apiUrl + '/latestforkedblocks/1000'
-    )
+    const {
+      data: { forkedBlocks, total }
+    } = await axios.get(process.env.config.apiUrl + '/latestforkedblocks/1000')
 
-    const forkedBlocks = await Promise.all(
-      data.map(async (forked) => {
+    await Promise.all(
+      forkedBlocks.map(async (forked) => {
         const { data: block } = await axios.get(
           process.env.config.apiUrl + `/block/${forked.number}`
         )
 
+        // TODO: add another check, statusCode od 200 is too weak
         const { status } = await axios.get(
           process.env.config.apiUrl + `/uncle/${forked.hash}`
         )
@@ -30,6 +33,6 @@ export const actions = {
       })
     )
 
-    commit('SET_FORKEDBLOCKS', forkedBlocks)
+    commit('SET_FORKEDBLOCKS', { forkedBlocks, total })
   }
 }

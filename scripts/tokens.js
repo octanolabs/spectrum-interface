@@ -32,7 +32,7 @@ const tokens = {
     name: 'CryptopiaFeeShare',
     symbol: 'CEFS',
     decimals: 8,
-    display: true
+    display: false
   },
   '0x94ad7e41c1d44022c4f47cb1ba019fd1a022c536': {
     name: 'Dotcoin',

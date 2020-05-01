@@ -4,6 +4,7 @@
     :headers="headers"
     :loading="loading"
     item-key="number"
+    v-bind="$attrs"
     @refresh="$emit('refresh')"
   >
     <template v-slot:topMessage>
@@ -11,7 +12,7 @@
       {{ formatNumber(total) }} blocks
     </template>
     <template v-slot:item.timestamp="data">
-      {{ $moment.unix(data.value).format('lll') }}
+      {{ $moment.unix(data.value).format('L, LTS') }}
     </template>
     <template v-slot:item.number="data">
       <nuxt-link :to="{ name: 'block-id', params: { id: data.value } }">{{
@@ -20,12 +21,7 @@
     </template>
     <template v-slot:item.transactions="data">
       <template v-if="data.value !== 0">
-        <nuxt-link
-          :to="{
-            name: 'block-id-action',
-            params: { id: data.item.number, action: 'transactions' }
-          }"
-        >
+        <nuxt-link :to="`/block/${data.item.number}?show=transactions`">
           {{ data.value }}
         </nuxt-link>
       </template>
@@ -39,22 +35,23 @@
       </nuxt-link>
     </template>
     <template v-slot:item.miner="data">
-      <nuxt-link :to="{ name: 'Address', params: { hash: data.value } }">{{
-        getAddressTag(data.value)
-      }}</nuxt-link>
+      <nuxt-link
+        :to="{ name: 'account-address', params: { address: data.value } }"
+      >
+        {{ getAddressTag(data.value) }}
+      </nuxt-link>
     </template>
     <template v-slot:item.gasUsed="data">
       {{ data.value }} ({{ calcGasUsed(data.value, data.item.gasLimit) }})
     </template>
     <template v-slot:item.avgGasPrice="data">
-      <span v-if="data.value !== 'NaN'"
-        >{{ fromWeiToGwei(data.value) }} gwei</span
-      >
+      <span v-if="data.value !== 'NaN'">
+        {{ fromWeiToGwei(data.value) }} gwei
+      </span>
       <span v-else>-</span>
     </template>
     <template v-slot:item.blockReward="data">
-      {{ fromWei(addTxFees(data.value, data.item.txFees)) }}
-      UBQ
+      {{ fromWei(addTxFees(data.value, data.item.txFees)) }} UBQ
     </template>
   </table-view>
 </template>

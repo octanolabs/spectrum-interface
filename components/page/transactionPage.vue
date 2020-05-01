@@ -16,20 +16,22 @@
     <template v-slot:transaction.timestamp="{ timestamp }">
       {{ calcTime(timestamp) }}
     </template>
-    <template v-slot:transaction.from="{ from }">
-      <!--      TODO: add address link when impl-->
-      <nuxt-link :to="{ name: 'Address', params: { hash: token.to } }">
-        {{ from | shortenAddress }}
+    <template v-slot:transaction.from="{ from: fromAddress }">
+      <nuxt-link
+        :to="{ name: 'account-address', params: { address: fromAddress } }"
+      >
+        {{ fromAddress | shortenAddress }}
       </nuxt-link>
-      {{ getAddressTag(from) }}
+      {{ getAddressTag(fromAddress) }}
     </template>
-    <template v-slot:transaction.to="{ to }">
-      <!--      TODO: add address link when impl-->
-      <nuxt-link :to="{ name: 'Address', params: { hash: token.to } }">
-        {{ to | shortenAddress }}
+    <template v-slot:transaction.to="{ to: toAddress }">
+      <nuxt-link
+        :to="{ name: 'account-address', params: { address: toAddress } }"
+      >
+        {{ toAddress | shortenAddress }}
       </nuxt-link>
       <template v-if="to">
-        {{ getAddressTag(to) }}
+        {{ getAddressTag(toAddress) }}
       </template>
       <template v-else>
         null
@@ -115,10 +117,7 @@
         {{ token.symbol }}
       </nuxt-link>
     </template>
-    <template v-if="showLogs" v-slot:eventLogs.logs.key>
-      Event Logs:
-    </template>
-    <template v-if="showLogs" v-slot:eventLogs.logs>
+    <template v-if="showLogs" v-slot:eventLogs>
       <tx-logs-card :event-logs="eventLogs" />
     </template>
   </data-view>

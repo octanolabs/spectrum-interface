@@ -5,7 +5,9 @@
       <v-card light>
         <v-card-text>
           <div class="d-flex flex-column align-center">
-            <label> Block {{ number }} </label>
+            <label>
+              Block <nuxt-link :to="`/block/${number}`">{{ number }}</nuxt-link>
+            </label>
             <label>
               <small>{{ timeSince }}</small>
             </label>
@@ -17,23 +19,22 @@
 
     <v-col cols="8">
       <v-row>
-        <strong
-          >Mined By
-          <nuxt-link :to="{ name: 'Address', params: { hash: miner.full } }">{{
-            miner.short
-          }}</nuxt-link></strong
-        >
+        <strong>
+          Mined By
+          <nuxt-link
+            :to="{ name: 'account-address', params: { address: miner.full } }"
+          >
+            {{ miner.short }}
+          </nuxt-link>
+        </strong>
       </v-row>
       <v-row>
-        <label
-          ><nuxt-link
-            :to="{
-              name: 'block-id-action',
-              params: { id: number, action: 'transactions' }
-            }"
-            >{{ txns }} txns</nuxt-link
-          ></label
-        >
+        <label v-if="txns > 0">
+          <nuxt-link :to="`/block/${number}?show=transactions`">
+            {{ txns }} txns
+          </nuxt-link>
+        </label>
+        <label v-else> {{ txns }} txns </label>
       </v-row>
       <v-row>
         <label>Block Reward {{ reward }} UBQ</label>
@@ -43,8 +44,8 @@
 </template>
 
 <script>
-import addresses from '../scripts/addresses'
-import rewards from '../scripts/rewards'
+import addresses from '../../../scripts/addresses'
+import rewards from '../../../scripts/rewards'
 export default {
   props: {
     info: {

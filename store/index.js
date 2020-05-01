@@ -57,74 +57,54 @@ export const mutations = {
 }
 
 export const actions = {
-  fetchIndexState({ commit }) {
-    let d = {}
+  async fetchIndexState({ commit }) {
+    const { data: status } = await axios.get(
+      process.env.config.apiUrl + '/status'
+    )
+
+    const {
+      data: {
+        ticker: { price: btcPrice }
+      }
+    } = await axios.get('https://api.cryptonator.com/api/ticker/ubq-btc')
+
+    const {
+      data: {
+        bpi: {
+          EUR: { rate: usdRate },
+          USD: { rate: eurRate }
+        }
+      }
+    } = await axios.get('https://api.coindesk.com/v1/bpi/currentprice.json')
+
     const price = {
-      btc: '',
-      usd: '',
-      eur: ''
+      btc: btcPrice,
+      usd: common.mulFiat(btcPrice, eurRate.replace(',', '')),
+      eur: common.mulFiat(btcPrice, usdRate.replace(',', ''))
     }
-    axios
-      .get(process.env.config.apiUrl + '/status')
-      .then((res) => {
-        d = { ...res.data }
-        return axios.get('https://api.cryptonator.com/api/ticker/ubq-btc')
-      })
-      .then((res) => {
-        price.btc = res.data.ticker.price
 
-        return axios.get('https://api.coindesk.com/v1/bpi/currentprice.json')
-      })
-      .then((res) => {
-        price.eur = common.mulFiat(
-          price.btc,
-          res.data.bpi.EUR.rate.replace(',', '')
-        )
-        price.usd = common.mulFiat(
-          price.btc,
-          res.data.bpi.USD.rate.replace(',', '')
-        )
-        commit('SET_STATS', { ...d, price })
-      })
+    commit('SET_STATS', { ...status, price })
   },
-  fetchChainSummary({ commit }) {
-    const summary = {}
-    axios
-      .get(process.env.config.apiUrl + '/latesttransactions/12')
-      .then((response) => {
-        summary.txns = response.data.txns
-        summary.txnCount = response.data.total
-        return axios.get(process.env.config.apiUrl + '/latestblocks/12')
-      })
-      .then((response) => {
-        summary.blocks = response.data.blocks
-        summary.difficulty = common.toTH(summary.blocks[0].difficulty, 2) // (TH)
-        summary.blocktime =
-          summary.blocks[0].timestamp - summary.blocks[1].timestamp
+  async fetchChainSummary({ commit }) {
+    const {
+      data: { txns, total: txnCount }
+    } = await axios.get(process.env.config.apiUrl + '/latesttransactions/12')
 
-        // calc avg blocktime based on latest blocks
-        const blocktimes = []
+    const {
+      data: { blocks }
+    } = await axios.get(process.env.config.apiUrl + '/latestblocks/12')
 
-        let sum = 0
-        let count = 0
+    const { blocktime, hashrate } = common.calcAvgBlocktime(blocks)
 
-        summary.blocks.forEach(function(block) {
-          if (summary.blocks[count + 1]) {
-            const btime = block.timestamp - summary.blocks[count + 1].timestamp
-            blocktimes.push(btime)
-            sum += btime
-            count += 1
-          }
-        })
-        const avgBlocktime = sum / blocktimes.length
+    const difficulty = common.toTH(blocks[0].difficulty, 2)
 
-        // estimate hashrate based on avg blocktime (GH/s)
-        summary.hashrate = (
-          summary.blocks[0].difficulty /
-          avgBlocktime /
-          1000000000
-        ).toFixed(2)
-        commit('SET_SUMMARY', { ...summary })
-      })
+    commit('SET_SUMMARY', {
+      txns,
+      txnCount,
+      blocks,
+      blocktime,
+      hashrate,
+      difficulty
+    })
   }
 }

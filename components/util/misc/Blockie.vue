@@ -18,7 +18,20 @@
 
 <script>
 export default {
-  props: ['address', 'size', 'inline'],
+  props: {
+    address: {
+      type: String,
+      default: ''
+    },
+    size: {
+      type: String,
+      default: ''
+    },
+    inline: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       randseed: new Array(4),

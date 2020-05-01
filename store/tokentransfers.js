@@ -5,8 +5,8 @@ export const state = () => ({
 })
 
 export const mutations = {
-  SET_TRANSFERS(state, { txns, total }) {
-    state.latest = txns
+  SET_TRANSFERS(state, { transfers, total }) {
+    state.latest = transfers
     state.total = total
   }
 }

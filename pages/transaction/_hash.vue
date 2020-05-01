@@ -1,6 +1,6 @@
 <template>
   <v-row justify="center">
-    <v-col cols="6">
+    <v-col lg="8" md="10" sm="12">
       <transaction-page
         :transaction="txn"
         :price-usd="$store.state.stats.price.usd"

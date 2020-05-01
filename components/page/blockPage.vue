@@ -1,6 +1,9 @@
 <template>
   <!--  TODO: add optional tab that lists uncles included in block-->
-  <data-view :item="block">
+  <data-view
+    :item="block"
+    :active-tab="openTransactions ? 'transactions' : 'block'"
+  >
     <template v-slot:block.number.key>
       Height:
     </template>
@@ -27,20 +30,8 @@
     <template v-slot:block.timestamp="{ timestamp }">
       ~{{ calcTime(timestamp) }}
     </template>
-    <template v-slot:block.transactions="{ number: height, transactions }">
-      <template v-if="transactions !== 0">
-        <nuxt-link
-          :to="{
-            name: 'block-id-action',
-            params: {
-              id: height,
-              action: 'transactions'
-            }
-          }"
-        >
-          {{ transactions }} transactions
-        </nuxt-link>
-      </template>
+    <template v-slot:block.transactions="{ transactions: txns }">
+      <template v-if="txns !== 0"> {{ txns }} transactions </template>
       <template v-else>0 transactions</template>
     </template>
     <template v-slot:block.hash="{ hash }">
@@ -55,13 +46,15 @@
       {{ sha3Uncles }}
     </template>
     <template v-slot:block.miner="{ miner }">
-      {{ getAddressTag(miner) }}
+      <nuxt-link :to="{ name: 'account-address', params: { address: miner } }">
+        {{ getAddressTag(miner) }}
+      </nuxt-link>
     </template>
     <template v-slot:block.difficulty="{ difficulty }">
       {{ toTH(difficulty) }} TH
     </template>
     <template v-slot:block.size="{ size }">
-      {{ formatNumber(size) }}
+      {{ formatNumber(size) }} bytes
     </template>
     <template v-slot:block.gasUsed="{ gasUsed, gasLimit }">
       {{ formatNumber(gasUsed) }} ({{ calcGasUsed(gasUsed, gasLimit) }})
@@ -87,17 +80,31 @@
     <template v-slot:block.extraData="{ extraData }">
       {{ toUtf8(extraData) || toAscii(extraData) }} (hex:{{ extraData }})
     </template>
+    <template v-slot:transactions>
+      <txns-table
+        v-if="transactions.length > 0"
+        :transactions="transactions"
+        :block-number="block.number"
+        :total="transactions.length"
+        block
+        no-breadcrumbs
+        no-loading
+      />
+      <p v-else>This block didn't mine any transactions</p>
+    </template>
   </data-view>
 </template>
 
 <script>
 import dataView from '~/components/util/DataView.vue'
+import txnsTable from '~/components/tables/txnsTable.vue'
 import common from '~/scripts/common'
 import addresses from '~/scripts/addresses'
 
 export default {
   components: {
-    dataView
+    dataView,
+    txnsTable
   },
   props: {
     latestBlock: {
@@ -113,6 +120,15 @@ export default {
       default: () => {
         return {}
       }
+    },
+    transactions: {
+      type: Array,
+      required: true,
+      default: () => []
+    },
+    openTransactions: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
