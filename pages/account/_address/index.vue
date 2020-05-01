@@ -4,7 +4,7 @@
       <token-page
         v-if="isToken"
         :store="accountStore"
-        :price="$store.state.stats.price"
+        :price="tokenPrice"
         :address="$route.params.address"
         :loading-object="fetchStates"
         @refresh="$fetch"
@@ -13,7 +13,7 @@
       <account-page
         v-else
         :store="accountStore"
-        :price="$store.state.stats.price"
+        :price="prices.ubq"
         :address="$route.params.address"
         :loading-object="fetchStates"
         @refresh="$fetch"
@@ -23,7 +23,7 @@
 </template>
 
 <!-- Todo: Default token balance view should only show echer balance, optional button to load all other token balances-->
-<!-- maybe it should be ansall card component with balance + sparkline of n months of balance-->
+<!-- maybe it should be a small card component with balance + sparkline of n months of balance-->
 
 <script>
 import tokens from '../../../scripts/tokens'
@@ -68,15 +68,26 @@ export default {
     accountStore() {
       return this.$store.state.account
     },
+    prices() {
+      return this.$store.state.prices
+    },
     isToken() {
       const address = this.$route.params.address.toLowerCase()
       return Object.keys(tokens.getTokens()).includes(address)
+    },
+    tokenPrice() {
+      const address = this.$route.params.address.toLowerCase()
+      const tk = tokens.getToken(address)
+
+      if (tk.traded) {
+        return this.prices[tk.symbol.toLowerCase()]
+      }
+      return null
     }
   },
   watch: {
     '$route.params.address': {
       handler() {
-        console.log('route changed:', this.$route.params)
         this.$fetch()
       },
       immediate: true
@@ -93,8 +104,8 @@ export default {
   //   }
   //   return /^0x([A-Fa-f0-9]{42})$/.test(params.address)
   // },
-  middleware({ store, params }) {
-    store.dispatch('fetchIndexState', params.address)
+  async middleware({ store }) {
+    await store.dispatch('fetchPrices')
   },
   methods: {
     async setToken(address) {

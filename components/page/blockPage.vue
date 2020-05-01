@@ -3,6 +3,7 @@
   <data-view
     :item="block"
     :active-tab="openTransactions ? 'transactions' : 'block'"
+    :loading="loading"
   >
     <template v-slot:block.number.key>
       Height:
@@ -129,6 +130,11 @@ export default {
     openTransactions: {
       type: Boolean,
       default: false
+    },
+    loading: {
+      type: Boolean,
+      required: true,
+      default: false
     }
   },
   computed: {
@@ -156,8 +162,8 @@ export default {
         return null
       }
     },
-    fromWei(val) {
-      return common.fromWei(val)
+    fromWei(val, roundTo) {
+      return common.fromWei(val, roundTo)
     },
     fromWeiToGwei(val) {
       return common.fromWeiToGwei(val)

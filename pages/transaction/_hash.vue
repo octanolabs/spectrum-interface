@@ -3,7 +3,7 @@
     <v-col lg="8" md="10" sm="12">
       <transaction-page
         :transaction="txn"
-        :price-usd="$store.state.stats.price.usd"
+        :price-usd="priceUSD"
         :confirmations="confirmations"
       ></transaction-page>
     </v-col>
@@ -28,8 +28,8 @@ export default {
       }
     }
   },
-  middleware({ store }) {
-    store.dispatch('fetchIndexState')
+  async middleware({ store }) {
+    await store.dispatch('fetchPrices')
   },
   async fetch() {
     const { data } = await axios.get(
@@ -61,7 +61,7 @@ export default {
       return this.$store.state.stats.latestBlock.number
     },
     priceUSD() {
-      return this.$store.state.stats.price.usd
+      return this.$store.state.prices.usd
     }
   },
   // watch: {

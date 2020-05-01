@@ -39,7 +39,9 @@
                     </slot>
                   </v-col>
                   <v-col cols="8">
-                    <slot v-bind="item" :name="slot" />
+                    <!-- TODO: make this animation better -->
+                    <v-skeleton-loader v-if="loading" type="text" />
+                    <slot v-else v-bind="item" :name="slot" />
                   </v-col>
                 </template>
               </v-row>
@@ -96,6 +98,10 @@ export default {
     activeTab: {
       type: String,
       default: () => ''
+    },
+    loading: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {

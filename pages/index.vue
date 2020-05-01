@@ -16,9 +16,17 @@
             />
             <span style="display:inline-block; margin-left: 10px">
               <small>
-                MARKET CAP OF ${{ marketcap }} MILLION
+                MARKET CAP OF ${{
+                  calcMarketcap(
+                    fromWei(stats.supply / 1000000, -1),
+                    prices.ubq.usd
+                  )
+                }}
+                MILLION @
+                {{ calcMarketcap(fromWei(stats.supply, -1), prices.ubq.btc) }}
+                BTC
                 <br />
-                ${{ priceUSD }} @ {{ priceBTC }} BTC/UBQ
+                ${{ prices.ubq.usd.toFixed(3) }} @ {{ prices.ubq.btc }} BTC/UBQ
               </small>
             </span>
           </v-card-title>
@@ -106,9 +114,10 @@ export default {
     PreviewTxn,
     PreviewBlock
   },
-  middleware({ store }) {
-    store.dispatch('fetchIndexState')
-    store.dispatch('fetchChainSummary')
+  async middleware({ store }) {
+    await store.dispatch('fetchStats')
+    await store.dispatch('fetchPrices')
+    await store.dispatch('fetchChainSummary')
   },
   data() {
     return {
@@ -144,23 +153,11 @@ export default {
     summary() {
       return this.$store.state.summary
     },
+    prices() {
+      return this.$store.state.prices
+    },
     latestBlock() {
       return this.stats.latestBlock.number
-    },
-    priceUSD() {
-      return parseFloat(this.stats.price.usd).toFixed(4)
-    },
-    priceBTC() {
-      return this.stats.price.btc
-    },
-    marketcap() {
-      return (
-        common.mulFiat(
-          common.fromWei(this.stats.supply),
-          this.stats.price.usd,
-          2
-        ) / 1000000
-      ).toFixed(2)
     },
     chartData() {
       return {
@@ -217,59 +214,17 @@ export default {
     const self = this
     this.loop = setInterval(function() {
       self.now = self.$moment
-      self.$store.dispatch('fetchIndexState')
+      self.$store.dispatch('fetchStats')
       self.$store.dispatch('fetchChainSummary')
     }, process.env.config.pollData)
+  },
+  methods: {
+    calcMarketcap(supply, price) {
+      return common.calcMarketcap(supply, price)
+    },
+    fromWei(supply) {
+      return common.fromWei(supply, -1)
+    }
   }
 }
 </script>
-
-<style lang="scss">
-.page-grid {
-  display: grid;
-  grid-template-columns: 0.2fr 1fr 1fr 0.2fr;
-  grid-template-rows: auto 1fr;
-  width: 100%;
-  grid-gap: 20px;
-
-  /*grid-template-rows: 30px 40% 40% 30px;*/
-  grid-template-areas:
-    '. stats chart .'
-    '. blocks txns .';
-
-  @include for-phone-only {
-    grid-template-columns: 0.05fr auto 0.05fr;
-    grid-template-rows: auto auto auto auto;
-
-    grid-template-areas:
-      '. stats  .'
-      '. chart .'
-      '. blocks .'
-      '. txns .';
-  }
-}
-
-.stats {
-  grid-area: stats;
-}
-.chart {
-  grid-area: chart;
-}
-.blocks {
-  grid-area: blocks;
-}
-.txns {
-  grid-area: txns;
-}
-
-.ct-series-a .ct-line {
-  stroke: $ubiq-green;
-  stroke-width: 5px;
-}
-
-.ct-series-a .ct-point {
-  stroke: $ubiq-green;
-  stroke-width: 10px;
-  stroke-linecap: round;
-}
-</style>

@@ -56,7 +56,8 @@ const tokens = {
     name: 'GeoCoin',
     symbol: 'GEO',
     decimals: 8,
-    display: true
+    display: true,
+    traded: true
   },
   '0x0826180a4c981d5095cb5c48bb2a098a44cf6f73': {
     name: '10grans',
@@ -86,7 +87,8 @@ const tokens = {
     name: 'Sphere',
     symbol: 'SPHR',
     decimals: 8,
-    display: true
+    display: true,
+    traded: true
   },
   '0xbc3e373d2b24faf1dfe5b3f3acff9d66a7b48869': {
     name: 'WorldBit Token',

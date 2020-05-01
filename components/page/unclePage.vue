@@ -86,8 +86,8 @@ export default {
     formatNumber(val) {
       return common.formatNumber(val)
     },
-    fromWei(val) {
-      return common.fromWei(val)
+    fromWei(val, roundTo) {
+      return common.fromWei(val, roundTo)
     }
   }
 }

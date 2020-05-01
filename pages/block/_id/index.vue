@@ -6,6 +6,7 @@
         :block="block"
         :transactions="transactions"
         :open-transactions="openTransactions"
+        :loading="$fetchState.pending"
       />
     </v-col>
   </v-row>
@@ -62,9 +63,8 @@ export default {
       return false
     }
   },
-  fetchOnServer: false,
   middleware({ store }) {
-    store.dispatch('fetchIndexState')
+    store.dispatch('fetchStats')
   }
 }
 </script>

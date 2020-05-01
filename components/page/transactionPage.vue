@@ -30,11 +30,8 @@
       >
         {{ toAddress | shortenAddress }}
       </nuxt-link>
-      <template v-if="to">
+      <template>
         {{ getAddressTag(toAddress) }}
-      </template>
-      <template v-else>
-        null
       </template>
     </template>
     <template v-if="contractDeployed" v-slot:transaction.contractAddress.key>
@@ -73,9 +70,8 @@
       Actual Tx Cost/Fee:
     </template>
     <template v-slot:transaction.txFee="{ gasUsed, gasPrice }">
-      {{ calcTxFee(gasUsed, gasPrice) }} UBQ (${{
-        calcValue(calcTxFee(gasUsed, gasPrice), 4)
-      }})
+      {{ calcTxFee(gasUsed, gasPrice) }} UBQ
+      <template> (${{ calcValue(calcTxFee(gasUsed, gasPrice), 4) }}) </template>
     </template>
     <template v-slot:transaction.nonce.key>
       Nonce & [Position]:
@@ -227,8 +223,8 @@ export default {
         return ''
       }
     },
-    fromWei(val) {
-      return common.fromWei(val)
+    fromWei(val, roundTo) {
+      return common.fromWei(val, roundTo)
     },
     fromWeiToGwei(val) {
       return common.fromWeiToGwei(val)

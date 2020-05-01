@@ -8,7 +8,8 @@
           // tokenBalances: store.tokenBalances,
           transfersTotal: store.tokenTransfersTotal,
           contractData: store.contractData,
-          token: store.token
+          token: store.token,
+          price: price
         }"
       >
         <template v-slot:overview.blockie.key="{ address: accountAddress }">
@@ -33,7 +34,7 @@
         </template>
         <template v-slot:overview.hr />
         <template v-slot:overview.supply="{ supply, token: { symbol } }">
-          {{ supply }} {{ symbol }}
+          {{ formatNumber(supply) }} {{ symbol }}
         </template>
         <template v-slot:overview.supply.key>
           <!-- TODO: eventually swap this for reusable popout component -->
@@ -52,11 +53,11 @@
           </v-menu>
           :
         </template>
-        <template v-slot:overview.balance_usd="{ balance }">
-          {{ balance }} $
-        </template>
-        <template v-slot:overview.balance_usd.key>
-          Balance (USD)
+        <template
+          v-if="price !== null"
+          v-slot:overview.marketCap="{ supply, price }"
+        >
+          {{ calcMarketcap(supply, price.btc) }} BTC
         </template>
         <template v-slot:overview.transactions="{ transfersTotal }">
           {{ formatNumber(transfersTotal) }}
@@ -96,6 +97,7 @@ import DataView from '../util/DataView'
 import addresses from '../../scripts/addresses'
 import Blockie from '../util/misc/Blockie'
 import qrcodeModal from '../util/misc/qrcodeModal'
+import common from '../../scripts/common'
 import transfersTable from '~/components/tables/tokenTransfersTable'
 
 export default {
@@ -114,11 +116,7 @@ export default {
     price: {
       type: Object,
       required: true,
-      default: () => ({
-        btc: '',
-        usd: '',
-        eur: ''
-      })
+      default: () => null
     },
     store: {
       type: Object,
@@ -162,6 +160,9 @@ export default {
     },
     formatNumber(val) {
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+    },
+    calcMarketcap(supply, price) {
+      return common.calcMarketcap(supply, price)
     }
   }
 }

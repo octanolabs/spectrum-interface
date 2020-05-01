@@ -6,7 +6,6 @@ export const state = () => ({
   balance: '0',
   supply: '0',
 
-  isTokenAccount: false,
   token: {},
 
   txns: [],
@@ -22,8 +21,7 @@ export const state = () => ({
 })
 
 export const mutations = {
-  IS_TOKEN(state, payload) {
-    state.isTokenAccount = true
+  SET_TOKEN(state, payload) {
     state.token = payload
   },
   SET_SUPPLY(state, supply) {
@@ -49,30 +47,13 @@ export const mutations = {
   }
 }
 export const actions = {
-  async fillStore({ dispatch }, address) {
-    await Promise.all([
-      dispatch('fetchBalance', address),
-      dispatch('fetchTransactions', address),
-      dispatch('fetchTokenTransfers', address),
-      dispatch('fetchContractData', address),
-      dispatch('fetchTokenBalances', address)
-    ])
-  },
-  async fetchToken({ dispatch, commit }, address) {
-    await Promise.all([
-      commit('SET_TOKEN'),
-      dispatch('fetchTokenSupply', address),
-      dispatch('fetchTokenTransfers', address),
-      dispatch('fetchContractData', address)
-    ])
-  },
   //
   // Tokens
   //
   async setToken({ commit }, address) {
     const { name, symbol, decimals } = tokens.getToken(address)
 
-    await commit('IS_TOKEN', { name, symbol, decimals })
+    await commit('SET_TOKEN', { name, symbol, decimals })
   },
   async fetchTokenSupply({ commit }, address) {
     const { data } = await axios.post(process.env.config.rpcUrl, {

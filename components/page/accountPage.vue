@@ -86,6 +86,14 @@
             @refresh="$emit('refresh')"
           />
         </template>
+        <template v-if="store.isContract" v-slot:contractCode>
+          <v-card flat color="grey darken-4">
+            <v-card-title>Contract Bytecode</v-card-title>
+            <v-card-text>
+              {{ store.contractData.contractByteCode }}
+            </v-card-text>
+          </v-card>
+        </template>
       </data-view>
     </v-sheet>
   </div>
@@ -183,8 +191,8 @@ export default {
     formatNumber(val) {
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
     },
-    fromWei(val) {
-      return common.fromWei(val)
+    fromWei(val, roundTo) {
+      return common.fromWei(val, roundTo)
     },
     calcValue(balance, currency = 'btc') {
       return common.mulFiat(common.fromWei(balance), this.price[currency], 2)

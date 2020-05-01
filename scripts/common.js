@@ -24,10 +24,15 @@ export default {
     return new BigNumber(hex.substring(2), 16).toString()
   },
   mulFiat(a, b, decimals) {
-    return new BigNumber(a)
-      .times(b)
-      .toFixed(decimals)
-      .toString()
+    const num = new BigNumber(a)
+    if (num.toString() === '0') {
+      return '0'
+    } else {
+      return num
+        .times(b)
+        .toFixed(decimals)
+        .toString()
+    }
   },
   toUtf8(hex) {
     if (hex) {
@@ -101,8 +106,14 @@ export default {
       ' UTC)'
     )
   },
+  calcMarketcap(supply, price) {
+    BigNumber.config({ DECIMAL_PLACES: 2 })
+
+    return new BigNumber(supply).multipliedBy(new BigNumber(price)).toString(10)
+  },
   calcAvgBlocktime(blocks) {
     const blocktimes = []
+    BigNumber.config({ DECIMAL_PLACES: 2 })
 
     let avgBlockTime = 0
     let hashrate = 0
@@ -118,11 +129,13 @@ export default {
         count += 1
       }
     })
-    avgBlockTime = sum / blocktimes.length
+    avgBlockTime = new BigNumber(sum).div(new BigNumber(blocktimes.length))
 
     // estimate hashrate based on avg blocktime (GH/s)
-    hashrate = (blocks[0].difficulty / avgBlockTime / 1000000000).toFixed(2)
+    hashrate = new BigNumber(blocks[0].difficulty)
+      .div(new BigNumber(avgBlockTime))
+      .div(new BigNumber(1000000000))
 
-    return { avgBlockTime, hashrate }
+    return { blocktime: avgBlockTime, hashrate }
   }
 }

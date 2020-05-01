@@ -1,7 +1,9 @@
 import axios from 'axios'
 import common from '~/scripts/common'
+import tokens from '~/scripts/tokens'
 
 export const state = () => ({
+  prices: {},
   stats: {
     timestamp: 0,
     symbol: 'UBQ',
@@ -27,11 +29,6 @@ export const state = () => ({
       txFees: '',
       extraData: ''
     },
-    price: {
-      btc: '',
-      usd: '',
-      eur: ''
-    },
     txnCounts: {
       data: [],
       labels: []
@@ -48,42 +45,65 @@ export const state = () => ({
 })
 
 export const mutations = {
-  SET_STATS(state, payload) {
-    state.stats = { ...payload }
-  },
   SET_SUMMARY(state, payload) {
     state.summary = { ...payload }
+  },
+  SET_PRICES(state, payload) {
+    state.prices = { ...payload }
+  },
+  SET_STATS(state, payload) {
+    state.stats = { ...payload }
   }
 }
 
 export const actions = {
-  async fetchIndexState({ commit }) {
+  async fetchStats({ commit }) {
     const { data: status } = await axios.get(
       process.env.config.apiUrl + '/status'
     )
 
-    const {
-      data: {
-        ticker: { price: btcPrice }
-      }
-    } = await axios.get('https://api.cryptonator.com/api/ticker/ubq-btc')
+    commit('SET_STATS', status)
+  },
+  async fetchPrices({ commit }) {
+    const prices = {}
+    const tokenObj = tokens.getTokens()
 
-    const {
-      data: {
-        bpi: {
-          EUR: { rate: usdRate },
-          USD: { rate: eurRate }
+    const data = await Promise.all([
+      Promise.resolve(
+        axios.get('https://api.coingecko.com/api/v3/coins/ubiq/tickers')
+      ).then(
+        ({
+          data: {
+            tickers: [{ converted_last: last }, ,]
+          }
+        }) => {
+          return { symbol: 'ubq', ...last }
         }
-      }
-    } = await axios.get('https://api.coindesk.com/v1/bpi/currentprice.json')
+      ),
+      ...Object.keys(tokenObj)
+        .filter((token) => {
+          return tokenObj[token].traded
+        })
+        .map(async (token) => {
+          const { name, symbol } = tokenObj[token]
+          const {
+            data: {
+              tickers: [{ converted_last: last }, ,]
+            }
+          } = await axios.get(
+            `https://api.coingecko.com/api/v3/coins/${name.toLowerCase()}/tickers`
+          )
+          return { symbol: symbol.toLowerCase(), ...last }
+        })
+    ])
 
-    const price = {
-      btc: btcPrice,
-      usd: common.mulFiat(btcPrice, eurRate.replace(',', '')),
-      eur: common.mulFiat(btcPrice, usdRate.replace(',', ''))
-    }
+    data.forEach((price) => {
+      // TODO: add synthetic ubiq price for tokens
+      const { symbol, usd, btc } = price
+      prices[symbol] = { usd, btc }
+    })
 
-    commit('SET_STATS', { ...status, price })
+    commit('SET_PRICES', prices)
   },
   async fetchChainSummary({ commit }) {
     const {
