@@ -17,23 +17,24 @@ export const mutations = {
 
 export const actions = {
   async fetchLatest({ commit }) {
-    const { data } = await axios.get(
-      process.env.config.apiUrl + '/latesttransactions/1000'
-    )
+    const {
+      data: { result }
+    } = await axios.post(process.env.config.apiUrl, {
+      jsonrpc: '2.0',
+      method: 'explorer_latestTransactions',
+      params: [1000],
+      id: 88
+    })
 
-    commit('SET_LATEST', data)
+    commit('SET_LATEST', result)
   },
   async fetchPending({ commit }) {
-    const { data } = await axios.post(
-      process.env.config.rpcUrl,
-      {
-        jsonrpc: '2.0',
-        method: 'eth_getBlockByNumber',
-        params: ['pending', true],
-        id: 1
-      },
-      { headers: { 'Content-Type': 'application/json' } }
-    )
+    const { data } = await axios.post(process.env.config.rpcUrl, {
+      jsonrpc: '2.0',
+      method: 'eth_getBlockByNumber',
+      params: ['pending', true],
+      id: 1
+    })
 
     commit('SET_PENDING', data)
   }

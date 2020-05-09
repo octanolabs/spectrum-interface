@@ -13,10 +13,14 @@ export const mutations = {
 
 export const actions = {
   async fetchUncles({ commit }) {
-    const { data } = await axios.get(
-      process.env.config.apiUrl + '/latestuncles/1000'
-    )
-
-    commit('SET_UNCLES', data)
+    const {
+      data: { result }
+    } = await axios.post(process.env.config.apiUrl, {
+      jsonrpc: '2.0',
+      method: 'explorer_latestUncles',
+      params: [1000],
+      id: 88
+    })
+    commit('SET_UNCLES', result)
   }
 }

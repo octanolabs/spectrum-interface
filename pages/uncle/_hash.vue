@@ -24,11 +24,16 @@ export default {
     }
   },
   async fetch() {
-    const { data } = await axios.get(
-      process.env.config.apiUrl + `/uncle/${this.$route.params.hash}`
-    )
+    const {
+      data: { result }
+    } = await axios.post(process.env.config.apiUrl, {
+      jsonrpc: '2.0',
+      method: 'explorer_uncleByHash',
+      params: [this.$route.params.hash],
+      id: 88
+    })
 
-    this.uncle = data
+    this.uncle = result
   },
   data() {
     return {

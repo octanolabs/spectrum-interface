@@ -80,7 +80,7 @@
       {{ nonce }} [{{ position }}]
     </template>
     <template v-slot:transaction.status="{ status }">
-      {{ status }}
+      {{ status ? 'Success' : 'Failed' }}
     </template>
     <template v-slot:transaction.input.key>
       Input Data:
@@ -159,9 +159,9 @@ export default {
       default: false
     },
     priceUsd: {
-      type: String,
+      type: Number,
       required: true,
-      default: '0'
+      default: 0
     },
     confirmations: {
       type: Number,

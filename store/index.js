@@ -58,9 +58,14 @@ export const mutations = {
 
 export const actions = {
   async fetchStats({ commit }) {
-    const { data: status } = await axios.get(
-      process.env.config.apiUrl + '/status'
-    )
+    const {
+      data: { result: status }
+    } = await axios.post(process.env.config.apiUrl, {
+      jsonrpc: '2.0',
+      method: 'explorer_status',
+      params: [],
+      id: 88
+    })
 
     commit('SET_STATS', status)
   },
@@ -107,12 +112,26 @@ export const actions = {
   },
   async fetchChainSummary({ commit }) {
     const {
-      data: { txns, total: txnCount }
-    } = await axios.get(process.env.config.apiUrl + '/latesttransactions/12')
+      data: {
+        result: { txns, total: txnCount }
+      }
+    } = await axios.post(process.env.config.apiUrl, {
+      jsonrpc: '2.0',
+      method: 'explorer_latestTransactions',
+      params: [12],
+      id: 88
+    })
 
     const {
-      data: { blocks }
-    } = await axios.get(process.env.config.apiUrl + '/latestblocks/12')
+      data: {
+        result: { blocks }
+      }
+    } = await axios.post(process.env.config.apiUrl, {
+      jsonrpc: '2.0',
+      method: 'explorer_latestBlocks',
+      params: [12],
+      id: 88
+    })
 
     const { blocktime, hashrate } = common.calcAvgBlocktime(blocks)
 

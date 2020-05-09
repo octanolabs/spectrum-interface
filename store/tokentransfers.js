@@ -13,10 +13,15 @@ export const mutations = {
 
 export const actions = {
   async fetchLatest({ commit }) {
-    const { data } = await axios.get(
-      process.env.config.apiUrl + '/latesttokentransfers/1000'
-    )
+    const {
+      data: { result }
+    } = await axios.post(process.env.config.apiUrl, {
+      jsonrpc: '2.0',
+      method: 'explorer_latestTokenTransfers',
+      params: [1000],
+      id: 88
+    })
 
-    commit('SET_TRANSFERS', data)
+    commit('SET_TRANSFERS', result)
   }
 }

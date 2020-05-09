@@ -78,14 +78,22 @@ export const actions = {
     commit('SET_SUPPLY', supply)
   },
   async fetchTransfersOfToken({ commit }, address) {
-    const { data: result } = await axios.get(
-      process.env.config.apiUrl + '/latesttransfersbytoken/' + address
-    )
+    const {
+      data: { result }
+    } = await axios.post(process.env.config.apiUrl, {
+      jsonrpc: '2.0',
+      method: 'explorer_latestTransfersOfToken',
+      params: [address],
+      id: 88
+    })
+
     commit('SET_TRANSFERS', result)
   },
+
   //
   // Accounts
   //
+
   async fetchBalance({ commit }, address) {
     const {
       data: { result }
@@ -99,28 +107,46 @@ export const actions = {
     commit('SET_BALANCE', common.hexToDecimal(result))
   },
   async fetchTransactions({ commit }, address) {
-    const { data: result } = await axios.get(
-      process.env.config.apiUrl + '/latestaccounttxns/' + address
-    )
+    const {
+      data: { result }
+    } = await axios.post(process.env.config.apiUrl, {
+      jsonrpc: '2.0',
+      method: 'explorer_latestTransactionsByAccount',
+      params: [address],
+      id: 88
+    })
 
     commit('SET_TRANSACTIONS', result)
   },
+
   async fetchTokenTransfers({ commit }, address) {
-    const { data: result } = await axios.get(
-      process.env.config.apiUrl + '/latestaccounttokentxns/' + address
-    )
+    const {
+      data: { result }
+    } = await axios.post(process.env.config.apiUrl, {
+      jsonrpc: '2.0',
+      method: 'explorer_latestTokenTransfersByAccount',
+      params: [address],
+      id: 88
+    })
+
     commit('SET_TRANSFERS', result)
   },
   async fetchContractData({ commit }, address) {
     const {
       data: {
-        hash: contractDeployTxn,
-        input: contractByteCode,
-        from: contractDeployBy
+        result: {
+          hash: contractDeployTxn,
+          input: contractByteCode,
+          from: contractDeployBy
+        }
       }
-    } = await axios.get(
-      process.env.config.apiUrl + '/transactionbycontract/' + address
-    )
+    } = await axios.post(process.env.config.apiUrl, {
+      jsonrpc: '2.0',
+      method: 'explorer_transactionByContractAddress',
+      params: [address],
+      id: 88
+    })
+
     if (contractDeployTxn) {
       commit('SET_CONTRACTDATA', {
         contractDeployTxn,

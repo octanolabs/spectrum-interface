@@ -13,10 +13,15 @@ export const mutations = {
 
 export const actions = {
   async fetchBlocks({ commit }) {
-    const { data } = await axios.get(
-      process.env.config.apiUrl + '/latestblocks/1000'
-    )
+    const {
+      data: { result }
+    } = await axios.post(process.env.config.apiUrl, {
+      jsonrpc: '2.0',
+      method: 'explorer_latestBlocks',
+      params: [1000],
+      id: 88
+    })
 
-    commit('SET_BLOCKS', data)
+    commit('SET_BLOCKS', result)
   }
 }
