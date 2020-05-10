@@ -10,6 +10,7 @@
     <template v-slot:topMessage>
       Latest {{ formatNumber(transfers.length) }} token transfers from a total
       of {{ formatNumber(total) }}
+      <span id="icon"></span>
     </template>
     <template v-slot:item.hash="{ value: txHash }">
       <nuxt-link :to="{ name: 'transaction-hash', params: { hash: txHash } }">
@@ -25,22 +26,18 @@
         v-if="fromAddress === '0x0000000000000000000000000000000000000000'"
         style="color: #00ea90"
       >
-        <v-menu transition="scale-transition" origin="bottom-left">
+        <v-tooltip attach="#icon" nudge-right="150" nudge-bottom="60">
           <template v-slot:activator="{ on }">
-            <v-icon color="primary" small v-on="on"
-              >mdi-information-outline</v-icon
-            >
+            <v-icon color="primary" small v-on="on">
+              mdi-information-outline
+            </v-icon>
           </template>
-          <v-card flat>
-            <v-card-text class="text-wrap">
-              <div class="d-block" style="width: 250px">
-                Token transfers coming from
-                0x0000000000000000000000000000000000000000 are actually newly
-                minted tokens from the token contract.
-              </div>
-            </v-card-text>
-          </v-card>
-        </v-menu>
+          <div class="d-block text-wrap">
+            Token transfers coming from
+            0x0000000000000000000000000000000000000000 are actually newly minted
+            tokens from the token contract.
+          </div>
+        </v-tooltip>
         <nuxt-link
           :to="{ to: 'account-address', params: { address: fromAddress } }"
         >

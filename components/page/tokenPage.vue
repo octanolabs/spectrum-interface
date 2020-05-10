@@ -38,20 +38,15 @@
         </template>
         <template v-slot:overview.supply.key>
           <!-- TODO: eventually swap this for reusable popout component -->
-          <v-menu top right transition="scale-transition" origin="bottom left">
+          <v-tooltip attach="#info">
             <template v-slot:activator="{ on }">
-              Supply <v-icon small v-on="on">mdi-information</v-icon>
+              Supply <v-icon id="info" small v-on="on">mdi-information</v-icon>
             </template>
-            <v-card flat>
-              <v-card-text class="text-wrap">
-                <div class="d-block" style="width: 250px">
-                  This value represents the total supply defined in the token
-                  contract, it may not represent current circulating supply.'
-                </div>
-              </v-card-text>
-            </v-card>
-          </v-menu>
-          :
+            <div class="d-block" style="width: 250px">
+              This value represents the total supply defined in the token
+              contract, it may not represent current circulating supply.
+            </div>
+          </v-tooltip>
         </template>
         <template
           v-if="price !== null"
