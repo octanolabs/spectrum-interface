@@ -52,6 +52,11 @@ export default {
     priceUSD() {
       return this.$store.state.prices.ubq.usd
     }
+  },
+  watch: {
+    $route() {
+      this.$fetch()
+    }
   }
 }
 </script>

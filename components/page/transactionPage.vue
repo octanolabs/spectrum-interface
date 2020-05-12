@@ -69,9 +69,10 @@
     <template v-slot:transaction.txFee.key>
       Actual Tx Cost/Fee:
     </template>
-    <template v-slot:transaction.txFee="{ gasUsed, gasPrice }">
-      {{ calcTxFee(gasUsed, gasPrice) }} UBQ
-      <template> (${{ calcValue(calcTxFee(gasUsed, gasPrice), 4) }}) </template>
+    <template v-slot:transaction.txFee>
+      <!--   Sometimes tx changes but txfee is not calculted again   -->
+      {{ txFee }} UBQ
+      <template> (${{ calcValue(txFee, 4) }}) </template>
     </template>
     <template v-slot:transaction.nonce.key>
       Nonce & [Position]:
@@ -80,7 +81,14 @@
       {{ nonce }} [{{ position }}]
     </template>
     <template v-slot:transaction.status="{ status }">
-      {{ status ? 'Success' : 'Failed' }}
+      <template v-if="status">
+        Success
+      </template>
+      <template v-else>
+        <span class="overline" style="color: orangered">
+          Failed
+        </span>
+      </template>
     </template>
     <template v-slot:transaction.input.key>
       Input Data:
@@ -171,6 +179,8 @@ export default {
   },
   data() {
     return {
+      txFee: 0,
+
       refreshing: false,
 
       token: {},
@@ -183,6 +193,10 @@ export default {
   },
   watch: {
     transaction() {
+      this.txFee = this.calcTxFee(
+        this.transaction.gasUsed,
+        this.transaction.gasPrice
+      )
       if (this.transaction.logs.length > 0) {
         this.showLogs = true
         this.eventLogs = contracts.processEventLogs(this.transaction.logs)
