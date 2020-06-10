@@ -108,8 +108,8 @@ export default {
       switch (this.activeToolbarItem) {
         case 'ANALYTICS':
           return [
-            { path: '/charts', text: 'Charts' },
-            { path: '/map', text: 'Node map' }
+            { path: '/analytics/charts', text: 'Charts' },
+            { path: '/analytics/map', text: 'Node map' }
           ]
         case 'BLOCKCHAIN':
           return [

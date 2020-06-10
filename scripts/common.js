@@ -11,7 +11,11 @@ export default {
 
     return new BigNumber(value).div(1000000000000000000).toString()
   },
-  fromWeiToGwei(value) {
+  fromWeiToGwei(value, roundTo = -1) {
+    if (roundTo !== -1) {
+      BigNumber.config({ DECIMAL_PLACES: roundTo })
+    }
+
     return new BigNumber(value).div(1000000000).toString()
   },
   calcTxFee(gasUsed, gasPrice) {

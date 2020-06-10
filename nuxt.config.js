@@ -31,7 +31,7 @@ export default {
   // Vuetify is probably useless here and as a plugin
   plugins: [
     '~plugins/vuetify.js',
-    '~plugins/chartist.js',
+    '~plugins/apexcharts.js',
     '~plugins/perfectscrollbar.js',
     '~plugins/smoothreflow.js',
     '~plugins/notifications.js',
@@ -79,6 +79,18 @@ export default {
     // treeShake: true,
     customVariables: ['~/assets/scss/style.scss'],
     optionsPath: '~plugins/vuetify.js'
+  },
+  /*
+   ** moment module configuration
+   ** https://github.com/nuxt-community/moment-module
+   */
+  moment: {
+    defaultTimezone: 'Etc/UTC',
+    timezone: {
+      matchZones: ['Etc/UTC'],
+      startYear: 2000,
+      endYear: 2030
+    }
   },
   /*
    ** Build configuration

@@ -61,10 +61,14 @@
       <v-col sm="7" md="10" lg="5">
         <v-card class="">
           <v-card-title>
-            <h6>14 day Ubiq transaction history</h6>
+            <h6>28 day Ubiq transaction history</h6>
           </v-card-title>
           <v-card-text>
-            <LineChart :chart-data="chartData" max-height="200px" />
+            <chart-wrapper
+              light-toolbar
+              :series="chartData"
+              :options="chartOptions"
+            />
           </v-card-text>
         </v-card>
       </v-col>
@@ -101,16 +105,16 @@
 </template>
 
 <script>
-import LineChart from '../components/charts/Line'
 import common from '../scripts/common'
 import PreviewTxn from '../components/util/misc/PreviewTxn.vue'
 import PreviewBlock from '../components/util/misc/PreviewBlock.vue'
 import PreviewList from '../components/util/PreviewList'
+import ChartWrapper from '../components/util/charts/ChartWrapper'
 
 export default {
   components: {
+    ChartWrapper,
     PreviewList,
-    LineChart,
     PreviewTxn,
     PreviewBlock
   },
@@ -118,31 +122,61 @@ export default {
     await store.dispatch('fetchStats')
     await store.dispatch('fetchPrices')
     await store.dispatch('fetchChainSummary')
+    await store.dispatch('charts/fetchTransactions')
   },
   data() {
     return {
       errors: [],
       chartOptions: {
-        scales: {
-          xAxes: [
-            {
-              display: false
-            }
-          ],
-          yAxes: [
-            {
-              ticks: {
-                min: 0
-              },
-              fontColor: 'rgba(255,255,255,0.5)'
-            }
-          ]
+        chart: {
+          type: 'line'
         },
-        legend: {
-          display: false
+        stroke: {
+          show: true,
+          curve: 'smooth',
+          lineCap: 'butt',
+          colors: undefined,
+          width: 2,
+          dashArray: 0
         },
-        responsive: true,
-        maintainAspectRatio: false
+        colors: ['#00ea90'],
+        yaxis: {
+          min(min) {
+            return min - 750
+          },
+          max(max) {
+            return max + 750
+          },
+          labels: {
+            show: false
+          }
+        },
+        xaxis: {
+          type: 'datetime',
+          labels: {
+            show: false
+          },
+          axisTicks: {
+            show: false
+          },
+          crosshairs: {
+            show: false
+          }
+        },
+        tooltip: {
+          enabled: true,
+          fillSeriesColor: true,
+          x: {
+            show: false
+          },
+          y: {
+            show: true
+          },
+          fixed: {
+            enabled: true,
+            position: 'topLeft'
+          }
+        }
       }
     }
   },
@@ -160,44 +194,12 @@ export default {
       return this.stats.latestBlock.number
     },
     chartData() {
-      return {
-        labels: [
-          '25/3',
-          '26/3',
-          '27/3',
-          '28/3',
-          '29/3',
-          '30/3',
-          '31/3',
-          '1/4',
-          '2/4',
-          '3/4',
-          '4/4',
-          '5/4',
-          '6/4',
-          '7/4'
-        ],
-        series: [
-          {
-            data: [
-              2124,
-              2178,
-              2115,
-              1798,
-              2021,
-              2049,
-              2054,
-              2037,
-              2137,
-              2005,
-              1947,
-              1949,
-              2098,
-              2084
-            ]
-          }
-        ]
-      }
+      return [
+        {
+          ...this.$store.state.charts.txns,
+          ...{ data: this.$store.state.charts.txns.data.slice(-28) }
+        }
+      ]
     }
     // chartData() {
     //   return {
@@ -216,6 +218,7 @@ export default {
       self.now = self.$moment
       self.$store.dispatch('fetchStats')
       self.$store.dispatch('fetchChainSummary')
+      self.$store.dispatch('fetchPrices')
     }, process.env.config.pollData)
   },
   methods: {
