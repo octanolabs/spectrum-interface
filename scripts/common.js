@@ -32,10 +32,7 @@ export default {
     if (num.toString() === '0') {
       return '0'
     } else {
-      return num
-        .times(b)
-        .toFixed(decimals)
-        .toString()
+      return num.times(b).toFixed(decimals).toString()
     }
   },
   toUtf8(hex) {
@@ -80,17 +77,17 @@ export default {
       return null
     }
   },
-  toTH(diff, decimals) {
-    return new BigNumber(diff)
-      .div(1000000000000)
-      .toFixed(decimals)
-      .toString()
+  toTH(diff, roundTo = -1) {
+    if (roundTo !== -1) {
+      BigNumber.config({ DECIMAL_PLACES: roundTo })
+    }
+    return new BigNumber(diff).div(1000000000000).toString()
   },
-  toGH(hashrate, decimals) {
-    return new BigNumber(hashrate)
-      .div(1000000000)
-      .toFixed(decimals)
-      .toString()
+  toGH(hashrate, roundTo = -1) {
+    if (roundTo !== -1) {
+      BigNumber.config({ DECIMAL_PLACES: roundTo })
+    }
+    return new BigNumber(hashrate).div(1000000000).toString()
   },
   formatNumber(val) {
     if (val) {
@@ -141,5 +138,5 @@ export default {
       .div(new BigNumber(1000000000))
 
     return { blocktime: avgBlockTime, hashrate }
-  }
+  },
 }

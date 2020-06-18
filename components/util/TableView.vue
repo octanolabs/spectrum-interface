@@ -50,12 +50,6 @@
         <v-progress-linear indeterminate color="primary"></v-progress-linear>
       </div>
     </template>
-    <!--    <template v-if="loading" v-slot:item>-->
-    <!--      <tr>-->
-    <!--        <v-skeleton-loader type="table-row"></v-skeleton-loader>-->
-    <!--      </tr>-->
-    <!--    </template>-->
-    <!-- -->
     <template v-slot:no-data>
       <v-icon>mdi-table-cancel</v-icon> looks like there's nothing here.
     </template>

@@ -1,17 +1,17 @@
 <template>
-  <perfect-scrollbar style="height: 100%">
+  <perfect-scrollbar style="height: 100%;" :options="{ suppressScrollX: true }">
     <v-app>
       <AppBar />
       <notifications position="bottom right" group="normal" />
 
       <!-- Sizes your content based upon application components -->
       <!-- AppBar's smooth reflow doesn't play nice with nuxt's auto resizing shenanigans, this padding makes it so the content under the appbar is not moved-->
-      <v-content style="padding-top: 112px;">
+      <v-main style="padding-top: 112px;">
         <!-- Provides the application the proper gutter -->
         <v-container fluid>
           <nuxt></nuxt>
         </v-container>
-      </v-content>
+      </v-main>
 
       <!--    remove footer for dev-->
       <Footer />
@@ -29,8 +29,8 @@ import Footer from '../components/Footer'
 export default {
   components: {
     AppBar,
-    Footer
-  }
+    Footer,
+  },
 }
 </script>
 

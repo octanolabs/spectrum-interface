@@ -93,17 +93,10 @@ export default {
       immediate: true,
     },
   },
-  // watch: {
-  //   '$route.params': {
-  //     handler: this.$fetch
-  //   }
-  // },
-  // validate({ params }) {
-  //   if (/^\d+$/.test(params.address)) {
-  //     return true
-  //   }
-  //   return /^0x([A-Fa-f0-9]{42})$/.test(params.address)
-  // },
+
+  validate({ params }) {
+    return /^0x([A-Fa-f0-9]{40})$/.test(params.address)
+  },
   async middleware({ store }) {
     await store.dispatch('fetchPrices')
   },
