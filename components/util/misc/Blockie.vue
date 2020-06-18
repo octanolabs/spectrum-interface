@@ -5,7 +5,7 @@
       :class="['addressIdenticon', size, 'inline']"
       :style="{
         backgroundImage: 'url(' + blockieImg + ')',
-        verticalAlign: 'top'
+        verticalAlign: 'top',
       }"
     ></div>
     <div
@@ -21,21 +21,21 @@ export default {
   props: {
     address: {
       type: String,
-      default: ''
+      default: '',
     },
     size: {
       type: String,
-      default: ''
+      default: '',
     },
     inline: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
       randseed: new Array(4),
-      blockieImg: ''
+      blockieImg: '',
     }
   },
   watch: {
@@ -43,15 +43,15 @@ export default {
       this.blockieImg = this.createIcon({
         seed: val.toLowerCase(),
         size: 8,
-        scale: 16
+        scale: 16,
       }).toDataURL()
-    }
+    },
   },
   created() {
     this.blockieImg = this.createIcon({
       seed: this.address.toLowerCase(),
       size: 8,
-      scale: 16
+      scale: 16,
     }).toDataURL()
   },
   methods: {
@@ -151,7 +151,7 @@ export default {
       const canvas = document.createElement('canvas')
       this.renderIcon(opts, canvas)
       return canvas
-    }
-  }
+    },
+  },
 }
 </script>

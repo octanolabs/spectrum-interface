@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-sheet v-if="loading" min-height="200px">
-      <div class="d-flex justify-center align-center" style="height: 200px">
+      <div class="d-flex justify-center align-center" style="height: 200px;">
         <v-col cols="2">
           <v-progress-circular size="100" color="primary" indeterminate />
         </v-col>
@@ -55,12 +55,12 @@ export default {
     loading: {
       type: Boolean,
       required: true,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
-      activeItems: []
+      activeItems: [],
     }
   },
   computed: {
@@ -73,7 +73,7 @@ export default {
       return Object.keys(this.$scopedSlots).filter((s) => {
         return !s.includes('default')
       })
-    }
-  }
+    },
+  },
 }
 </script>

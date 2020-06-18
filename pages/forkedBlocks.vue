@@ -43,7 +43,7 @@
               <nuxt-link
                 :to="{
                   name: 'account-address',
-                  params: { address: item.miner }
+                  params: { address: item.miner },
                 }"
                 >{{ getAddressTag(item.miner) }}
               </nuxt-link>
@@ -57,7 +57,7 @@
               <nuxt-link
                 :to="{
                   name: 'block-id',
-                  params: { id: item.canonicalblock.number }
+                  params: { id: item.canonicalblock.number },
                 }"
               >
                 {{ item.canonicalblock.hash.substring(0, 32) }}...
@@ -67,7 +67,7 @@
               <nuxt-link
                 :to="{
                   name: 'Address',
-                  params: { hash: item.canonicalblock.miner }
+                  params: { hash: item.canonicalblock.miner },
                 }"
               >
                 {{ getAddressTag(item.canonicalblock.miner) }}
@@ -101,7 +101,7 @@ import expansionTable from '~/components/util/ExpansionTable'
 export default {
   name: 'ForkedBlocks',
   components: {
-    expansionTable
+    expansionTable,
   },
   async fetch() {
     await this.$store.dispatch('forkedblocks/fetchForkedBlocks')
@@ -111,27 +111,27 @@ export default {
       headers: [
         {
           text: 'Height',
-          value: 'number'
+          value: 'number',
         },
         {
           text: 'Miner',
-          value: 'miner'
+          value: 'miner',
         },
         {
           text: 'Seen',
-          value: 'timestamp'
+          value: 'timestamp',
         },
         {
           text: 'Included as Uncle',
-          value: 'includedAsUncle'
-        }
-      ]
+          value: 'includedAsUncle',
+        },
+      ],
     }
   },
   computed: {
     store() {
       return this.$store.state.forkedblocks
-    }
+    },
   },
   created() {
     setTimeout(() => {
@@ -153,7 +153,7 @@ export default {
     },
     calcTime(timestamp) {
       return this.$moment().to(timestamp * 1000)
-    }
-  }
+    },
+  },
 }
 </script>

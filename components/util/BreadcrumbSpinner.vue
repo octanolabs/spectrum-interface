@@ -1,5 +1,5 @@
 <template>
-  <v-row style="margin: 0">
+  <v-row style="margin: 0;">
     <v-col cols="11">
       <v-breadcrumbs
         v-if="!noBreadcrumbs"
@@ -35,16 +35,16 @@ export default {
   props: {
     loading: {
       type: Boolean,
-      default: false
+      default: false,
     },
     noLoading: {
       type: Boolean,
-      default: false
+      default: false,
     },
     noBreadcrumbs: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   computed: {
     pathItems() {
@@ -63,7 +63,7 @@ export default {
         if (index > 0) {
           const pathItem = {
             text: item.charAt(0).toUpperCase() + item.slice(1),
-            to: split.slice(0, index + 1).join('/')
+            to: split.slice(0, index + 1).join('/'),
           }
 
           pathItems.push(pathItem)
@@ -83,8 +83,8 @@ export default {
       // })
 
       return pathItems
-    }
-  }
+    },
+  },
 }
 </script>
 

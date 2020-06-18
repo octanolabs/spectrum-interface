@@ -28,8 +28,8 @@ export default {
     eventLogs: {
       type: Array,
       required: true,
-      default: () => []
-    }
-  }
+      default: () => [],
+    },
+  },
 }
 </script>

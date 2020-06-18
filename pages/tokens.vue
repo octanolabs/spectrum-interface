@@ -12,7 +12,7 @@ import tokens from '~/scripts/tokens'
 
 export default {
   components: {
-    tokensTable
+    tokensTable,
   },
   methods: {
     getTokens() {
@@ -25,7 +25,7 @@ export default {
             name: tks[address].name,
             symbol: tks[address].symbol,
             decimals: tks[address].decimals,
-            address
+            address,
           }
 
           result.push(token)
@@ -33,7 +33,7 @@ export default {
       }
 
       return result
-    }
-  }
+    },
+  },
 }
 </script>

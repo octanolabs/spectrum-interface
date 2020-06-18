@@ -17,7 +17,7 @@ import unclesTable from '~/components/tables/unclesTable.vue'
 export default {
   name: 'Uncles',
   components: {
-    unclesTable
+    unclesTable,
   },
   async fetch() {
     await this.$store.dispatch('uncles/fetchUncles')
@@ -25,12 +25,12 @@ export default {
   computed: {
     unclesStore() {
       return this.$store.state.uncles
-    }
+    },
   },
   created() {
     setTimeout(() => {
       this.$fetch()
     }, 60000)
-  }
+  },
 }
 </script>

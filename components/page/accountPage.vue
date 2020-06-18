@@ -6,7 +6,7 @@
           balance: store.balance,
           address: address,
           tokenBalances: store.tokenBalances,
-          transactions: store.txnsTotal
+          transactions: store.txnsTotal,
         }"
       >
         <template v-slot:overview.blockie.key="{ address: accountAddress }">
@@ -116,13 +116,13 @@ export default {
     Blockie,
     DataView,
     transfersTable,
-    txnsTable
+    txnsTable,
   },
   props: {
     address: {
       type: String,
       required: true,
-      default: '0x'
+      default: '0x',
     },
     price: {
       type: Object,
@@ -130,8 +130,8 @@ export default {
       default: () => ({
         btc: '',
         usd: '',
-        eur: ''
-      })
+        eur: '',
+      }),
     },
     store: {
       type: Object,
@@ -146,8 +146,8 @@ export default {
         isContract: false,
         contractData: {},
 
-        tokenBalances: []
-      })
+        tokenBalances: [],
+      }),
     },
     loadingObject: {
       type: Object,
@@ -156,13 +156,13 @@ export default {
         tokenBalances: false,
         transactions: false,
         tokenTransfers: false,
-        contractData: false
-      })
-    }
+        contractData: false,
+      }),
+    },
   },
   data() {
     return {
-      selectedToken: null
+      selectedToken: null,
     }
   },
   methods: {
@@ -199,7 +199,7 @@ export default {
     },
     gettokens() {
       return tokens.tokens()
-    }
-  }
+    },
+  },
 }
 </script>

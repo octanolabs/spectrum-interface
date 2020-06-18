@@ -12,7 +12,7 @@
       <nuxt-link
         :to="{
           name: 'block-id',
-          params: { id: height - 1 }
+          params: { id: height - 1 },
         }"
       >
         <v-icon small>mdi-arrow-left-circle</v-icon>
@@ -22,7 +22,7 @@
         v-if="fromHead > 0"
         :to="{
           name: 'block-id',
-          params: { id: height + 1 }
+          params: { id: height + 1 },
         }"
         ><v-icon small>mdi-arrow-right-circle</v-icon></nuxt-link
       >
@@ -105,7 +105,7 @@ import addresses from '~/scripts/addresses'
 export default {
   components: {
     dataView,
-    txnsTable
+    txnsTable,
   },
   props: {
     latestBlock: {
@@ -113,34 +113,34 @@ export default {
       required: true,
       default: () => {
         return {}
-      }
+      },
     },
     block: {
       type: Object,
       required: true,
       default: () => {
         return {}
-      }
+      },
     },
     transactions: {
       type: Array,
       required: true,
-      default: () => []
+      default: () => [],
     },
     openTransactions: {
       type: Boolean,
-      default: false
+      default: false,
     },
     loading: {
       type: Boolean,
       required: true,
-      default: false
-    }
+      default: false,
+    },
   },
   computed: {
     fromHead() {
       return this.latestBlock.number - this.block.number
-    }
+    },
   },
   methods: {
     getAddressTag(hash) {
@@ -173,7 +173,7 @@ export default {
     },
     toUtf8(val) {
       return common.toUtf8(val)
-    }
-  }
+    },
+  },
 }
 </script>

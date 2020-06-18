@@ -23,7 +23,7 @@ const pools = {
   '0xd4259e490a20dd1884ed61fd33a92ce6f9eb140f': 'Cryptodig.ru',
   '0x7b9a3f220e2820f0da3d0e365a729f2fb8b351c6': 'Miner-hash.cloud',
   '0x0ebf873b343ab004d5a95479c58645bd75f4c42b': 'ReiDoCoin.com.br',
-  '0x59b5ff7ef75bdbbf78f341eeb1bcbc2a908edd67': 'Mole-pool.net'
+  '0x59b5ff7ef75bdbbf78f341eeb1bcbc2a908edd67': 'Mole-pool.net',
 }
 
 const misc = {
@@ -56,7 +56,7 @@ const misc = {
   '0x36ae3bdbbd19bc55f2fe3cccf41bf12c4c3afb42': 'ESCH Airdrop #2',
   '0x1cac28619f78cdf8da22f9cf523f995d3fe7e98c': 'ESCH Airdrop #3',
   '0xfcd0b547b89f001c17d50df98cf10ce406da5518': 'UIP #1',
-  '0x96cf38c234d5e513c4fc783a3ba73d7320f2900b': 'UIP #2'
+  '0x96cf38c234d5e513c4fc783a3ba73d7320f2900b': 'UIP #2',
 }
 
 export default {
@@ -69,5 +69,5 @@ export default {
       return null
     }
   },
-  pools
+  pools,
 }

@@ -17,7 +17,7 @@ export const state = () => ({
   isContract: false,
   contractData: {},
 
-  tokenBalances: []
+  tokenBalances: [],
 })
 
 export const mutations = {
@@ -44,7 +44,7 @@ export const mutations = {
   },
   SET_TOKENBALANCES(state, tokenBalances) {
     state.tokenBalances = tokenBalances
-  }
+  },
 }
 export const actions = {
   //
@@ -62,11 +62,11 @@ export const actions = {
       params: [
         {
           to: address,
-          data: '0x18160ddd'
+          data: '0x18160ddd',
         },
-        'latest'
+        'latest',
       ],
-      id: 2
+      id: 2,
     })
 
     let supply = '-'
@@ -79,12 +79,12 @@ export const actions = {
   },
   async fetchTransfersOfToken({ commit }, address) {
     const {
-      data: { result }
+      data: { result },
     } = await axios.post(process.env.config.apiUrl, {
       jsonrpc: '2.0',
       method: 'explorer_latestTransfersOfToken',
       params: [address],
-      id: 88
+      id: 88,
     })
 
     commit('SET_TRANSFERS', result)
@@ -96,24 +96,24 @@ export const actions = {
 
   async fetchBalance({ commit }, address) {
     const {
-      data: { result }
+      data: { result },
     } = await axios.post(process.env.config.rpcUrl, {
       jsonrpc: '2.0',
       method: 'eth_getBalance',
       params: [address, 'latest'],
-      id: 1
+      id: 1,
     })
 
     commit('SET_BALANCE', common.hexToDecimal(result))
   },
   async fetchTransactions({ commit }, address) {
     const {
-      data: { result }
+      data: { result },
     } = await axios.post(process.env.config.apiUrl, {
       jsonrpc: '2.0',
       method: 'explorer_latestTransactionsByAccount',
       params: [address],
-      id: 88
+      id: 88,
     })
 
     commit('SET_TRANSACTIONS', result)
@@ -121,12 +121,12 @@ export const actions = {
 
   async fetchTokenTransfers({ commit }, address) {
     const {
-      data: { result }
+      data: { result },
     } = await axios.post(process.env.config.apiUrl, {
       jsonrpc: '2.0',
       method: 'explorer_latestTokenTransfersByAccount',
       params: [address],
-      id: 88
+      id: 88,
     })
 
     commit('SET_TRANSFERS', result)
@@ -137,21 +137,21 @@ export const actions = {
         result: {
           hash: contractDeployTxn,
           input: contractByteCode,
-          from: contractDeployBy
-        }
-      }
+          from: contractDeployBy,
+        },
+      },
     } = await axios.post(process.env.config.apiUrl, {
       jsonrpc: '2.0',
       method: 'explorer_transactionByContractAddress',
       params: [address],
-      id: 88
+      id: 88,
     })
 
     if (contractDeployTxn) {
       commit('SET_CONTRACTDATA', {
         contractDeployTxn,
         contractByteCode,
-        contractDeployBy
+        contractDeployBy,
       })
     }
   },
@@ -161,28 +161,28 @@ export const actions = {
     const tokenBalances = await Promise.all(
       Object.keys(tokenList).map(async (contract) => {
         const {
-          data: { result }
+          data: { result },
         } = await axios.post(process.env.config.rpcUrl, {
           jsonrpc: '2.0',
           method: 'eth_call',
           params: [
             {
               to: contract,
-              data: '0x70a08231' + tokens.zeroPadAddress(address)
+              data: '0x70a08231' + tokens.zeroPadAddress(address),
             },
-            'latest'
+            'latest',
           ],
-          id: 88
+          id: 88,
         })
 
         return {
           name: tokenList[contract].name,
           symbol: tokenList[contract].symbol,
-          balance: tokens.toBalance(result, contract)
+          balance: tokens.toBalance(result, contract),
         }
       })
     )
 
     commit('SET_TOKENBALANCES', tokenBalances)
-  }
+  },
 }

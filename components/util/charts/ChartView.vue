@@ -9,7 +9,7 @@
 <template>
   <v-card outlined>
     <v-card-title>
-      <div class="d-flex align-center" style="width: 100%">
+      <div class="d-flex align-center" style="width: 100%;">
         <v-col cols="2">
           <v-menu
             ref="menu"
@@ -71,25 +71,25 @@ import ChartWrapper from './ChartWrapper'
 
 export default {
   components: {
-    ChartWrapper
+    ChartWrapper,
   },
   inheritAttrs: false,
   props: {
     chartNames: {
       type: Array,
       required: true,
-      default: () => null
+      default: () => null,
     },
     chartOptions: {
       type: Array,
       required: true,
-      default: () => []
+      default: () => [],
     },
     chartData: {
       type: Array,
       required: true,
-      default: () => null
-    }
+      default: () => null,
+    },
   },
   data() {
     return {
@@ -97,7 +97,7 @@ export default {
       menu: false,
       dates: [],
       data: [],
-      options: {}
+      options: {},
     }
   },
   computed: {
@@ -113,14 +113,12 @@ export default {
       const [from, to] =
         this.dates.length !== 2
           ? [
-              this.$moment(earliestDate)
-                .subtract(1, 'years')
-                .unix() * 1000,
-              this.$moment(earliestDate).unix() * 1000
+              this.$moment(earliestDate).subtract(1, 'years').unix() * 1000,
+              this.$moment(earliestDate).unix() * 1000,
             ]
           : [
               this.$moment(this.dates[0], 'YYYY-MM-DD').unix() * 1000,
-              this.$moment(this.dates[1], 'YYYY-MM-DD').unix() * 1000
+              this.$moment(this.dates[1], 'YYYY-MM-DD').unix() * 1000,
             ]
 
       return this.findStampInSeries(from, to, series)
@@ -153,7 +151,7 @@ export default {
       }
 
       return series
-    }
+    },
   },
   watch: {
     activeChart: {
@@ -165,23 +163,23 @@ export default {
         this.data = this.keyedSeries[key].map(({ name, data }) => {
           return {
             name,
-            data: data.slice(startIdx, endIdx + 1)
+            data: data.slice(startIdx, endIdx + 1),
           }
         })
 
         this.options = this.keyedOptions[key]
       },
-      immediate: true
+      immediate: true,
     },
     sliceDateRange: {
       handler([startIdx, endIdx]) {
         this.data = this.keyedSeries[this.activeChart].map(({ name, data }) => {
           return {
             name,
-            data: data.slice(startIdx, endIdx + 1)
+            data: data.slice(startIdx, endIdx + 1),
           }
         })
-      }
+      },
     },
     dates: {
       handler(dates) {
@@ -193,7 +191,7 @@ export default {
             this.$moment(earliestDate)
               .subtract(1, 'years')
               .format('YYYY-MM-DD'),
-            this.$moment(earliestDate).format('YYYY-MM-DD')
+            this.$moment(earliestDate).format('YYYY-MM-DD'),
           ]
         }
 
@@ -206,15 +204,15 @@ export default {
           this.dates = [to, from]
         }
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   methods: {
     setShowAllDataPoints() {
       const [[{ data: series }]] = this.chartData
       this.dates = [
         this.$moment(series[0].x).format('YYYY-MM-DD'),
-        this.$moment(series[series.length - 1].x).format('YYYY-MM-DD')
+        this.$moment(series[series.length - 1].x).format('YYYY-MM-DD'),
       ]
     },
     findStampInSeries(from, to, series = []) {
@@ -238,7 +236,7 @@ export default {
         endIdx++
       }
       return [startIdx, endIdx]
-    }
-  }
+    },
+  },
 }
 </script>

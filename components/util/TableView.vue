@@ -72,7 +72,7 @@ import common from '~/scripts/common'
 
 export default {
   components: {
-    breadcrumbSpinner
+    breadcrumbSpinner,
   },
   inheritAttrs: false,
   props: {
@@ -81,7 +81,7 @@ export default {
       required: true,
       default: () => {
         return []
-      }
+      },
     },
     itemKey: {
       // Unique key for each row item; if not present can mess up certain features (expanded rows)
@@ -89,14 +89,14 @@ export default {
       required: true,
       default: () => {
         return ''
-      }
+      },
     },
     headers: {
       type: Array,
       required: true,
       default: () => {
         return [{ text: 'Default' }]
-      }
+      },
     },
     options: {
       // Table options
@@ -104,26 +104,26 @@ export default {
       default: () => {
         return {
           page: 1,
-          itemsPerPage: 15
+          itemsPerPage: 15,
         }
-      }
+      },
     },
     dense: {
       type: Boolean,
       required: false,
       default: () => {
         return false
-      }
+      },
     },
     loading: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   methods: {
     formatNumber(n) {
       return common.formatNumber(n)
-    }
-  }
+    },
+  },
 }
 </script>

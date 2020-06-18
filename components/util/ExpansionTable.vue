@@ -79,30 +79,30 @@ import BreadcrumbSpinner from '~/components/util/BreadcrumbSpinner.vue'
 
 export default {
   components: {
-    BreadcrumbSpinner
+    BreadcrumbSpinner,
   },
   props: {
     items: {
       type: Array,
       required: true,
-      default: () => []
+      default: () => [],
     },
     headers: {
       type: Array,
       required: true,
-      default: () => []
+      default: () => [],
     },
     loading: {
       type: Boolean,
       required: false,
-      default: false
-    }
+      default: false,
+    },
     // 'expansion-key': {
     //   type: String,
     //   required: true,
     //   default: () => ''
     // }
-  }
+  },
 }
 </script>
 

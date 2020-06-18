@@ -9,13 +9,13 @@ const options = {
     dark: true,
     themes: {
       dark: {
-        primary: '#00ea90'
-      }
-    }
-  }
+        primary: '#00ea90',
+      },
+    },
+  },
 }
 
 export default new Vuetify({
   preset,
-  ...options
+  ...options,
 })

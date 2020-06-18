@@ -34,7 +34,7 @@ export default {
   name: 'Account',
   components: {
     accountPage,
-    tokenPage
+    tokenPage,
   },
   fetch() {
     const address = this.$route.params.address.toLowerCase()
@@ -60,8 +60,8 @@ export default {
         tokenBalances: false,
         transactions: false,
         tokenTransfers: false,
-        contractData: false
-      }
+        contractData: false,
+      },
     }
   },
   computed: {
@@ -83,15 +83,15 @@ export default {
         return this.prices[tk.symbol.toLowerCase()]
       }
       return null
-    }
+    },
   },
   watch: {
     '$route.params.address': {
       handler() {
         this.$fetch()
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   // watch: {
   //   '$route.params': {
@@ -146,7 +146,7 @@ export default {
       this.fetchStates.tokenBalances = true
       await this.$store.dispatch('account/fetchTokenBalances', address)
       this.fetchStates.tokenBalances = false
-    }
-  }
+    },
+  },
 }
 </script>

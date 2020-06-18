@@ -4,10 +4,10 @@
       <v-card-text>
         <v-row>
           <v-col cols="6"
-            ><div style="display:inline-block;width:350px;">
+            ><div style="display: inline-block; width: 350px;">
               <img
                 src="../assets/poweredby.png"
-                style="height:50px;margin:0 auto 5px auto;"
+                style="height: 50px; margin: 0 auto 5px auto;"
               />
               Ubiqscan is powered by Ubiq Spectrum an open-source block explorer
               and analytics platform for Ubiq, a decentralized smart contracts
@@ -16,7 +16,7 @@
           >
           <v-col cols="3"
             ><h6>Latest Discussions <span class="fa fa-reddit" /></h6>
-            <hr style="margin: 5px 0px"/>
+            <hr style="margin: 5px 0px;" />
             <div v-for="(item, index) in reddit" :key="index">
               <a
                 v-if="item.data.title.length < 90"
@@ -30,7 +30,7 @@
                 target="_blank"
                 >{{ item.data.title.substr(0, 90) }}...</a
               >
-              <hr style="margin: 5px 0px" /></div
+              <hr style="margin: 5px 0px;" /></div
           ></v-col>
         </v-row>
       </v-card-text>
@@ -67,8 +67,8 @@
               :to="{
                 name: 'account-address',
                 params: {
-                  address: '0xa126d20e4424ff3f611670c129b931ad3eb60433'
-                }
+                  address: '0xa126d20e4424ff3f611670c129b931ad3eb60433',
+                },
               }"
               >Donations 0xa126d20e4424ff3f611670c129b931ad3eb60433</nuxt-link
             >
@@ -86,7 +86,7 @@ export default {
   name: 'Footer',
   data() {
     return {
-      reddit: []
+      reddit: [],
     }
   },
   created() {
@@ -101,8 +101,8 @@ export default {
           console.log(response)
           this.reddit = response.data.children.splice(0, 4)
         })
-    }
-  }
+    },
+  },
 }
 </script>
 

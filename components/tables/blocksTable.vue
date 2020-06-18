@@ -64,7 +64,7 @@ import addresses from '~/scripts/addresses'
 export default {
   name: 'BlocksTable',
   components: {
-    tableView
+    tableView,
   },
   props: {
     blocks: {
@@ -72,22 +72,22 @@ export default {
       required: true,
       default: () => {
         return []
-      }
+      },
     },
     total: {
       type: Number,
       required: true,
       default: () => {
         return false
-      }
+      },
     },
     loading: {
       type: Boolean,
       required: false,
       default: () => {
         return false
-      }
-    }
+      },
+    },
   },
   data() {
     return {
@@ -95,54 +95,54 @@ export default {
         {
           text: 'Timestamp',
           value: 'timestamp',
-          sortable: false
+          sortable: false,
         },
         {
           text: 'Height',
           value: 'number',
-          sortable: false
+          sortable: false,
         },
         {
           text: 'Txns',
           value: 'transactions',
-          sortable: false
+          sortable: false,
         },
         {
           text: 'Uncles',
           value: 'uncles',
-          sortable: false
+          sortable: false,
         },
         {
           text: 'BlockHash',
           value: 'hash',
-          sortable: false
+          sortable: false,
         },
         {
           text: 'Miner',
           value: 'miner',
-          sortable: false
+          sortable: false,
         },
         {
           text: 'GasUsed',
           value: 'gasUsed',
-          sortable: false
+          sortable: false,
         },
         {
           text: 'GasLimit',
           value: 'gasLimit',
-          sortable: false
+          sortable: false,
         },
         {
           text: 'Avg.GasPrice',
           value: 'avgGasPrice',
-          sortable: false
+          sortable: false,
         },
         {
           text: 'Reward',
           value: 'blockReward',
-          sortable: false
-        }
-      ]
+          sortable: false,
+        },
+      ],
     }
   },
   methods: {
@@ -169,7 +169,7 @@ export default {
     },
     formatNumber(val) {
       return common.formatNumber(val)
-    }
-  }
+    },
+  },
 }
 </script>

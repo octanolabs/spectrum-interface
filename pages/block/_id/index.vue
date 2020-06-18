@@ -19,7 +19,7 @@ import blockPage from '~/components/page/blockPage.vue'
 export default {
   name: 'Block',
   components: {
-    blockPage
+    blockPage,
   },
   validate({ params }) {
     if (/^\d+$/.test(params.id)) {
@@ -39,13 +39,13 @@ export default {
     }
 
     const {
-      data: { result }
+      data: { result },
     } = await axios
       .post(process.env.config.apiUrl, {
         jsonrpc: '2.0',
         method,
         params: [id],
-        id: 88
+        id: 88,
       })
       .then(({ data: { result: block } }) => {
         this.block = block
@@ -54,7 +54,7 @@ export default {
           jsonrpc: '2.0',
           method: 'explorer_transactionsByBlockNumber',
           params: [id],
-          id: 88
+          id: 88,
         })
       })
 
@@ -63,7 +63,7 @@ export default {
   data() {
     return {
       block: {},
-      transactions: []
+      transactions: [],
     }
   },
   computed: {
@@ -73,10 +73,10 @@ export default {
         return true
       }
       return false
-    }
+    },
   },
   middleware({ store }) {
     store.dispatch('fetchStats')
-  }
+  },
 }
 </script>

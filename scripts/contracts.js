@@ -65,7 +65,7 @@ const functions = {
   '0x21a0adb6':
     'withdraw(bytes _proof, bytes32 _root, bytes32 _nullifierHash, address _recipient, address _relayer, uint256 _fee, unit256 _refund)',
   '0x97fc007c': 'updateVerifier(address _newVerifier)',
-  '0x06394c9b': 'changeOperator(address _newOperator)'
+  '0x06394c9b': 'changeOperator(address _newOperator)',
 }
 
 const events = {
@@ -105,7 +105,7 @@ const events = {
   '0xa945e51e':
     'Deposit(index_topic_1 bytes32 commitment, uint32 leafIndex, uint256 timestamp)',
   '0xe9e508ba':
-    'Withdrawal(address to, bytes32 nullifierHash, index_topic_1 address relayer, uint256 fee)'
+    'Withdrawal(address to, bytes32 nullifierHash, index_topic_1 address relayer, uint256 fee)',
 }
 
 export default {
@@ -116,17 +116,17 @@ export default {
         isKnown: true,
         methodId,
         function: functions[methodId],
-        params: str.substr(10).match(/.{1,64}/g)
+        params: str.substr(10).match(/.{1,64}/g),
       }
     } else {
       return {
-        isKnown: false
+        isKnown: false,
       }
     }
   },
   processEventLogs(logs_) {
     const logs = []
-    logs_.forEach(function(item) {
+    logs_.forEach(function (item) {
       const eventId = item.topics[0].substr(0, 10).toLowerCase()
       let isKnown = false
       let name = ''
@@ -140,7 +140,7 @@ export default {
         isKnown,
         name,
         topics: item.topics,
-        data: item.data.substr(2).match(/.{1,64}/g)
+        data: item.data.substr(2).match(/.{1,64}/g),
       })
     })
     return logs
@@ -152,5 +152,5 @@ export default {
     } else {
       return false
     }
-  }
+  },
 }

@@ -53,8 +53,8 @@ export default {
       required: true,
       default: () => {
         return {}
-      }
-    }
+      },
+    },
   },
   data() {
     return {
@@ -64,19 +64,19 @@ export default {
       miner: {},
       reward: 0,
       time: 0,
-      timeSince: 0
+      timeSince: 0,
     }
   },
   watch: {
     info(val) {
       this.setData(val)
-    }
+    },
   },
   created() {
     this.setData(this.info)
     // update timeSince every 10 seconds
     const self = this
-    setInterval(function() {
+    setInterval(function () {
       self.timeSince = self.$moment().to(self.time)
     }, 10000)
   },
@@ -89,12 +89,12 @@ export default {
         short:
           addresses.getAddressTag(val.miner) ||
           val.miner.substring(0, 17) + '...',
-        full: val.miner
+        full: val.miner,
       }
       this.reward = rewards.calculateMintedCoins(val.number, val.uncles)
       this.time = val.timestamp * 1000
       this.timeSince = this.$moment().to(this.time)
-    }
-  }
+    },
+  },
 }
 </script>

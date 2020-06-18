@@ -27,12 +27,12 @@ export const state = () => ({
       unclesReward: '',
       avgGasPrice: '',
       txFees: '',
-      extraData: ''
+      extraData: '',
     },
     txnCounts: {
       data: [],
-      labels: []
-    }
+      labels: [],
+    },
   },
   summary: {
     txns: [],
@@ -40,8 +40,8 @@ export const state = () => ({
     blocks: [],
     hashrate: '',
     blocktime: 0,
-    difficulty: 0
-  }
+    difficulty: 0,
+  },
 })
 
 export const mutations = {
@@ -53,18 +53,18 @@ export const mutations = {
   },
   SET_STATS(state, payload) {
     state.stats = { ...payload }
-  }
+  },
 }
 
 export const actions = {
   async fetchStats({ commit }) {
     const {
-      data: { result: status }
+      data: { result: status },
     } = await axios.post(process.env.config.apiUrl, {
       jsonrpc: '2.0',
       method: 'explorer_status',
       params: [],
-      id: 88
+      id: 88,
     })
 
     commit('SET_STATS', status)
@@ -79,8 +79,8 @@ export const actions = {
       ).then(
         ({
           data: {
-            tickers: [{ converted_last: last }, ,]
-          }
+            tickers: [{ converted_last: last }, ,],
+          },
         }) => {
           return { symbol: 'ubq', ...last }
         }
@@ -93,13 +93,13 @@ export const actions = {
           const { name, symbol } = tokenObj[token]
           const {
             data: {
-              tickers: [{ converted_last: last }, ,]
-            }
+              tickers: [{ converted_last: last }, ,],
+            },
           } = await axios.get(
             `https://api.coingecko.com/api/v3/coins/${name.toLowerCase()}/tickers`
           )
           return { symbol: symbol.toLowerCase(), ...last }
-        })
+        }),
     ])
 
     data.forEach((price) => {
@@ -113,24 +113,24 @@ export const actions = {
   async fetchChainSummary({ commit }) {
     const {
       data: {
-        result: { txns, total: txnCount }
-      }
+        result: { txns, total: txnCount },
+      },
     } = await axios.post(process.env.config.apiUrl, {
       jsonrpc: '2.0',
       method: 'explorer_latestTransactions',
       params: [12],
-      id: 88
+      id: 88,
     })
 
     const {
       data: {
-        result: { blocks }
-      }
+        result: { blocks },
+      },
     } = await axios.post(process.env.config.apiUrl, {
       jsonrpc: '2.0',
       method: 'explorer_latestBlocks',
       params: [12],
-      id: 88
+      id: 88,
     })
 
     const { blocktime, hashrate } = common.calcAvgBlocktime(blocks)
@@ -143,7 +143,7 @@ export const actions = {
       blocks,
       blocktime,
       hashrate,
-      difficulty
+      difficulty,
     })
-  }
+  },
 }

@@ -15,7 +15,7 @@ import {
   mdiMagnify,
   mdiDownload,
   mdiAxisArrow,
-  mdiSelection
+  mdiSelection,
 } from '@mdi/js'
 
 export default {
@@ -23,12 +23,12 @@ export default {
   props: {
     sparkline: {
       type: Boolean,
-      default: false
+      default: false,
     },
     lightToolbar: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
@@ -55,7 +55,7 @@ export default {
       selectSvg: `<svg xmlns="http://www.w3.org/2000/svg">
                  <path d="${mdiSelection}"/>
                 </svg>
-                `
+                `,
     }
   },
   computed: {
@@ -78,7 +78,7 @@ export default {
           zoom: false,
           pan: false,
           reset: false,
-          download: this.downloadSvg
+          download: this.downloadSvg,
         }
       } else {
         toolbar = {
@@ -88,7 +88,7 @@ export default {
           zoom: this.magnifySvg,
           pan: this.panSvg,
           reset: true,
-          download: this.downloadSvg
+          download: this.downloadSvg,
         }
       }
 
@@ -100,34 +100,34 @@ export default {
             ...chart,
             ...{
               selection: {
-                enabled: true
+                enabled: true,
               },
               toolbar: {
                 show: true,
-                tools: toolbar
-              }
-            }
+                tools: toolbar,
+              },
+            },
           },
           xaxis: {
             ...xaxis,
             axisBorder: {
-              show: false
-            }
+              show: false,
+            },
           },
           states: {
             hover: {
               filter: {
-                type: 'none'
-              }
-            }
+                type: 'none',
+              },
+            },
           },
           markers: {
             ...markers,
-            ...{ strokeWidth: 0 }
+            ...{ strokeWidth: 0 },
           },
-          ...opts
+          ...opts,
         },
-        ...rest
+        ...rest,
       }
 
       if (this.sparkline) {
@@ -139,16 +139,16 @@ export default {
               chart: {
                 ...props.options.chart,
                 ...{
-                  sparkline: { enabled: true }
-                }
-              }
-            }
-          }
+                  sparkline: { enabled: true },
+                },
+              },
+            },
+          },
         }
       } else {
         return props
       }
-    }
-  }
+    },
+  },
 }
 </script>

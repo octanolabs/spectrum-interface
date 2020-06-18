@@ -52,8 +52,8 @@ export default {
       required: true,
       default: () => {
         return {}
-      }
-    }
+      },
+    },
   },
   data() {
     return {
@@ -61,27 +61,27 @@ export default {
       from: {},
       to: {},
       value: 0,
-      time: 0
+      time: 0,
     }
   },
   created() {
     this.hash = {
       full: this.info.hash,
-      short: this.info.hash.substring(0, 25).toUpperCase()
+      short: this.info.hash.substring(0, 25).toUpperCase(),
     }
     this.from = {
       full: this.info.from,
       short:
         addresses.getAddressTag(this.info.from) ||
-        this.info.from.substring(0, 17) + '...'
+        this.info.from.substring(0, 17) + '...',
     }
     this.to = {
       full: this.info.to,
       short:
         addresses.getAddressTag(this.info.to) ||
-        this.info.to.substring(0, 17) + '...'
+        this.info.to.substring(0, 17) + '...',
     }
     this.value = common.fromWei(this.info.value, 4)
-  }
+  },
 }
 </script>

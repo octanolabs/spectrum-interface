@@ -61,7 +61,7 @@ import addresses from '~/scripts/addresses'
 export default {
   name: 'TxnsTable',
   components: {
-    tableView
+    tableView,
   },
   props: {
     transactions: {
@@ -69,41 +69,41 @@ export default {
       required: true,
       default: () => {
         return []
-      }
+      },
     },
     total: {
       type: Number,
       required: true,
       default: () => {
         return false
-      }
+      },
     },
     loading: {
       type: Boolean,
       required: false,
       default: () => {
         return false
-      }
+      },
     },
     pending: {
       type: Boolean,
       required: false,
       default: () => {
         return false
-      }
+      },
     },
     block: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
     blockNumber: {
       type: Number,
       required: false,
       default: () => {
         return 0
-      }
-    }
+      },
+    },
   },
   computed: {
     headers() {
@@ -111,23 +111,23 @@ export default {
         {
           text: 'Txhash',
           value: 'hash',
-          sortable: false
+          sortable: false,
         },
         {
           text: 'From',
           value: 'from',
-          sortable: false
+          sortable: false,
         },
         {
           text: 'To',
           value: 'to',
-          sortable: false
+          sortable: false,
         },
         {
           text: 'Value',
           value: 'value',
-          sortable: false
-        }
+          sortable: false,
+        },
       ]
 
       if (this.pending) {
@@ -136,8 +136,8 @@ export default {
           {
             text: 'Gas Price',
             value: 'gasPrice',
-            sortable: false
-          }
+            sortable: false,
+          },
         ]
       } else {
         headers = [
@@ -145,13 +145,13 @@ export default {
           {
             text: 'Txfee',
             value: 'txFee',
-            sortable: false
-          }
+            sortable: false,
+          },
         ]
       }
 
       return headers
-    }
+    },
   },
   methods: {
     getRowCount(items) {
@@ -174,7 +174,7 @@ export default {
     },
     hexToDecimal(hex) {
       return common.hexToDecimal(hex)
-    }
-  }
+    },
+  },
 }
 </script>

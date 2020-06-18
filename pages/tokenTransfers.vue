@@ -17,7 +17,7 @@ import transfersTable from '~/components/tables/tokenTransfersTable.vue'
 export default {
   name: 'TokenTransfers',
   components: {
-    transfersTable
+    transfersTable,
   },
   async fetch() {
     await this.$store.dispatch('tokentransfers/fetchLatest')
@@ -25,12 +25,12 @@ export default {
   computed: {
     transfersStore() {
       return this.$store.state.tokentransfers
-    }
+    },
   },
   created() {
     setTimeout(() => {
       this.$fetch()
     }, 60000)
-  }
+  },
 }
 </script>

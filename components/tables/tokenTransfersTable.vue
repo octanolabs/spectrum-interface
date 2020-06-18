@@ -24,7 +24,7 @@
       <!--      TODO: address route-->
       <span
         v-if="fromAddress === '0x0000000000000000000000000000000000000000'"
-        style="color: #00ea90"
+        style="color: #00ea90;"
       >
         <v-tooltip attach="#icon" nudge-right="150" nudge-bottom="60">
           <template v-slot:activator="{ on }">
@@ -81,24 +81,24 @@ import TableView from '~/components/util/TableView'
 
 export default {
   components: {
-    TableView
+    TableView,
   },
   props: {
     transfers: {
       type: Array,
       required: true,
-      default: () => []
+      default: () => [],
     },
     total: {
       type: Number,
       required: true,
-      default: 0
+      default: 0,
     },
     loading: {
       type: Boolean,
       required: true,
-      default: false
-    }
+      default: false,
+    },
   },
   data: () => {
     return {
@@ -109,34 +109,34 @@ export default {
         {
           value: 'hash',
           text: 'TxHash',
-          sortable: false
+          sortable: false,
         },
         {
           value: 'timestamp',
           text: 'Age',
-          sortable: false
+          sortable: false,
         },
         {
           value: 'from',
           text: 'From',
-          sortable: false
+          sortable: false,
         },
         {
           value: 'to',
           text: 'To',
-          sortable: false
+          sortable: false,
         },
         {
           value: 'value',
           text: 'Value',
-          sortable: false
+          sortable: false,
         },
         {
           value: 'contract',
           text: 'Token',
-          sortable: false
-        }
-      ]
+          sortable: false,
+        },
+      ],
     }
   },
   methods: {
@@ -157,7 +157,7 @@ export default {
     },
     formatNumber(val) {
       return common.formatNumber(val)
-    }
-  }
+    },
+  },
 }
 </script>

@@ -57,7 +57,7 @@ import addresses from '~/scripts/addresses'
 
 export default {
   components: {
-    dataView
+    dataView,
   },
   props: {
     uncle: {
@@ -65,8 +65,8 @@ export default {
       required: true,
       default: () => {
         return {}
-      }
-    }
+      },
+    },
   },
   methods: {
     getAddressTag(hash) {
@@ -88,7 +88,7 @@ export default {
     },
     fromWei(val, roundTo) {
       return common.fromWei(val, roundTo)
-    }
-  }
+    },
+  },
 }
 </script>

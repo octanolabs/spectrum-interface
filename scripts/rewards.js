@@ -26,9 +26,7 @@ export default {
 
   includeUnclesReward(blockHeight, unclesCount) {
     const reward = new BigNumber(
-      this.baseBlockReward(blockHeight)
-        .dividedBy(32)
-        .times(unclesCount)
+      this.baseBlockReward(blockHeight).dividedBy(32).times(unclesCount)
     )
     if (reward > 0) {
       return reward
@@ -54,5 +52,5 @@ export default {
       .plus(unclesReward)
       .div(1000000000000000000)
       .toString()
-  }
+  },
 }

@@ -3,18 +3,18 @@
     <v-row justify="center">
       <v-col sm="7" md="10" lg="5">
         <v-card
-          style="height: 100%"
+          style="height: 100%;"
           dark
-          class=" d-flex flex-column justify-end"
+          class="d-flex flex-column justify-end"
         >
           <v-card-title>
             <img
               src="../assets/logo-circle.svg"
               width="50"
               height="50"
-              style="margin-top:-20px;"
+              style="margin-top: -20px;"
             />
-            <span style="display:inline-block; margin-left: 10px">
+            <span style="display: inline-block; margin-left: 10px;">
               <small>
                 MARKET CAP OF ${{
                   calcMarketcap(
@@ -35,22 +35,22 @@
             <v-row>
               <v-col cols="4" class="text-left">
                 <div>
-                  <h2 style="margin-bottom:0px;">LAST BLOCK</h2>
+                  <h2 style="margin-bottom: 0px;">LAST BLOCK</h2>
                   <h4>{{ latestBlock }} ({{ summary.blocktime }}s)</h4>
                 </div>
                 <div>
-                  <h2 style="margin-bottom:0px;">TRANSACTIONS</h2>
+                  <h2 style="margin-bottom: 0px;">TRANSACTIONS</h2>
                   <h4>{{ summary.txnCount }}</h4>
                 </div>
               </v-col>
               <v-spacer></v-spacer>
               <v-col cols="4" class="text-right">
                 <div>
-                  <h3 style="margin-bottom:0px;">Hash Rate</h3>
+                  <h3 style="margin-bottom: 0px;">Hash Rate</h3>
                   <h4>{{ summary.hashrate }} GH/s</h4>
                 </div>
                 <div>
-                  <h3 style="margin-bottom:0px;">Network Difficulty</h3>
+                  <h3 style="margin-bottom: 0px;">Network Difficulty</h3>
                   <h4>{{ summary.difficulty }} TH</h4>
                 </div>
               </v-col>
@@ -116,7 +116,7 @@ export default {
     ChartWrapper,
     PreviewList,
     PreviewTxn,
-    PreviewBlock
+    PreviewBlock,
   },
   async middleware({ store }) {
     await store.dispatch('fetchStats')
@@ -129,7 +129,7 @@ export default {
       errors: [],
       chartOptions: {
         chart: {
-          type: 'line'
+          type: 'line',
         },
         stroke: {
           show: true,
@@ -137,7 +137,7 @@ export default {
           lineCap: 'butt',
           colors: undefined,
           width: 2,
-          dashArray: 0
+          dashArray: 0,
         },
         colors: ['#00ea90'],
         yaxis: {
@@ -148,36 +148,36 @@ export default {
             return max + 750
           },
           labels: {
-            show: false
-          }
+            show: false,
+          },
         },
         xaxis: {
           type: 'datetime',
           labels: {
-            show: false
+            show: false,
           },
           axisTicks: {
-            show: false
+            show: false,
           },
           crosshairs: {
-            show: false
-          }
+            show: false,
+          },
         },
         tooltip: {
           enabled: true,
           fillSeriesColor: true,
           x: {
-            show: false
+            show: false,
           },
           y: {
-            show: true
+            show: true,
           },
           fixed: {
             enabled: true,
-            position: 'topLeft'
-          }
-        }
-      }
+            position: 'topLeft',
+          },
+        },
+      },
     }
   },
   computed: {
@@ -197,10 +197,10 @@ export default {
       return [
         {
           ...this.$store.state.charts.txns,
-          ...{ data: this.$store.state.charts.txns.data.slice(-28) }
-        }
+          ...{ data: this.$store.state.charts.txns.data.slice(-28) },
+        },
       ]
-    }
+    },
     // chartData() {
     //   return {
     //     labels: this.stats.txnCounts.labels.slice(-14),
@@ -214,7 +214,7 @@ export default {
   },
   created() {
     const self = this
-    this.loop = setInterval(function() {
+    this.loop = setInterval(function () {
       self.now = self.$moment
       self.$store.dispatch('fetchStats')
       self.$store.dispatch('fetchChainSummary')
@@ -227,7 +227,7 @@ export default {
     },
     fromWei(supply) {
       return common.fromWei(supply, -1)
-    }
-  }
+    },
+  },
 }
 </script>

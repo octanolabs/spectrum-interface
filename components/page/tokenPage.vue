@@ -9,7 +9,7 @@
           transfersTotal: store.tokenTransfersTotal,
           contractData: store.contractData,
           token: store.token,
-          price: price
+          price: price,
         }"
       >
         <template v-slot:overview.blockie.key="{ address: accountAddress }">
@@ -18,7 +18,7 @@
         <template
           v-slot:overview.address.key="{
             address: accountAddress,
-            token: { name }
+            token: { name },
           }"
         >
           Showing token ({{ name }}) deployed at account {{ address }}
@@ -42,7 +42,7 @@
             <template v-slot:activator="{ on }">
               Supply <v-icon id="info" small v-on="on">mdi-information</v-icon>
             </template>
-            <div class="d-block" style="width: 250px">
+            <div class="d-block" style="width: 250px;">
               This value represents the total supply defined in the token
               contract, it may not represent current circulating supply.
             </div>
@@ -61,7 +61,7 @@
       <data-view
         :item="{
           transfers: store.tokenTransfers,
-          contract: store.contractData
+          contract: store.contractData,
         }"
         no-breadcrumbs
       >
@@ -100,18 +100,18 @@ export default {
     Blockie,
     DataView,
     transfersTable,
-    qrcodeModal
+    qrcodeModal,
   },
   props: {
     address: {
       type: String,
       required: true,
-      default: '0x'
+      default: '0x',
     },
     price: {
       type: Object,
       required: true,
-      default: () => null
+      default: () => null,
     },
     store: {
       type: Object,
@@ -122,8 +122,8 @@ export default {
         contractData: {},
         supply: '',
         name: '',
-        symbol: ''
-      })
+        symbol: '',
+      }),
     },
     loadingObject: {
       type: Object,
@@ -132,13 +132,13 @@ export default {
         tokenBalances: false,
         transactions: false,
         tokenTransfers: false,
-        contractData: false
-      })
-    }
+        contractData: false,
+      }),
+    },
   },
   data() {
     return {
-      selectedToken: null
+      selectedToken: null,
     }
   },
   methods: {
@@ -158,7 +158,7 @@ export default {
     },
     calcMarketcap(supply, price) {
       return common.calcMarketcap(supply, price)
-    }
-  }
+    },
+  },
 }
 </script>

@@ -12,16 +12,16 @@ export default {
   props: {
     tag: {
       type: String,
-      default: 'div'
+      default: 'div',
     },
     options: {
       type: Object,
       required: false,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
   mounted() {
     this.$smoothReflow(this.options)
-  }
+  },
 }
 </script>

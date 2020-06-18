@@ -11,7 +11,7 @@
             :value="address"
             :options="{
               color: { dark: '#00ea90', light: '#0000' },
-              scale: 7
+              scale: 7,
             }"
           ></qrcode>
         </v-row>
@@ -27,8 +27,8 @@ export default {
     address: {
       type: String,
       required: true,
-      default: '0x0000000000000000000000000000000000000000'
-    }
-  }
+      default: '0x0000000000000000000000000000000000000000',
+    },
+  },
 }
 </script>

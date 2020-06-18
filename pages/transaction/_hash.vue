@@ -18,7 +18,7 @@ import transactionPage from '~/components/page/transactionPage.vue'
 export default {
   name: 'Transaction',
   components: {
-    transactionPage
+    transactionPage,
   },
   async middleware({ store }) {
     await store.dispatch('fetchPrices')
@@ -26,18 +26,18 @@ export default {
   },
   async fetch() {
     const {
-      data: { result }
+      data: { result },
     } = await axios.post(process.env.config.apiUrl, {
       jsonrpc: '2.0',
       method: 'explorer_transactionByHash',
       params: [this.$route.params.hash],
-      id: 88
+      id: 88,
     })
     this.txn = result
   },
   data() {
     return {
-      txn: {}
+      txn: {},
     }
   },
   computed: {
@@ -51,12 +51,12 @@ export default {
     },
     priceUSD() {
       return this.$store.state.prices.ubq.usd
-    }
+    },
   },
   watch: {
     $route() {
       this.$fetch()
-    }
-  }
+    },
+  },
 }
 </script>

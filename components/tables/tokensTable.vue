@@ -14,36 +14,36 @@
 import tableView from '~/components/util/TableView'
 export default {
   components: {
-    tableView
+    tableView,
   },
   props: {
     tokens: {
       type: Array,
       required: true,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   data() {
     return {
       headers: [
         {
           value: 'symbol',
-          text: 'Symbol'
+          text: 'Symbol',
         },
         {
           value: 'name',
-          text: 'Name'
+          text: 'Name',
         },
         {
           value: 'decimals',
-          text: 'Decimals'
+          text: 'Decimals',
         },
         {
           value: 'address',
-          text: 'Address'
-        }
-      ]
+          text: 'Address',
+        },
+      ],
     }
-  }
+  },
 }
 </script>

@@ -48,7 +48,7 @@ import addresses from '~/scripts/addresses'
 export default {
   name: 'UnclesTable',
   components: {
-    tableView
+    tableView,
   },
   props: {
     uncles: {
@@ -56,22 +56,22 @@ export default {
       required: true,
       default: () => {
         return []
-      }
+      },
     },
     total: {
       type: Number,
       required: true,
       default: () => {
         return false
-      }
+      },
     },
     loading: {
       type: Boolean,
       required: false,
       default: () => {
         return false
-      }
-    }
+      },
+    },
   },
 
   data() {
@@ -87,8 +87,8 @@ export default {
 
         { text: 'Miner', value: 'miner' },
 
-        { ext: 'Reward', value: 'reward' }
-      ]
+        { ext: 'Reward', value: 'reward' },
+      ],
     }
   },
   methods: {
@@ -106,7 +106,7 @@ export default {
     },
     formatNumber(val) {
       return common.formatNumber(val)
-    }
-  }
+    },
+  },
 }
 </script>

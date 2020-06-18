@@ -17,7 +17,7 @@ import blocksTable from '~/components/tables/blocksTable.vue'
 export default {
   name: 'Blocks',
   components: {
-    blocksTable
+    blocksTable,
   },
   async fetch() {
     await this.$store.dispatch('blocks/fetchBlocks')
@@ -25,12 +25,12 @@ export default {
   computed: {
     blocksStore() {
       return this.$store.state.blocks
-    }
+    },
   },
   created() {
     setTimeout(() => {
       this.$fetch()
     }, 60000)
-  }
+  },
 }
 </script>

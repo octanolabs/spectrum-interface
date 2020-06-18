@@ -63,7 +63,7 @@ import breadcrumbSpinner from '~/components/util/BreadcrumbSpinner.vue'
 
 export default {
   components: {
-    breadcrumbSpinner
+    breadcrumbSpinner,
   },
   filters: {
     stripTabAndKey(value) {
@@ -85,7 +85,7 @@ export default {
       if (!value) return ''
       value = value.toString()
       return value.charAt(0).toUpperCase() + value.slice(1)
-    }
+    },
   },
   props: {
     item: {
@@ -93,16 +93,16 @@ export default {
       required: true,
       default: () => {
         return { test: 'default' }
-      }
+      },
     },
     activeTab: {
       type: String,
-      default: () => ''
+      default: () => '',
     },
     loading: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   methods: {
     tabSlots() {
@@ -135,7 +135,7 @@ export default {
 
         return tab === selectedTab
       })
-    }
-  }
+    },
+  },
 }
 </script>

@@ -44,22 +44,22 @@ export default {
     inputData: {
       type: Object,
       required: false,
-      default: () => {}
+      default: () => {},
     },
     inputString: {
       type: String,
       required: true,
-      default: () => {}
+      default: () => {},
     },
     hasInputData: {
       type: Boolean,
       required: false,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
-      viewType: 'Original'
+      viewType: 'Original',
     }
   },
   watch: {
@@ -67,7 +67,7 @@ export default {
       if (val) {
         this.viewType = 'Default view'
       }
-    }
-  }
+    },
+  },
 }
 </script>

@@ -12,10 +12,10 @@ export default {
       {
         hid: 'description',
         name: 'description',
-        content: process.env.npm_package_description || ''
-      }
+        content: process.env.npm_package_description || '',
+      },
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
   /*
    ** Customize the progress-bar color
@@ -35,7 +35,7 @@ export default {
     '~plugins/perfectscrollbar.js',
     '~plugins/smoothreflow.js',
     '~plugins/notifications.js',
-    '~plugins/qrcode.js'
+    '~plugins/qrcode.js',
   ],
   /*
    ** Nuxt.js dev-modules
@@ -45,14 +45,14 @@ export default {
     '@nuxtjs/eslint-module',
     '@nuxtjs/router-extras',
     '@nuxtjs/vuetify',
-    '@nuxtjs/moment'
+    '@nuxtjs/moment',
   ],
   /*
    ** Nuxt.js modules
    */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
   ],
   /*
    *  Global App-wide variables
@@ -62,8 +62,8 @@ export default {
     config: {
       apiUrl: 'http://185.243.113.40:8181/v4/',
       rpcUrl: 'https://rpc1.ubiqscan.io/',
-      pollData: 30000 // interval to poll api, in ms
-    }
+      pollData: 30000, // interval to poll api, in ms
+    },
   },
   /*
    ** Axios module configuration
@@ -79,7 +79,7 @@ export default {
   vuetify: {
     // treeShake: true,
     customVariables: ['~/assets/scss/style.scss'],
-    optionsPath: '~plugins/vuetify.js'
+    optionsPath: '~plugins/vuetify.js',
   },
   /*
    ** moment module configuration
@@ -90,8 +90,8 @@ export default {
     timezone: {
       matchZones: ['Etc/UTC'],
       startYear: 2000,
-      endYear: 2030
-    }
+      endYear: 2030,
+    },
   },
   /*
    ** Build configuration
@@ -100,6 +100,6 @@ export default {
     /*
      ** You can extend webpack config here
      */
-    extend(config, ctx) {}
-  }
+    extend(config, ctx) {},
+  },
 }

@@ -85,7 +85,7 @@
         Success
       </template>
       <template v-else>
-        <span class="overline" style="color: orangered">
+        <span class="overline" style="color: orangered;">
           Failed
         </span>
       </template>
@@ -141,12 +141,12 @@ export default {
   components: {
     dataView,
     inputDataCard,
-    txLogsCard
+    txLogsCard,
   },
   filters: {
     shortenAddress(hash = '0x00000000000000000000000000000000') {
       return hash.substring(0, 17) + '...'
-    }
+    },
   },
   props: {
     transaction: {
@@ -154,28 +154,28 @@ export default {
       required: true,
       default: () => {
         return {}
-      }
+      },
     },
     pending: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
     contractDeployed: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
     priceUsd: {
       type: Number,
       required: true,
-      default: 0
+      default: 0,
     },
     confirmations: {
       type: Number,
       required: false,
-      default: 0
-    }
+      default: 0,
+    },
   },
   data() {
     return {
@@ -188,7 +188,7 @@ export default {
       eventLogs: [],
       tokenTransferred: false,
       showLogs: false,
-      computedInputData: false
+      computedInputData: false,
     }
   },
   watch: {
@@ -211,7 +211,7 @@ export default {
           this.tokenTransferred = true
         }
       }
-    }
+    },
   },
   methods: {
     getAddressTag(hash) {
@@ -257,7 +257,7 @@ export default {
     },
     calcValue(ubq, decimals) {
       return common.mulFiat(ubq, this.priceUsd, decimals)
-    }
-  }
+    },
+  },
 }
 </script>

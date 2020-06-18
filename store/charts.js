@@ -7,40 +7,40 @@ export const state = () => ({
   // Blocks
   gasPrice: {
     name: '',
-    data: []
+    data: [],
   },
   gasLimit: {
     name: '',
-    data: []
+    data: [],
   },
   blocks: {
     name: '',
-    data: []
+    data: [],
   },
   blockTime: {
     name: '',
-    data: []
+    data: [],
   },
   difficulty: {
     name: '',
-    data: []
+    data: [],
   },
   supply: {
     name: '',
-    data: []
+    data: [],
   },
 
   // Transactions
 
   txns: {
     name: '',
-    data: []
+    data: [],
   },
   txFees: {
     name: '',
     prices: [],
-    data: []
-  }
+    data: [],
+  },
 })
 
 export const mutations = {
@@ -70,17 +70,17 @@ export const mutations = {
   },
   SET_FULL(state) {
     state.filled = true
-  }
+  },
 }
 
 async function fetchNumberChart(name = '', limit = 0) {
   const {
-    data: { result }
+    data: { result },
   } = await axios.post(process.env.config.apiUrl, {
     jsonrpc: '2.0',
     method: 'explorer_getNumberChart',
     params: [name, limit],
-    id: 88
+    id: 88,
   })
 
   const { name: chartName, timestamps, series } = result
@@ -94,12 +94,12 @@ async function fetchNumberChart(name = '', limit = 0) {
 
 async function fetchNumberStringChart(name = '', limit = 0) {
   const {
-    data: { result }
+    data: { result },
   } = await axios.post(process.env.config.apiUrl, {
     jsonrpc: '2.0',
     method: 'explorer_getNumberStringChart',
     params: [name, limit],
-    id: 88
+    id: 88,
   })
 
   const { name: chartName, timestamps, series } = result
@@ -177,12 +177,12 @@ export const actions = {
 
   async fetchTxFees({ commit }) {
     const {
-      data: { result }
+      data: { result },
     } = await axios.post(process.env.config.apiUrl, {
       jsonrpc: '2.0',
       method: 'explorer_getNumberStringChart',
       params: ['txFees', 0],
-      id: 88
+      id: 88,
     })
 
     const { name: chartName, timestamps, series } = result
@@ -234,12 +234,12 @@ export const actions = {
       const ts = moment(val, 'MM/DD/YY').unix() * 1000
       return {
         x: ts,
-        y: common.mulFiat(common.fromWei(series[idx]), mapPrices.get(ts), 2)
+        y: common.mulFiat(common.fromWei(series[idx]), mapPrices.get(ts), 2),
       }
     })
 
     const chartData = { name: chartName, data, prices: stampPrices }
 
     commit('SET_TXFEES', chartData)
-  }
+  },
 }
