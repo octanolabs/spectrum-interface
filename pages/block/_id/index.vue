@@ -12,6 +12,10 @@
   </v-row>
 </template>
 
+<router>
+  path: /block/:id/:action?
+</router>
+
 <script>
 import axios from 'axios'
 import blockPage from '~/components/page/blockPage.vue'
@@ -53,7 +57,7 @@ export default {
         return axios.post(process.env.config.apiUrl, {
           jsonrpc: '2.0',
           method: 'explorer_transactionsByBlockNumber',
-          params: [id],
+          params: [block.number],
           id: 88,
         })
       })
@@ -68,11 +72,7 @@ export default {
   },
   computed: {
     openTransactions() {
-      const query = this.$route.query
-      if (query.show === 'transactions') {
-        return true
-      }
-      return false
+      return this.$route.params.action === 'transactions'
     },
   },
   middleware({ store }) {

@@ -5,6 +5,7 @@
         :transaction="txn"
         :price-usd="priceUSD"
         :confirmations="confirmations"
+        :contract-deployed="contractDeployed"
       />
     </v-col>
   </v-row>
@@ -41,6 +42,9 @@ export default {
     }
   },
   computed: {
+    contractDeployed() {
+      return this.txn.to === '' && !!this.txn.contractAddress
+    },
     confirmations() {
       return this.pending === true
         ? 0

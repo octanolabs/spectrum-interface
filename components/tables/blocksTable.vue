@@ -21,7 +21,7 @@
     </template>
     <template v-slot:item.transactions="data">
       <template v-if="data.value !== 0">
-        <nuxt-link :to="`/block/${data.item.number}?show=transactions`">
+        <nuxt-link :to="`/block/${data.item.number}/transactions`">
           {{ data.value }}
         </nuxt-link>
       </template>

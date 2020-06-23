@@ -24,7 +24,10 @@
       </nuxt-link>
       {{ getAddressTag(fromAddress) }}
     </template>
-    <template v-slot:transaction.to="{ to: toAddress }">
+    <template
+      v-if="!contractDeployed"
+      v-slot:transaction.to="{ to: toAddress }"
+    >
       <nuxt-link
         :to="{ name: 'account-address', params: { address: toAddress } }"
       >
@@ -41,7 +44,14 @@
       v-if="contractDeployed"
       v-slot:transaction.contractAddress="{ contractAddress }"
     >
-      {{ contractAddress }}
+      <nuxt-link
+        :to="{ name: 'account-address', params: { address: contractAddress } }"
+      >
+        {{ contractAddress | shortenAddress }}
+      </nuxt-link>
+      <template>
+        {{ getAddressTag(contractAddress) }}
+      </template>
     </template>
     <template v-slot:transaction.value="{ value }">
       {{ fromWei(value) }} UBQ (${{ calcValue(fromWei(value), 2) }})
@@ -81,14 +91,12 @@
       {{ nonce }} [{{ position }}]
     </template>
     <template v-slot:transaction.status="{ status }">
-      <template v-if="status">
+      <v-chip v-if="status" outlined color="primary">
         Success
-      </template>
-      <template v-else>
-        <span class="overline" style="color: orangered;">
-          Failed
-        </span>
-      </template>
+      </v-chip>
+      <v-chip v-else outlined color="error">
+        Failed
+      </v-chip>
     </template>
     <template v-slot:transaction.input.key>
       Input Data:
@@ -145,7 +153,7 @@ export default {
   },
   filters: {
     shortenAddress(hash = '0x00000000000000000000000000000000') {
-      return hash.substring(0, 17) + '...'
+      return hash.substring(0, 26) + '...'
     },
   },
   props: {
@@ -190,6 +198,11 @@ export default {
       showLogs: false,
       computedInputData: false,
     }
+  },
+  computed: {
+    deployedContract() {
+      return this.transaction.to === '' && !!this.transaction.contractAddress
+    },
   },
   watch: {
     transaction() {
