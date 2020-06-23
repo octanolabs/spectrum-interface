@@ -1,12 +1,4 @@
 <template>
-  <!--  TODO:
-  do smth like this
-
-  -row
-    -col, cols=12
-    -col, expandable, place always under the other col
-  -->
-
   <v-app-bar
     color="black"
     dark
@@ -21,7 +13,7 @@
     </v-app-bar-nav-icon>
 
     <v-toolbar-title>
-      <nuxt-link to="/" style="color: #fff; text-decoration: none">
+      <nuxt-link to="/" style="color: #fff; text-decoration: none;">
         Ubiqscan
       </nuxt-link>
     </v-toolbar-title>
@@ -38,7 +30,7 @@
         right
         type="text"
         label="Search by Address / Txhash / Block"
-        style="max-width: 400px"
+        style="max-width: 400px;"
         @keydown="handleEvent"
       >
       </v-text-field>
@@ -100,7 +92,7 @@ export default {
       search: '',
       errors: [],
       activeToolbarItem: '',
-      expandToolbar: false
+      expandToolbar: false,
     }
   },
   computed: {
@@ -109,26 +101,25 @@ export default {
         case 'ANALYTICS':
           return [
             { path: '/analytics/charts', text: 'Charts' },
-            { path: '/analytics/map', text: 'Node map' }
+            // { path: '/analytics/map', text: 'Node map' },
           ]
         case 'BLOCKCHAIN':
           return [
             { path: '/transactions/latest', text: 'View Txns' },
-            { path: '/transactions/pending', text: 'View Pending Txns' },
             { path: '/blocks', text: 'View Blocks' },
             { path: '/uncles', text: 'View Uncles' },
-            { path: '/forkedBlocks', text: 'Forked Blocks (Reorgs)' }
+            { path: '/forkedBlocks', text: 'Forked Blocks (Reorgs)' },
           ]
         case 'TOKENS':
           return [
             { path: '/tokens', text: 'View Tokens' },
-            { path: '/tokentransfers', text: 'View Token Transfers' }
+            { path: '/tokentransfers', text: 'View Token Transfers' },
           ]
         case 'MISC':
           return [{ path: 'https://ubiq.darcr.us', text: 'Network Stats' }]
       }
       return ['']
-    }
+    },
   },
   mounted() {
     this.$smoothReflow()
@@ -138,7 +129,7 @@ export default {
       this.$router.options.routes.forEach((route) => {
         this.items.push({
           name: route.name,
-          path: route.path
+          path: route.path,
         })
       })
     },
@@ -180,7 +171,7 @@ export default {
 
         this.$router.push({
           name: 'account-address',
-          params: { address: str.toLowerCase() }
+          params: { address: str.toLowerCase() },
         })
         this.search = ''
       } else if (hash.test(str)) {
@@ -192,7 +183,7 @@ export default {
             jsonrpc: '2.0',
             method: 'eth_getBlockByHash',
             params: [str, false],
-            id: 1
+            id: 1,
           })
           .then((response) => {
             if (response.data.result) {
@@ -200,8 +191,8 @@ export default {
               this.$router.push({
                 name: 'block-id',
                 params: {
-                  id: common.hexToDecimal(response.data.result.number)
-                }
+                  id: common.hexToDecimal(response.data.result.number),
+                },
               })
               this.search = ''
             } else {
@@ -211,14 +202,14 @@ export default {
                   jsonrpc: '2.0',
                   method: 'eth_getTransactionByHash',
                   params: [str],
-                  id: 2
+                  id: 2,
                 })
                 .then((response) => {
                   if (response.data.result) {
                     // is txn hash
                     this.$router.push({
                       name: 'transaction-hash',
-                      params: { hash: str.toLowerCase() }
+                      params: { hash: str.toLowerCase() },
                     })
                     this.search = ''
                   } else {
@@ -229,7 +220,7 @@ export default {
                       text:
                         '<span class="fa fa-search"/> Invalid Txn/Block Hash: ' +
                         str,
-                      type: 'error'
+                      type: 'error',
                     })
                   }
                 })
@@ -249,11 +240,11 @@ export default {
         this.$notify({
           group: 'normal',
           text: '<span class="fa fa-search"/> Invalid search params: ' + str,
-          type: 'error'
+          type: 'error',
         })
       }
-    }
-  }
+    },
+  },
 }
 </script>
 <style scoped>

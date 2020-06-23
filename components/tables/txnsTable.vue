@@ -12,10 +12,13 @@
       <span v-if="block" class="font-weight-light">
         block {{ blockNumber }}
       </span>
-      <span v-else> a total of {{ total }} </span>
+      <span v-else> a total of {{ formatNumber(total) }} </span>
     </template>
     <template v-else v-slot:topMessage>
       Showing {{ formatNumber(transactions.length) }} pending transactions
+    </template>
+    <template v-if="!pending" v-slot:item.timestamp="{ value: ts }">
+      {{ $moment.unix(ts).format('L, LTS') }}
     </template>
     <template v-if="!pending" v-slot:item.hash="{ value: txHash }">
       <nuxt-link :to="{ name: 'transaction-hash', params: { hash: txHash } }">
@@ -30,12 +33,26 @@
         {{ getAddressTag(sender) }}
       </nuxt-link>
     </template>
-    <template v-slot:item.to="{ value: receiver }">
+    <template v-if="!deploysContracts" v-slot:item.to="{ value: receiver }">
       <v-icon color="#333333">mdi-play</v-icon>
       <nuxt-link
         :to="{ name: 'account-address', params: { address: receiver } }"
       >
         {{ getAddressTag(receiver) }}
+      </nuxt-link>
+    </template>
+    <template v-if="deploysContracts" v-slot:header.contractAddress>
+      <v-icon color="#333333">mdi-script</v-icon>
+      Contract Address
+    </template>
+    <template
+      v-if="deploysContracts"
+      v-slot:item.contractAddress="{ value: contractAddress }"
+    >
+      <nuxt-link
+        :to="{ name: 'account-address', params: { address: contractAddress } }"
+      >
+        {{ getAddressTag(contractAddress) }}
       </nuxt-link>
     </template>
     <template v-slot:item.value="{ value: amount }">
@@ -48,7 +65,7 @@
       {{ calcTxFee(gasUsed, gasPrice) }}
     </template>
     <template v-else v-slot:item.gasPrice="{ item: { gasPrice } }">
-      {{ fromWeiToGwei(hexToDecimal(gasPrice)) }} Gwei
+      {{ fromWeiToGwei(gasPrice) }} Gwei
     </template>
   </table-view>
 </template>
@@ -97,6 +114,11 @@ export default {
       required: false,
       default: false,
     },
+    deploysContracts: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
     blockNumber: {
       type: Number,
       required: false,
@@ -107,7 +129,12 @@ export default {
   },
   computed: {
     headers() {
-      let headers = [
+      let defaultHeaders = [
+        {
+          text: 'Timestamp',
+          value: 'timestamp',
+          sortable: false,
+        },
         {
           text: 'Txhash',
           value: 'hash',
@@ -118,20 +145,41 @@ export default {
           value: 'from',
           sortable: false,
         },
-        {
-          text: 'To',
-          value: 'to',
-          sortable: false,
-        },
-        {
-          text: 'Value',
-          value: 'value',
-          sortable: false,
-        },
       ]
 
+      if (this.deploysContracts) {
+        defaultHeaders = [
+          ...defaultHeaders,
+          {
+            text: 'Contract Address',
+            value: 'contractAddress',
+            sortable: false,
+          },
+          {
+            text: 'Value',
+            value: 'value',
+            sortable: false,
+          },
+        ]
+      } else {
+        defaultHeaders = [
+          ...defaultHeaders,
+          {
+            text: 'To',
+            value: 'to',
+            sortable: false,
+          },
+          {
+            text: 'Value',
+            value: 'value',
+            sortable: false,
+          },
+        ]
+      }
+
       if (this.pending) {
-        headers = [
+        const [, ...headers] = defaultHeaders
+        defaultHeaders = [
           ...headers,
           {
             text: 'Gas Price',
@@ -140,8 +188,8 @@ export default {
           },
         ]
       } else {
-        headers = [
-          ...headers,
+        defaultHeaders = [
+          ...defaultHeaders,
           {
             text: 'Txfee',
             value: 'txFee',
@@ -150,7 +198,7 @@ export default {
         ]
       }
 
-      return headers
+      return defaultHeaders
     },
   },
   methods: {
