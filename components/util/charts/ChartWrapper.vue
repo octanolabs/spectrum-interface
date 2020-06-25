@@ -4,8 +4,8 @@
  -->
 
 <template>
-  <apexchart v-if="sparkline" v-bind="chartProps" />
-  <apexchart v-else height="500" v-bind="chartProps" />
+  <apexchart v-if="sparkline" ref="apexchart" v-bind="chartProps" />
+  <apexchart v-else ref="apexchart" height="500" v-bind="chartProps" />
 </template>
 
 <script>
@@ -60,13 +60,13 @@ export default {
   },
   computed: {
     chartProps() {
-      const { options: chartOptions, grid, ...rest } = this.$attrs
+      const { options: chartOptions, ...rest } = this.$attrs
 
       if (!chartOptions) {
         return {}
       }
 
-      const { theme, chart, xaxis, markers, ...opts } = chartOptions
+      const { theme, chart, xaxis, markers, tooltip, ...opts } = chartOptions
 
       let toolbar = {}
 
@@ -85,7 +85,7 @@ export default {
           selection: true,
           zoomin: this.plusSvg,
           zoomout: this.minusSvg,
-          zoom: this.magnifySvg,
+          zoom: false,
           pan: this.panSvg,
           reset: true,
           download: this.downloadSvg,
@@ -94,7 +94,11 @@ export default {
 
       const props = {
         options: {
-          theme: { mode: 'dark' },
+          theme: {
+            mode: 'dark',
+            palette: 'palette3',
+            monochrome: { enabled: false },
+          },
           grid: { show: false },
           chart: {
             ...chart,
@@ -120,6 +124,10 @@ export default {
                 type: 'none',
               },
             },
+          },
+          tooltip: {
+            ...tooltip,
+            theme: 'dark',
           },
           markers: {
             ...markers,

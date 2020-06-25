@@ -1,6 +1,6 @@
 import axios from 'axios'
 import moment from 'moment'
-import common from '~/scripts/common'
+import common from '../scripts/common'
 
 export const state = () => ({
   filled: false,
@@ -110,16 +110,25 @@ async function fetchNumberStringChart(name = '', limit = 0) {
 
   return { name: chartName, data }
 }
-//
-// function fetchMLChart(name = '') {
-//   return axios.post(process.env.config.apiUrl, {
-//     jsonrpc: '2.0',
-//     method: 'explorer_getMLChart',
-//     params: [name],
-//     id: 88
-//   })
-// }
 
+async function fetchMLChart(name = '') {
+  const {
+    data: { result },
+  } = await axios.post(process.env.config.apiUrl, {
+    jsonrpc: '2.0',
+    method: 'explorer_getNumberChart',
+    params: [name],
+    id: 88,
+  })
+
+  const { name: chartName, timestamps, series } = result
+
+  const data = timestamps.map((val, idx) => {
+    return { x: moment(val, 'MM/DD/YY').unix() * 1000, y: series[idx] }
+  })
+
+  return { name: chartName, data }
+}
 export const actions = {
   async fetchAll({ dispatch, commit }) {
     await dispatch('fetchGasPrice')
@@ -131,6 +140,8 @@ export const actions = {
 
     await dispatch('fetchTransactions')
     await dispatch('fetchTxFees')
+    await dispatch('fetchGasPriceLevels')
+    await dispatch('fetchGasLevels')
 
     commit('SET_FULL')
   },
@@ -174,7 +185,6 @@ export const actions = {
 
     commit('SET_TXNS', chartData)
   },
-
   async fetchTxFees({ commit }) {
     const {
       data: { result },
@@ -199,8 +209,7 @@ export const actions = {
       ).unix()}`
     )
 
-    const { prices } = priceData
-    const map = new Map(prices)
+    const map = new Map(priceData.prices)
 
     const getStamp = (ts) => moment(ts, 'MM/DD/YY').unix() * 1000
 
@@ -228,18 +237,37 @@ export const actions = {
       idx++
     }
 
-    const mapPrices = new Map(stampPrices)
+    // const mapPrices = new Map(stampPrices)
 
     const data = timestamps.map((val, idx) => {
       const ts = moment(val, 'MM/DD/YY').unix() * 1000
       return {
         x: ts,
-        y: common.mulFiat(common.fromWei(series[idx]), mapPrices.get(ts), 2),
+        y: common.fromWei(series[idx], 2),
       }
     })
 
-    const chartData = { name: chartName, data, prices: stampPrices }
+    const prices = timestamps.map((val, idx) => {
+      return {
+        x: stampPrices[idx][0],
+        y: stampPrices[idx][1],
+      }
+    })
+
+    const chartData = { name: chartName, data, prices }
 
     commit('SET_TXFEES', chartData)
+  },
+
+  async fetchGasPriceLevels({ commit }) {
+    const chartData = await fetchMLChart('gasPrices')
+
+    commit('SET_GASPRICE', chartData)
+  },
+
+  async fetchGasLevels({ commit }) {
+    const chartData = await fetchMLChart('gasPrices')
+
+    commit('SET_GASPRICE', chartData)
   },
 }

@@ -10,8 +10,13 @@
             :prices="store.txFees.prices"
           />
         </template>
-        <template v-slot:transactions1>
-          <txns-chart :txns="store.txns.data" :avg-gas-price="{ data: [] }" />
+        <template v-slot:blocks>
+          <blocks-chart
+            :blocks="store.blocks.data"
+            :supply="store.supply.data"
+            :block-time="store.blockTime.data"
+            :difficulty="store.difficulty.data"
+          />
         </template>
       </chart-display>
     </v-col>
@@ -20,10 +25,11 @@
 
 <script>
 import TxnsChart from '../../components/charts/TxnsChart'
+import BlocksChart from '../../components/charts/BlocksChart'
 import ChartDisplay from '~/components/util/charts/ChartDisplay'
 
 export default {
-  components: { TxnsChart, ChartDisplay },
+  components: { BlocksChart, TxnsChart, ChartDisplay },
   async fetch() {
     await this.$store.dispatch('charts/fetchAll')
   },

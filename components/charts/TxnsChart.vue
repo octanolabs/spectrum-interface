@@ -5,27 +5,6 @@
     :chart-data="chartData"
   >
   </chart-view>
-
-  <!--  <v-card outlined>-->
-  <!--    {{ activeChart }}-->
-  <!--    <v-card-title>-->
-  <!--      <v-radio-group v-model="activeChart" row>-->
-  <!--        <v-radio label="" name="txns/gasPrice">-->
-  <!--          txns/gasPrice-->
-  <!--        </v-radio>-->
-  <!--        <v-radio label="" name="gaslimit">-->
-  <!--          gaslimit-->
-  <!--        </v-radio>-->
-  <!--      </v-radio-group>-->
-  <!--    </v-card-title>-->
-  <!--    <v-card-text>-->
-  <!--      <chart-wrapper-->
-  <!--        v-bind="$attrs"-->
-  <!--        :series="chartData"-->
-  <!--        :options="chartOptions"-->
-  <!--      />-->
-  <!--    </v-card-text>-->
-  <!--  </v-card>-->
 </template>
 
 <script>
@@ -39,80 +18,103 @@ export default {
     txns: {
       type: Array,
       required: true,
-      default: () => []
+      default: () => [],
     },
     prices: {
       type: Array,
       required: false,
-      default: () => []
+      default: () => [],
     },
     avgGasPrice: {
       type: Array,
       required: false,
-      default: () => []
+      default: () => [],
     },
     txFees: {
       type: Array,
       required: false,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   data() {
     return {
       activeChart: 0,
       chartOptions: [
         {
-          chart: {
-            type: 'line',
-            zoom: {
-              autoScaleYaxis: true
-            }
-          },
-          colors: ['#00ea90', '#ef6221', '#555555'],
+          colors: [
+            'rgba(0,234,144,0.2)',
+            'rgba(225,239,33,0.75)',
+            '#00ea90',
+            '#2261cd',
+          ],
           stroke: {
             show: true,
             curve: 'smooth',
             lineCap: 'butt',
-            colors: undefined,
             width: 1,
-            dashArray: 0
+            dashArray: 0,
           },
           xaxis: {
             type: 'datetime',
             labels: {
-              show: false
+              show: false,
             },
             axisTicks: {
-              show: false
+              show: false,
             },
             tooltip: {
-              formatter: (val) =>
-                this.$moment(val)
-                  .utc()
-                  .format('YYYY-MM-DD')
-            }
+              formatter: (val) => this.$moment(val).utc().format('YYYY-MM-DD'),
+            },
+          },
+          chart: {
+            animations: {
+              enabled: false,
+            },
+          },
+          tooltip: {
+            enabledOnSeries: [0, 1, 2],
           },
           yaxis: [
-            { seriesName: 'Transactions' },
+            {
+              seriesName: 'Transactions',
+              labels: {
+                show: false,
+                formatter: (label) => label.toFixed(),
+              },
+            },
             {
               seriesName: 'Avg. Gas Price',
               labels: {
                 show: false,
-                formatter: (label) => `${common.fromWeiToGwei(label, 2)} Gwei`
-              }
+                formatter: (label) => `${common.fromWeiToGwei(label, 2)} Gwei`,
+              },
             },
             {
-              seriesName: 'Tx fees',
+              seriesName: 'Cumulative Tx fees',
               labels: {
                 show: false,
-                formatter: (label, idx) => `${label} (${this.prices[idx]}) $`
-              }
-            }
-          ]
+                formatter(label, { series, dataPointIndex }) {
+                  return `
+                  ${series[2][dataPointIndex]} UBQ
+                  (${common.mulFiat(
+                    series[2][dataPointIndex],
+                    series[3][dataPointIndex],
+                    2
+                  )} $)`
+                },
+              },
+            },
+            {
+              seriesName: 'Price',
+              labels: {
+                show: false,
+              },
+            },
+          ],
         },
         {
           chart: {
-            type: 'line'
+            type: 'line',
           },
           stroke: {
             show: true,
@@ -120,26 +122,27 @@ export default {
             lineCap: 'butt',
             colors: undefined,
             width: 1,
-            dashArray: 0
+            dashArray: 0,
           },
           xaxis: {
             labels: {
-              show: false
-            }
+              show: false,
+            },
           },
-          yaxis: [{ name: 'GasLimit', data: this.gasLimit }]
-        }
+          yaxis: [{ name: 'GasLimit', data: this.gasLimit }],
+        },
       ],
       chartData: [
         [
-          { name: 'Transactions', data: this.txns },
+          { name: 'Transactions', type: 'column', data: this.txns },
           { name: 'Avg. Gas Price', type: 'line', data: this.avgGasPrice },
-          { name: 'Tx fees', type: 'line', data: this.txFees }
+          { name: 'Cumulative Tx fees', type: 'line', data: this.txFees },
+          { name: 'Price', type: 'line', data: this.prices },
         ],
-        [{ name: 'GasLimit', data: this.gasLimit }]
-      ]
+        [{ name: 'GasLimit', data: this.gasLimit }],
+      ],
     }
-  }
+  },
   // computed: {
   //   chartData() {
   //     switch (this.activeChart) {
@@ -230,16 +233,3 @@ export default {
   // }
 }
 </script>
-
-<style lang="css">
-.ct-series-a .ct-line {
-  /* Set the colour of this series line */
-  stroke: #00ea90;
-  /* Control the thikness of your lines */
-  stroke-width: 2.5px;
-}
-
-.ct-series-a .ct-point {
-  stroke-linecap: butt;
-}
-</style>

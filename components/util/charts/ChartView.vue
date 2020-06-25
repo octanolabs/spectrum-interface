@@ -40,9 +40,36 @@
           </v-menu>
         </v-col>
         <v-col>
-          <v-btn text color="primary" small dark @click="setShowAllDataPoints"
-            >Show all data points</v-btn
+          <v-btn
+            text
+            color="primary"
+            small
+            dark
+            @click="setShowDataPoints('6m')"
           >
+            6m
+          </v-btn>
+          <v-btn
+            text
+            color="primary"
+            small
+            dark
+            @click="setShowDataPoints('1y')"
+          >
+            1y
+          </v-btn>
+          <v-btn
+            text
+            color="primary"
+            small
+            dark
+            @click="setShowDataPoints('3y')"
+          >
+            3y
+          </v-btn>
+          <v-btn text color="primary" small dark @click="setShowDataPoints()">
+            Show all data points
+          </v-btn>
         </v-col>
         <v-spacer />
         <v-col cols="auto">
@@ -61,6 +88,7 @@
       </div>
     </v-card-title>
     <v-card-text>
+      <!-- Why bound to $attrs? -->
       <chart-wrapper v-bind="$attrs" :series="data" :options="options" />
     </v-card-text>
   </v-card>
@@ -156,13 +184,14 @@ export default {
   watch: {
     activeChart: {
       handler(newChart) {
-        const key = this.chartNames[0] || newChart
+        const key = newChart || this.chartNames[0]
 
         const [startIdx, endIdx] = this.sliceDateRange
-        // slice includes start element and excludes end element
-        this.data = this.keyedSeries[key].map(({ name, data }) => {
+        // Array.slice includes start element and excludes end element
+        this.data = this.keyedSeries[key].map(({ name, type, data }) => {
           return {
             name,
+            type,
             data: data.slice(startIdx, endIdx + 1),
           }
         })
@@ -173,12 +202,15 @@ export default {
     },
     sliceDateRange: {
       handler([startIdx, endIdx]) {
-        this.data = this.keyedSeries[this.activeChart].map(({ name, data }) => {
-          return {
-            name,
-            data: data.slice(startIdx, endIdx + 1),
+        this.data = this.keyedSeries[this.activeChart].map(
+          ({ name, type, data }) => {
+            return {
+              name,
+              type,
+              data: data.slice(startIdx, endIdx + 1),
+            }
           }
-        })
+        )
       },
     },
     dates: {
@@ -203,17 +235,54 @@ export default {
         ) {
           this.dates = [to, from]
         }
+
+        if (
+          this.$moment(from, 'YYYY-MM-DD').isBefore(
+            this.$moment(earliestDate, 'YYYY-MM-DD')
+          )
+        ) {
+          this.dates = [this.$moment(earliestDate).format('YYYY-MM-DD'), to]
+        }
       },
       immediate: true,
     },
   },
   methods: {
-    setShowAllDataPoints() {
+    setShowDataPoints(period = 'all') {
       const [[{ data: series }]] = this.chartData
-      this.dates = [
-        this.$moment(series[0].x).format('YYYY-MM-DD'),
-        this.$moment(series[series.length - 1].x).format('YYYY-MM-DD'),
-      ]
+      switch (period) {
+        case '6m':
+          this.dates = [
+            this.$moment(series[series.length - 1].x)
+              .subtract(6, 'months')
+              .format('YYYY-MM-DD'),
+            this.$moment(series[series.length - 1].x).format('YYYY-MM-DD'),
+          ]
+          break
+        case '1y':
+          this.dates = [
+            this.$moment(series[series.length - 1].x)
+              .subtract(1, 'years')
+              .format('YYYY-MM-DD'),
+            this.$moment(series[series.length - 1].x).format('YYYY-MM-DD'),
+          ]
+          break
+        case '3y':
+          this.dates = [
+            this.$moment(series[series.length - 1].x)
+              .subtract(3, 'years')
+              .format('YYYY-MM-DD'),
+            this.$moment(series[series.length - 1].x).format('YYYY-MM-DD'),
+          ]
+          break
+        case 'all':
+        default:
+          this.dates = [
+            this.$moment(series[0].x).format('YYYY-MM-DD'),
+            this.$moment(series[series.length - 1].x).format('YYYY-MM-DD'),
+          ]
+          break
+      }
     },
     findStampInSeries(from, to, series = []) {
       const checkStamp = (t, ms) => this.$moment(ms).isSameOrAfter(t, 'day')
