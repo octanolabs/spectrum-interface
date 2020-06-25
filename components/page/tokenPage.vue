@@ -5,7 +5,6 @@
         :item="{
           supply: store.supply,
           address: address,
-          // tokenBalances: store.tokenBalances,
           transfersTotal: store.tokenTransfersTotal,
           contractData: store.contractData,
           token: store.token,
@@ -54,7 +53,7 @@
         >
           {{ calcMarketcap(supply, price.btc) }} BTC
         </template>
-        <template v-slot:overview.transactions="{ transfersTotal }">
+        <template v-slot:overview.transfers="{ transfersTotal }">
           {{ formatNumber(transfersTotal) }}
         </template>
       </data-view>
@@ -154,7 +153,7 @@ export default {
       }
     },
     formatNumber(val) {
-      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+      return common.formatNumber(val)
     },
     calcMarketcap(supply, price) {
       return common.calcMarketcap(supply, price)

@@ -90,10 +90,13 @@ export default {
     return new BigNumber(hashrate).div(1000000000).toString()
   },
   formatNumber(val) {
-    if (val) {
-      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+    const split = val.toString().split('.')
+    const withCommas = split[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+
+    if (split.length < 2) {
+      return withCommas
     } else {
-      return null
+      return `${withCommas}.${split[1]}`
     }
   },
   toChecksumAddress(address) {

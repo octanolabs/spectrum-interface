@@ -2,7 +2,7 @@ import axios from 'axios'
 import tokens from '~/scripts/tokens'
 import common from '~/scripts/common'
 
-export const state = () => ({
+export const getDefaultState = () => ({
   balance: '0',
   supply: '0',
 
@@ -10,6 +10,9 @@ export const state = () => ({
 
   txns: [],
   txnsTotal: 0,
+
+  mined: [],
+  minedTotal: 0,
 
   tokenTransfers: [],
   tokenTransfersTotal: 0,
@@ -20,7 +23,12 @@ export const state = () => ({
   tokenBalances: [],
 })
 
+export const state = getDefaultState()
+
 export const mutations = {
+  CLEAR_STATE(state) {
+    Object.assign(state, getDefaultState())
+  },
   SET_TOKEN(state, payload) {
     state.token = payload
   },
@@ -33,6 +41,10 @@ export const mutations = {
   SET_TRANSACTIONS(state, { txns, total }) {
     state.txns = txns
     state.txnsTotal = total
+  },
+  SET_MINED(state, { blocks, total }) {
+    state.mined = blocks
+    state.minedTotal = total
   },
   SET_TRANSFERS(state, { transfers, total }) {
     state.tokenTransfers = transfers
@@ -50,6 +62,9 @@ export const actions = {
   //
   // Tokens
   //
+  clearState({ commit }) {
+    commit('CLEAR_STATE')
+  },
   async setToken({ commit }, address) {
     const { name, symbol, decimals } = tokens.getToken(address)
 
@@ -118,7 +133,18 @@ export const actions = {
 
     commit('SET_TRANSACTIONS', result)
   },
+  async fetchMinedBlocks({ commit }, address) {
+    const {
+      data: { result },
+    } = await axios.post(process.env.config.apiUrl, {
+      jsonrpc: '2.0',
+      method: 'explorer_latestMinedBlocks',
+      params: [address, 100],
+      id: 88,
+    })
 
+    commit('SET_MINED', result)
+  },
   async fetchTokenTransfers({ commit }, address) {
     const {
       data: { result },

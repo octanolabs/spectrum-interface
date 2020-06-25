@@ -65,12 +65,6 @@ const tokens = {
     decimals: 18,
     display: true,
   },
-  '0x4b4899a10f3e507db207b0ee2426029efa168a67': {
-    name: 'Qwark',
-    symbol: 'QWARK',
-    decimals: 8,
-    display: true,
-  },
   '0x5e1715bb79805bd672729760b3f7f34d6f485098': {
     name: 'PickleRicks',
     symbol: 'RICKS',

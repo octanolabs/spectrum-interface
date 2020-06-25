@@ -5,15 +5,26 @@
         :item="{
           balance: store.balance,
           address: address,
-          tokenBalances: store.tokenBalances,
+          tokenBalances: store.tokenBalances.filter(
+            (token) => token.balance !== '0'
+          ),
           transactions: store.txnsTotal,
         }"
       >
         <template v-slot:overview.blockie.key="{ address: accountAddress }">
           <blockie :address="accountAddress" size="md" inline></blockie>
         </template>
-        <template v-slot:overview.address.key="{ address: accountAddress }">
+        <template
+          v-if="!store.isContract"
+          v-slot:overview.address.key="{ address: accountAddress }"
+        >
           Showing account {{ accountAddress }}
+        </template>
+        <template
+          v-else
+          v-slot:overview.address.key="{ address: accountAddress }"
+        >
+          Showing contract deployed at {{ accountAddress }}
         </template>
         <template v-slot:overview.address="{ address: accountAddress }">
           <qrcode-modal :address="accountAddress" />
@@ -35,26 +46,16 @@
           {{ formatNumber(transactions) }}
         </template>
         <template v-slot:tokens="{ tokenBalances }">
-          <v-row>
-            <v-col cols="3">
-              <v-menu offset-y>
-                <template v-slot:activator="{ on }">
-                  <v-btn dark v-on="on">
-                    <span v-if="selectedToken !== null">
-                      {{ selectedToken.balance }} {{ selectedToken.symbol }}
-                    </span>
-                    <span v-else>
-                      Dropdown
-                    </span>
-                  </v-btn>
-                </template>
+          <div class="d-flex align-items-stretch">
+            <v-card outlined rounded elevation="6">
+              <v-card-text>
+                Token balances:
+              </v-card-text>
+              <v-card-text>
                 <v-list>
                   <v-list-item
-                    v-for="(item, index) in tokenBalances.filter(
-                      (token) => token.balance !== '0'
-                    )"
+                    v-for="(item, index) in tokenBalances"
                     :key="index"
-                    @click="selectedToken = item"
                   >
                     <v-list-item-title>
                       {{ item.balance }} {{ item.symbol }}
@@ -62,9 +63,23 @@
                     <v-list-item-content>{{ item.name }}</v-list-item-content>
                   </v-list-item>
                 </v-list>
-              </v-menu>
-            </v-col>
-          </v-row>
+              </v-card-text>
+            </v-card>
+            <v-spacer />
+            <v-card outlined rounded elevation="6">
+              <v-card-text>
+                <chart-wrapper
+                  :series="tokenBalances.map((i) => parseInt(i.balance))"
+                  type="pie"
+                  :options="{
+                    stroke: { show: false },
+                    labels: tokenBalances.map((i) => i.symbol),
+                  }"
+                >
+                </chart-wrapper>
+              </v-card-text>
+            </v-card>
+          </div>
         </template>
       </data-view>
       <data-view :item="{ test: 'test' }" no-breadcrumbs>
@@ -84,6 +99,14 @@
             :total="store.tokenTransfersTotal"
             :loading="loadingObject.tokenTransfers"
             @refresh="$emit('refresh')"
+          />
+        </template>
+        <template v-if="store.minedTotal > 0" v-slot:minedBlocks>
+          <blocks-table
+            :blocks="store.mined"
+            :total="store.minedTotal"
+            :loading="loadingObject.mined"
+            no-breadcrumbs
           />
         </template>
         <template v-if="store.isContract" v-slot:contractCode>
@@ -107,11 +130,15 @@ import tokens from '../../scripts/tokens'
 
 import Blockie from '../util/misc/Blockie'
 import qrcodeModal from '../util/misc/qrcodeModal'
+import ChartWrapper from '../util/charts/ChartWrapper'
+import BlocksTable from '../tables/blocksTable'
 import transfersTable from '~/components/tables/tokenTransfersTable'
 import txnsTable from '~/components/tables/txnsTable'
 
 export default {
   components: {
+    BlocksTable,
+    ChartWrapper,
     qrcodeModal,
     Blockie,
     DataView,
@@ -140,6 +167,8 @@ export default {
         balance: '0',
         txns: [],
         txnsTotal: 0,
+        mined: [],
+        minedTotal: 0,
         tokenTransfers: [],
         tokenTransfersTotal: 0,
 
@@ -189,7 +218,7 @@ export default {
       )
     },
     formatNumber(val) {
-      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+      return common.formatNumber(val)
     },
     fromWei(val, roundTo) {
       return common.fromWei(val, roundTo)

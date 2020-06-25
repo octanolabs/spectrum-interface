@@ -48,6 +48,7 @@ export default {
     } else {
       this.fetchBalance(address)
       this.fetchTransactions(address)
+      this.fetchMinedBlocks(address)
       this.fetchTokenTransfers(address)
       this.fetchContractData(address)
       this.fetchTokenBalances(address)
@@ -61,6 +62,7 @@ export default {
         transactions: false,
         tokenTransfers: false,
         contractData: false,
+        mined: false,
       },
     }
   },
@@ -88,6 +90,7 @@ export default {
   watch: {
     '$route.params.address': {
       handler() {
+        this.$store.dispatch('account/clearState')
         this.$fetch()
       },
       immediate: true,
@@ -124,6 +127,11 @@ export default {
       this.fetchStates.transactions = true
       await this.$store.dispatch('account/fetchTransactions', address)
       this.fetchStates.transactions = false
+    },
+    async fetchMinedBlocks(address) {
+      this.fetchStates.mined = true
+      await this.$store.dispatch('account/fetchMinedBlocks', address)
+      this.fetchStates.mined = false
     },
     async fetchTokenTransfers(address) {
       this.fetchStates.tokenTransfers = true
