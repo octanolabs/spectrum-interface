@@ -6,6 +6,11 @@
   since all chart series are the same date-wise, we just find the index for one of them and use them to slice all of them
 -->
 
+<!--
+  TODO: when zooming in with the selection tool, series showed/hidden with
+   the controls on the bottom are reset, find out how to fix
+-->
+
 <template>
   <v-card outlined>
     <v-card-title>
@@ -71,7 +76,27 @@
             Show all data points
           </v-btn>
         </v-col>
-        <v-spacer />
+        <v-col>
+          <v-btn
+            v-if="selectionSuggestedDates.length > 0"
+            text
+            color="warning"
+            small
+            elevation="3"
+            @click="
+              () => {
+                dates = selectionSuggestedDates
+                selectionSuggestedDates = []
+              }
+            "
+          >
+            Zoom in: {{ selectionSuggestedDates[0] }}
+            {{ selectionSuggestedDates[1] }}
+          </v-btn>
+          <v-btn v-else small text disabled>
+            Use selection too to zoom in
+          </v-btn>
+        </v-col>
         <v-col cols="auto">
           <v-radio-group v-model="activeChart" row mandatory>
             <v-radio
@@ -89,7 +114,13 @@
     </v-card-title>
     <v-card-text>
       <!-- Why bound to $attrs? -->
-      <chart-wrapper v-bind="$attrs" :series="data" :options="options" />
+      <chart-wrapper
+        ref="chart"
+        v-bind="$attrs"
+        :series="data"
+        :options="options"
+        @selectRange="selectedRange"
+      />
     </v-card-text>
   </v-card>
 </template>
@@ -124,6 +155,7 @@ export default {
       activeChart: null,
       menu: false,
       dates: [],
+      selectionSuggestedDates: [],
       data: [],
       options: {},
     }
@@ -184,9 +216,11 @@ export default {
   watch: {
     activeChart: {
       handler(newChart) {
+        const [startIdx, endIdx] = this.sliceDateRange
         const key = newChart || this.chartNames[0]
 
-        const [startIdx, endIdx] = this.sliceDateRange
+        this.options = this.keyedOptions[key]
+
         // Array.slice includes start element and excludes end element
         this.data = this.keyedSeries[key].map(({ name, type, data }) => {
           return {
@@ -195,8 +229,6 @@ export default {
             data: data.slice(startIdx, endIdx + 1),
           }
         })
-
-        this.options = this.keyedOptions[key]
       },
       immediate: true,
     },
@@ -248,6 +280,12 @@ export default {
     },
   },
   methods: {
+    selectedRange({ xaxis, yaxis }) {
+      this.selectionSuggestedDates = [
+        this.$moment(xaxis.min).format('YYYY-MM-DD'),
+        this.$moment(xaxis.max).format('YYYY-MM-DD'),
+      ]
+    },
     setShowDataPoints(period = 'all') {
       const [[{ data: series }]] = this.chartData
       switch (period) {

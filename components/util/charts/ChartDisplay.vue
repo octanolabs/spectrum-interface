@@ -10,6 +10,8 @@
     <v-sheet v-else min-height="200px">
       <v-item-group v-model="activeItems" multiple>
         <v-row justify="center">
+          <v-col cols="1"></v-col>
+          <v-spacer />
           <v-col v-for="(slot, idx) in slots" :key="idx" md="2">
             <v-item v-slot:default="{ active, toggle }">
               <v-btn :color="active ? 'primary' : ''" text @click="toggle">
@@ -44,6 +46,12 @@
               <!--              </v-card>-->
             </v-item>
           </v-col>
+          <v-spacer />
+          <!--          <v-col cols="1">-->
+          <!--            <div class="d-flex justify-space-around">-->
+          <!--              <v-btn icon><v-icon>mdi-backup-restore</v-icon></v-btn>-->
+          <!--            </div>-->
+          <!--          </v-col>-->
         </v-row>
       </v-item-group>
       <v-row justify="center">
@@ -57,6 +65,9 @@
               </div>
             </v-scroll-x-transition>
           </template>
+          <div class="d-flex justify-center">
+            <span>No charts selected</span>
+          </div>
         </v-col>
       </v-row>
     </v-sheet>

@@ -30,39 +30,39 @@
                 target="_blank"
                 >{{ item.data.title.substr(0, 90) }}...</a
               >
-              <hr style="margin: 5px 0px;" /></div
-          ></v-col>
+              <hr style="margin: 5px 0px;" />
+            </div>
+          </v-col>
+          <v-col cols="3">
+            <h6>Social <v-icon>mdi-users</v-icon></h6>
+            <a href="https://twitter.com/ubiqsmart.com" target="_blank">
+              <v-icon>mdi-twitter</v-icon>
+            </a>
+            <a href="https://discord.gg/HF6vEGF" target="_blank">
+              <v-icon>mdi-discord</v-icon>
+            </a>
+            <a href="https://github.com/ubiq/" target="_blank">
+              <v-icon>mdi-github</v-icon>
+            </a>
+            <a href="https://www.reddit.com/r/Ubiq/" target="_blank">
+              <v-icon>mdi-reddit</v-icon>
+            </a>
+            <a href="https://blog.ubiqsmart.com" target="_blank">
+              <v-icon>mdi-medium</v-icon>
+            </a>
+          </v-col>
         </v-row>
       </v-card-text>
       <v-spacer></v-spacer>
       <v-card color="transparent" width="100%">
         <v-row justify="space-around">
-          <v-col>
-            <a href="https://ubiqsmart.com" target="_blank">
-              Ubiqsmart © {{ $moment().format('YYYY') }} (C)
+          <v-col cols="4" />
+          <v-col cols="4" class="d-flex justify-center">
+            <a href="https://octano.dev" target="_blank">
+              Octanolabs © {{ $moment().format('YYYY') }} (C)
             </a>
           </v-col>
-          <v-col>
-            <div class="social">
-              <!--              <h6>Social <v-icon>mdi-users</v-icon></h6>-->
-              <a href="https://twitter.com/ubiqsmart.com" target="_blank"
-                ><v-icon>mdi-twitter</v-icon></a
-              >
-              <a href="https://discord.gg/HF6vEGF" target="_blank"
-                ><v-icon>mdi-discord</v-icon></a
-              >
-              <a href="https://github.com/ubiq/" target="_blank"
-                ><v-icon>mdi-github</v-icon></a
-              >
-              <a href="https://www.reddit.com/r/Ubiq/" target="_blank"
-                ><v-icon>mdi-reddit</v-icon></a
-              >
-              <a href="https://blog.ubiqsmart.com" target="_blank"
-                ><v-icon>mdi-medium</v-icon></a
-              >
-            </div></v-col
-          >
-          <v-col>
+          <v-col cols="4">
             <nuxt-link
               :to="{
                 name: 'account-address',
@@ -107,28 +107,6 @@ export default {
 </script>
 
 <style scoped>
-.footer-grid {
-  display: grid;
-  grid-template-rows: 0.1fr 30px;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-areas:
-    'ubiq reddit social'
-    'copy copy copy';
-}
-.ubiq {
-  grid-area: ubiq;
-}
-.reddit {
-  grid-area: reddit;
-}
-.social {
-  grid-area: social;
-}
-.copy {
-  grid-area: copy;
-  /*display: flex;*/
-  /*justify-content: space-between;*/
-}
 .v-card__text {
   padding: 0;
 }

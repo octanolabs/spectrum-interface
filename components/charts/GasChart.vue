@@ -1,6 +1,12 @@
 <template>
   <chart-view
-    :chart-names="['gasLimit/gasUsed', 'gasPrice Levels', 'gas Levels']"
+    :chart-names="[
+      'gasLimit/gasUsed',
+      'gasPrice Levels',
+      'gasUsed Levels',
+      'gas Levels',
+    ]"
+    height="750"
     :chart-options="chartOptions"
     :chart-data="chartData"
     :types="['line', 'line']"
@@ -10,7 +16,6 @@
 
 <script>
 import ChartView from '../util/charts/ChartView'
-import common from '~/scripts/common'
 
 export default {
   components: { ChartView },
@@ -31,7 +36,12 @@ export default {
       required: false,
       default: () => [],
     },
-    gasLimitLevels: {
+    gasUsedLevels: {
+      type: Array,
+      required: false,
+      default: () => [],
+    },
+    gasLevels: {
       type: Array,
       required: false,
       default: () => [],
@@ -42,20 +52,23 @@ export default {
       activeChart: 0,
       chartOptions: [
         {
-          colors: ['#00ea90', '#ef6221', '#555555'],
-          annotations: {
-            yaxis: [],
+          title: {
+            text:
+              'Max Daily Block Capacity (mined blocks * gasLimit) / Total gas used in transactions',
+            style: {
+              fontFamily: 'Courier New',
+            },
+          },
+          fill: {
+            opacity: 0.3,
           },
           stroke: {
             show: true,
-            curve: 'smooth',
-            lineCap: 'butt',
+            curve: 'straight',
             width: 1,
             dashArray: 0,
           },
-          fill: {
-            opacity: 1,
-          },
+          colors: ['#ea9c00', '#ea0000'],
           xaxis: {
             type: 'datetime',
             labels: {
@@ -69,96 +82,116 @@ export default {
             },
           },
           yaxis: [
-            { seriesName: 'Blocks', labels: { show: false } },
             {
-              seriesName: 'Supply',
+              forceNiceScale: true,
+              logarithmic: false,
               labels: {
                 show: false,
-                formatter: (val) =>
-                  `${common.formatNumber(common.fromWei(val, 0))} UBQ`,
               },
             },
           ],
         },
-        {
-          annotations: {
-            position: 'front',
-            yaxis: [
-              {
-                y: 88,
-                strokeDashArray: 1,
-                borderColor: '#00ea90',
-                label: {
-                  text: '88 second target',
-                  borderColor: '#00ea90',
-                  offsetY: -20,
-                  style: {
-                    background: 'transparent',
-                  },
-                },
-              },
-            ],
-          },
-          colors: ['#00ea90', '#ef6221', '#555555'],
-          fill: {
-            colors: ['#00ea90', '#ef6221', '#555555'],
-            type: 'solid',
-            opacity: [1, 0.35],
-          },
-          stroke: {
-            show: true,
-            curve: 'smooth',
-            lineCap: 'butt',
-            colors: undefined,
-            width: 1,
-            dashArray: 0,
-          },
+        this.defaultChartLevelOptions({
           xaxis: {
             type: 'datetime',
+            categories: this.gasLevels[0].timestamps,
             labels: {
               show: false,
             },
           },
-          tooltip: {
-            enabled: true,
-            fixed: {
-              enabled: true,
-              position: 'topRight',
-              offsetX: -200,
+          yaxis: [
+            {
+              labels: {
+                show: false,
+              },
+            },
+          ],
+        }),
+        this.defaultChartLevelOptions({
+          xaxis: {
+            type: 'datetime',
+            categories: this.gasLevels[0].timestamps,
+            labels: {
+              show: false,
             },
           },
           yaxis: [
             {
-              seriesName: 'Average daily block time',
+              forceNiceScale: false,
               labels: {
                 show: false,
-              },
-            },
-            {
-              seriesName: 'Difficulty',
-              labels: {
-                show: false,
-                formatter: (val) => `${common.toTH(val, 3)} TH`,
               },
             },
           ],
-        },
+        }),
+        this.defaultChartLevelOptions({
+          xaxis: {
+            type: 'datetime',
+            categories: this.gasLevels[0].timestamps,
+            labels: {
+              show: false,
+            },
+          },
+          yaxis: [
+            {
+              forceNiceScale: false,
+              labels: {
+                show: false,
+              },
+            },
+          ],
+        }),
       ],
       chartData: [
         [
-          { name: 'Blocks', type: 'line', data: this.blocks },
-          { name: 'Supply', type: 'line', data: this.supply },
+          { name: 'Gaslimit', type: 'area', data: this.gasLimit },
+          { name: 'GasUsed', type: 'line', data: this.gasUsed },
         ],
-        [
-          {
-            name: 'Average daily block time',
-            type: 'line',
-            data: this.blockTime,
-          },
-          { name: 'Difficulty', type: 'area', data: this.difficulty },
-        ],
+        this.gasPriceLevels.map(({ name, data }) => {
+          return { name, data, type: 'area' }
+        }),
+        this.gasUsedLevels.map(({ name, data }) => {
+          return { name, data, type: 'area' }
+        }),
+        this.gasLevels.map(({ name, data }) => {
+          return { name, data, type: 'area' }
+        }),
       ],
     }
+  },
+  methods: {
+    defaultChartLevelOptions(obj = {}) {
+      return {
+        markers: {
+          size: 0,
+        },
+        theme: {
+          pallette: 'pallette3',
+        },
+        stroke: {
+          show: true,
+          curve: 'smooth',
+          lineCap: 'butt',
+          width: 1,
+          dashArray: 0,
+        },
+        chart: {
+          stacked: true,
+          animations: {
+            enabled: false,
+          },
+        },
+        tooltip: {
+          enabled: true,
+          fixed: {
+            enabled: true,
+            position: 'topRight',
+            offsetX: -200,
+          },
+        },
+        ...obj,
+      }
+    },
   },
 }
 </script>

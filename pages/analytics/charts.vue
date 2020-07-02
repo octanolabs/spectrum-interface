@@ -18,6 +18,15 @@
             :difficulty="store.difficulty.data"
           />
         </template>
+        <template v-slot:Gas>
+          <gas-chart
+            :gas-limit="store.gasLimit.data"
+            :gas-used="store.gasUsed.data"
+            :gas-price-levels="store.gasPriceLevels.data"
+            :gas-used-levels="store.gasUsedLevels.data"
+            :gas-levels="store.gasLevels.data"
+          />
+        </template>
       </chart-display>
     </v-col>
   </v-row>
@@ -26,10 +35,11 @@
 <script>
 import TxnsChart from '../../components/charts/TxnsChart'
 import BlocksChart from '../../components/charts/BlocksChart'
+import GasChart from '../../components/charts/GasChart'
 import ChartDisplay from '~/components/util/charts/ChartDisplay'
 
 export default {
-  components: { BlocksChart, TxnsChart, ChartDisplay },
+  components: { GasChart, BlocksChart, TxnsChart, ChartDisplay },
   async fetch() {
     await this.$store.dispatch('charts/fetchAll')
   },

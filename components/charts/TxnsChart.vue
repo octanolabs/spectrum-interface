@@ -1,6 +1,6 @@
 <template>
   <chart-view
-    :chart-names="['txns/gasPrice', 'gaslimit']"
+    :chart-names="['txns/gasPrice']"
     :chart-options="chartOptions"
     :chart-data="chartData"
   >
@@ -139,7 +139,6 @@ export default {
           { name: 'Cumulative Tx fees', type: 'line', data: this.txFees },
           { name: 'Price', type: 'line', data: this.prices },
         ],
-        [{ name: 'GasLimit', data: this.gasLimit }],
       ],
     }
   },

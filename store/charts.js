@@ -41,6 +41,26 @@ export const state = () => ({
     prices: [],
     data: [],
   },
+  values: {
+    name: '',
+    data: [],
+  },
+  gasUsed: {
+    name: '',
+    data: [],
+  },
+  gasPriceLevels: {
+    name: '',
+    data: [],
+  },
+  gasUsedLevels: {
+    name: '',
+    data: [],
+  },
+  gasLevels: {
+    name: '',
+    data: [],
+  },
 })
 
 export const mutations = {
@@ -68,6 +88,22 @@ export const mutations = {
   SET_TXFEES(state, txFees) {
     state.txFees = txFees
   },
+  SET_VALUES(state, values) {
+    state.values = values
+  },
+  SET_GASUSED(state, gasUsed) {
+    state.gasUsed = gasUsed
+  },
+  SET_GASPRICELEVELS(state, gasPriceLevels) {
+    state.gasPriceLevels = gasPriceLevels
+  },
+  SET_GASUSEDLEVELS(state, gasUsedLevels) {
+    state.gasUsedLevels = gasUsedLevels
+  },
+  SET_GASLEVELS(state, gasLevels) {
+    state.gasLevels = gasLevels
+  },
+
   SET_FULL(state) {
     state.filled = true
   },
@@ -111,36 +147,100 @@ async function fetchNumberStringChart(name = '', limit = 0) {
   return { name: chartName, data }
 }
 
-async function fetchMLChart(name = '') {
+async function fetchMultiSeriesChart(name = '') {
   const {
     data: { result },
   } = await axios.post(process.env.config.apiUrl, {
     jsonrpc: '2.0',
-    method: 'explorer_getNumberChart',
-    params: [name],
+    method: 'explorer_getMultiSeriesChart',
+    params: [name, 0],
     id: 88,
   })
 
-  const { name: chartName, timestamps, series } = result
+  const data = []
 
-  const data = timestamps.map((val, idx) => {
-    return { x: moment(val, 'MM/DD/YY').unix() * 1000, y: series[idx] }
-  })
+  const { name: chartName, timestamps, datasets } = result
+
+  for (let i = 0; i < datasets.length / 88; i++) {
+    const obj = {
+      name: '',
+      data: [],
+      timestamps: [],
+    }
+
+    let to = ''
+
+    const item = new Map()
+
+    const from = datasets[i * 88].name
+    for (
+      let j = 0;
+      i * 88 + j < datasets.length ? j < 88 : j < datasets.length % 88;
+      j++
+    ) {
+      const idx = i * 88 + j
+      to = datasets[idx].name
+      const map = new Map(
+        datasets[idx].series.map((val, index) => {
+          return [datasets[idx].timestamps[index], val]
+        })
+      )
+
+      for (const [ts, val] of map) {
+        if (item.has(ts)) {
+          item.set(ts, item.get(ts) + val)
+        } else {
+          item.set(ts, val)
+        }
+      }
+    }
+    obj.name = `${from}-${to}`
+    // obj.data = Array.from(item).map(([k, v]) => {
+    //   return {
+    //     // x: moment(k, 'MM/DD/YY').unix() * 1000,
+    //     x: k,
+    //     y: v,
+    //   }
+    // })
+
+    obj.data = timestamps.map((ts) => {
+      return {
+        x: moment(ts, 'MM/DD/YY').unix() * 1000,
+        y: item.has(ts) ? item.get(ts) : 0,
+      }
+    })
+
+    data.push(obj)
+  }
+
+  // for (const { name, series, timestamps } of datasets) {
+  //   const values = []
+  //   for (let i = 0; i < timestamps.length; i++) {
+  //     values.push({
+  //       x: moment(timestamps[i], 'MM/DD/YY').unix() * 1000,
+  //       y: series[i],
+  //     })
+  //   }
+  //   data.push({ name, data: values })
+  // }
 
   return { name: chartName, data }
 }
 export const actions = {
   async fetchAll({ dispatch, commit }) {
     await dispatch('fetchGasPrice')
-    await dispatch('fetchGasLimit')
     await dispatch('fetchBlocks')
+    await dispatch('fetchGasLimit')
     await dispatch('fetchBlocktimes')
     await dispatch('fetchDifficulty')
     await dispatch('fetchSupply')
 
     await dispatch('fetchTransactions')
     await dispatch('fetchTxFees')
+    await dispatch('fetchGasUsed')
+    await dispatch('fetchValues')
     await dispatch('fetchGasPriceLevels')
+    await dispatch('fetchGasUsedLevels')
     await dispatch('fetchGasLevels')
 
     commit('SET_FULL')
@@ -153,15 +253,19 @@ export const actions = {
 
     commit('SET_GASPRICE', chartData)
   },
-  async fetchGasLimit({ commit }) {
-    const chartData = await fetchNumberChart('gasLimit', 0)
-
-    commit('SET_GASLIMIT', chartData)
-  },
   async fetchBlocks({ commit }) {
     const chartData = await fetchNumberChart('blocks', 0)
 
     commit('SET_BLOCKS', chartData)
+  },
+  async fetchGasLimit({ commit, state }) {
+    const chartData = await fetchNumberChart('gasLimit', 0)
+
+    chartData.data = chartData.data.map(({ x, y }, idx) => {
+      return { x, y: y * state.blocks.data[idx].y }
+    })
+
+    commit('SET_GASLIMIT', chartData)
   },
   async fetchBlocktimes({ commit }) {
     const chartData = await fetchNumberChart('blockTime', 0)
@@ -258,16 +362,25 @@ export const actions = {
 
     commit('SET_TXFEES', chartData)
   },
-
-  async fetchGasPriceLevels({ commit }) {
-    const chartData = await fetchMLChart('gasPrices')
-
-    commit('SET_GASPRICE', chartData)
+  async fetchGasUsed({ commit }) {
+    const chartData = await fetchNumberStringChart('gasUsed', 0)
+    commit('SET_GASUSED', chartData)
+  },
+  async fetchValues({ commit }) {
+    const chartData = await fetchNumberStringChart('values', 0)
+    commit('SET_VALUES', chartData)
   },
 
+  async fetchGasPriceLevels({ commit }) {
+    const chartData = await fetchMultiSeriesChart('gasPriceLevels')
+    commit('SET_GASPRICELEVELS', chartData)
+  },
+  async fetchGasUsedLevels({ commit }) {
+    const chartData = await fetchMultiSeriesChart('gasUsedLevels')
+    commit('SET_GASUSEDLEVELS', chartData)
+  },
   async fetchGasLevels({ commit }) {
-    const chartData = await fetchMLChart('gasPrices')
-
-    commit('SET_GASPRICE', chartData)
+    const chartData = await fetchMultiSeriesChart('gasLevels')
+    commit('SET_GASLEVELS', chartData)
   },
 }
