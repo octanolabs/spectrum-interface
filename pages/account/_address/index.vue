@@ -1,25 +1,23 @@
 <template>
-  <v-row justify="center">
-    <v-col cols="10">
-      <token-page
-        v-if="isToken"
-        :store="accountStore"
-        :price="tokenPrice"
-        :address="$route.params.address"
-        :loading-object="fetchStates"
-        @refresh="$fetch"
-      />
+  <v-col cols="12" class="pa-0">
+    <token-page
+      v-if="isToken"
+      :store="accountStore"
+      :price="tokenPrice"
+      :address="$route.params.address"
+      :loading-object="fetchStates"
+      @refresh="$fetch"
+    />
 
-      <account-page
-        v-else
-        :store="accountStore"
-        :price="prices.ubq"
-        :address="$route.params.address"
-        :loading-object="fetchStates"
-        @refresh="$fetch"
-      />
-    </v-col>
-  </v-row>
+    <account-page
+      v-else
+      :store="accountStore"
+      :price="prices.ubq"
+      :address="$route.params.address"
+      :loading-object="fetchStates"
+      @refresh="$fetch"
+    />
+  </v-col>
 </template>
 
 <!-- Todo: Default token balance view should only show echer balance, optional button to load all other token balances-->

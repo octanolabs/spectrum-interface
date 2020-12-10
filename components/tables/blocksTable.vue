@@ -12,7 +12,7 @@
       {{ formatNumber(total) }} blocks
     </template>
     <template v-slot:item.timestamp="data">
-      {{ $moment.unix(data.value).format('L, LTS') }}
+      {{ calcTime(data.value) }}
     </template>
     <template v-slot:item.number="data">
       <nuxt-link :to="{ name: 'block-id', params: { id: data.value } }">{{
@@ -42,7 +42,9 @@
       </nuxt-link>
     </template>
     <template v-slot:item.gasUsed="data">
-      {{ data.value }} ({{ calcGasUsed(data.value, data.item.gasLimit) }})
+      {{ data.value }}/{{ data.item.gasLimit }} ({{
+        calcGasUsed(data.value, data.item.gasLimit)
+      }})
     </template>
     <template v-slot:item.avgGasPrice="data">
       <span v-if="data.value !== 'NaN'">
@@ -93,13 +95,13 @@ export default {
     return {
       headers: [
         {
-          text: 'Timestamp',
-          value: 'timestamp',
+          text: 'Height',
+          value: 'number',
           sortable: false,
         },
         {
-          text: 'Height',
-          value: 'number',
+          text: 'Timestamp',
+          value: 'timestamp',
           sortable: false,
         },
         {
@@ -113,33 +115,26 @@ export default {
           sortable: false,
         },
         {
-          text: 'BlockHash',
-          value: 'hash',
-          sortable: false,
-        },
-        {
           text: 'Miner',
           value: 'miner',
           sortable: false,
         },
         {
-          text: 'GasUsed',
+          text: 'Gas Used/Gas Limit',
           value: 'gasUsed',
-          sortable: false,
-        },
-        {
-          text: 'GasLimit',
-          value: 'gasLimit',
+          align: 'right',
           sortable: false,
         },
         {
           text: 'Avg.GasPrice',
           value: 'avgGasPrice',
+          align: 'right',
           sortable: false,
         },
         {
           text: 'Reward',
           value: 'blockReward',
+          align: 'right',
           sortable: false,
         },
       ],
@@ -165,7 +160,7 @@ export default {
       return ((gasUsed / gasLimit) * 100).toFixed(2) + '%'
     },
     calcTime(timestamp) {
-      return common.calcTime(timestamp)
+      return this.$moment().to(timestamp * 1000)
     },
     formatNumber(val) {
       return common.formatNumber(val)

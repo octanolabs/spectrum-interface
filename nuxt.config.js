@@ -60,7 +60,7 @@ export default {
    */
   env: {
     config: {
-      apiUrl: 'http://185.243.113.40:8181/v4/',
+      apiUrl: 'http://localhost:8080/v4/',
       rpcUrl: 'https://rpc1.ubiqscan.io/',
       pollData: 30000, // interval to poll api, in ms
     },

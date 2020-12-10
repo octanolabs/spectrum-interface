@@ -9,8 +9,8 @@
         any slot named "hr" will add an horizontal ruler
         -->
 
-  <v-card>
-    <v-card-title>
+  <v-card class="pa-0">
+    <v-card-title class="pa-0 mb-2">
       <breadcrumbSpinner v-bind="$attrs" no-loading />
     </v-card-title>
     <v-card-text class="body-2">

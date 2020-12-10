@@ -1,6 +1,6 @@
 <template>
-  <div class="d-flex flex-column">
-    <v-sheet>
+  <div class="d-flex flex-column pa-0">
+    <v-sheet class="pa-0">
       <data-view
         :item="{
           balance: store.balance,

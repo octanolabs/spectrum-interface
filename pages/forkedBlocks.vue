@@ -1,18 +1,30 @@
 <template>
   <!--  TODO: add to table: when forked block is included as uncle-->
   <v-row justify="center">
-    <v-col cols="10">
+    <v-col cols="12" class="pa-0">
       <expansion-table
         :items="store.forkedBlocks"
         :headers="headers"
         :loading="$fetchState.pending"
+        dense
         @refresh="$fetch()"
       >
         <template v-slot:topMessage>
+          <v-alert
+            dense
+            dismissible
+            outlined
+            text
+            border="left"
+            color="secondary"
+            class="mb-1"
+          >
+            Due to the way block propagation works, this is just a view from the
+            go-ubiq node this spectrum instance is using, and doesn't reflect
+            the entire state of the network.
+          </v-alert>
           Showing {{ store.total }} of {{ store.forkedBlocks.length }} forked
-          blocks. Due to the way block propagation works, this is just a view
-          from the go-ubiq node this spectrum instance is using, and doesn't
-          reflect the entire state of the network.
+          blocks.
         </template>
         <template v-slot:item.number="data">
           <nuxt-link :to="{ name: 'block-id', params: { id: data.value } }">{{

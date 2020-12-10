@@ -8,6 +8,8 @@
     :options="options"
     :item-key="itemKey"
     :class="{ 'body-2': dense }"
+    :footer-props="footerProps"
+    dense
   >
     <template v-slot:top>
       <!-- With v-bind=$attrs" on breadcrumb-spinner we can optionally turn off path or spinner or both-->
@@ -16,13 +18,15 @@
         :loading="loading"
         @refresh="$emit('refresh')"
       />
-      <v-card>
-        <v-card-text>
-          <slot
-            v-if="items.length > 0 && !loading"
-            name="topMessage"
-            v-bind="items"
-          ></slot>
+      <v-card tile class="pa-0 border-bottom">
+        <v-card-text class="px-4 py-1">
+          <small>
+            <slot
+              v-if="items.length > 0 && !loading"
+              name="topMessage"
+              v-bind="items"
+            ></slot>
+          </small>
         </v-card-text>
       </v-card>
     </template>
@@ -98,7 +102,7 @@ export default {
       default: () => {
         return {
           page: 1,
-          itemsPerPage: 15,
+          itemsPerPage: 25,
         }
       },
     },
@@ -113,6 +117,13 @@ export default {
       type: Boolean,
       default: false,
     },
+  },
+  data() {
+    return {
+      footerProps: {
+        itemsPerPageOptions: [25, 50, 100],
+      },
+    }
   },
   methods: {
     formatNumber(n) {

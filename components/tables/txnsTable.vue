@@ -18,11 +18,11 @@
       Showing {{ formatNumber(transactions.length) }} pending transactions
     </template>
     <template v-if="!pending" v-slot:item.timestamp="{ value: ts }">
-      {{ $moment.unix(ts).format('L, LTS') }}
+      {{ calcTime(ts) }}
     </template>
     <template v-if="!pending" v-slot:item.hash="{ value: txHash }">
       <nuxt-link :to="{ name: 'transaction-hash', params: { hash: txHash } }">
-        {{ txHash.substring(0, 23) }}...
+        {{ formatHash(txHash) }}
       </nuxt-link>
     </template>
     <template v-else v-slot:item.hash="{ value: txHash }">
@@ -212,7 +212,10 @@ export default {
       return common.fromWeiToGwei(value)
     },
     getAddressTag(hash) {
-      return addresses.getAddressTag(hash) || hash.substring(0, 23) + '...'
+      return (
+        addresses.getAddressTag(hash) ||
+        hash.substr(0, 8) + '...' + hash.substr(hash.length - 6)
+      )
     },
     calcTxFee(gasUsed, gasPrice) {
       return common.fromWei(common.calcTxFee(gasUsed, gasPrice))
@@ -222,6 +225,12 @@ export default {
     },
     hexToDecimal(hex) {
       return common.hexToDecimal(hex)
+    },
+    calcTime(timestamp) {
+      return this.$moment().to(timestamp * 1000)
+    },
+    formatHash(hash) {
+      return hash.substr(0, 10) + '...' + hash.substr(hash.length - 8)
     },
   },
 }

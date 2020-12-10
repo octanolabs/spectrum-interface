@@ -1,44 +1,40 @@
 <template>
-  <v-row align="center" style="height: 105px;">
-    <v-spacer></v-spacer>
-    <v-col cols="3">
-      <v-card light>
-        <v-card-text>
-          <div class="d-flex flex-column align-center">
-            <label>Amount</label>
-            <label>{{ value }} UBQ</label>
-          </div>
-        </v-card-text>
-      </v-card>
-    </v-col>
-    <v-spacer></v-spacer>
-    <v-col cols="8">
-      <div class="d-flex flex-column">
-        <strong
-          >TX#
-          <nuxt-link
-            :to="{ name: 'transaction-hash', params: { hash: hash.full } }"
-          >
-            {{ hash.short }}...
-          </nuxt-link>
-        </strong>
-        <label>
-          From
-          <nuxt-link
-            :to="{ name: 'account-address', params: { address: from.full } }"
-          >
-            {{ from.short }}
-          </nuxt-link>
-          To
-          <nuxt-link
-            :to="{ name: 'account-address', params: { address: to.full } }"
-          >
-            {{ to.short }}
-          </nuxt-link>
-        </label>
-      </div>
-    </v-col>
-  </v-row>
+  <v-list-item style="border-bottom: 1px solid #2e2e2e;">
+    <v-list-item-avatar tile color="#333">
+      <v-icon>mdi-bank-transfer</v-icon>
+    </v-list-item-avatar>
+    <v-list-item-content style="max-width: 200px;">
+      <v-list-item-title>
+        <nuxt-link
+          :to="{ name: 'transaction-hash', params: { hash: hash.full } }"
+        >
+          {{ hash.short }}...
+        </nuxt-link>
+      </v-list-item-title>
+      <v-list-item-subtitle>{{ timeSince }}</v-list-item-subtitle>
+    </v-list-item-content>
+    <v-list-item-content>
+      <v-list-item-title>
+        From
+        <nuxt-link
+          :to="{ name: 'account-address', params: { address: from.full } }"
+        >
+          {{ from.short }}
+        </nuxt-link>
+      </v-list-item-title>
+      <v-list-item-subtitle>
+        To
+        <nuxt-link
+          :to="{ name: 'account-address', params: { address: to.full } }"
+        >
+          {{ to.short }}
+        </nuxt-link>
+      </v-list-item-subtitle>
+    </v-list-item-content>
+    <v-list-item-action>
+      <v-chip label small>{{ value }} ubq</v-chip>
+    </v-list-item-action>
+  </v-list-item>
 </template>
 
 <script>
@@ -62,12 +58,13 @@ export default {
       to: {},
       value: 0,
       time: 0,
+      timeSince: 0,
     }
   },
   created() {
     this.hash = {
       full: this.info.hash,
-      short: this.info.hash.substring(0, 25).toUpperCase(),
+      short: this.info.hash.substring(0, 8),
     }
     this.from = {
       full: this.info.from,
@@ -82,6 +79,8 @@ export default {
         this.info.to.substring(0, 17) + '...',
     }
     this.value = common.fromWei(this.info.value, 4)
+    this.time = this.info.timestamp * 1000
+    this.timeSince = this.$moment().to(this.time)
   },
 }
 </script>

@@ -1,107 +1,138 @@
 <template>
-  <div class="body-2">
-    <v-row justify="center">
-      <v-col sm="7" md="10" lg="5">
-        <v-card
-          style="height: 100%;"
-          dark
-          class="d-flex flex-column justify-end"
-        >
-          <v-card-title>
-            <img
-              src="../assets/logo-circle.svg"
-              width="50"
-              height="50"
-              style="margin-top: -20px;"
-            />
-            <span style="display: inline-block; margin-left: 10px;">
-              <small>
-                MARKET CAP OF ${{
-                  calcMarketcap(
-                    fromWei(stats.supply / 1000000, -1),
-                    prices.ubq.usd
-                  )
-                }}
-                MILLION @
-                {{ calcMarketcap(fromWei(stats.supply, -1), prices.ubq.btc) }}
-                BTC
-                <br />
-                ${{ prices.ubq.usd.toFixed(3) }} @ {{ prices.ubq.btc }} BTC/UBQ
-              </small>
-            </span>
-          </v-card-title>
-          <v-spacer></v-spacer>
-          <v-card-text>
-            <v-row>
-              <v-col cols="4" class="text-left">
-                <div>
-                  <h2 style="margin-bottom: 0px;">LAST BLOCK</h2>
-                  <h4>{{ latestBlock }} ({{ summary.blocktime }}s)</h4>
-                </div>
-                <div>
-                  <h2 style="margin-bottom: 0px;">TRANSACTIONS</h2>
-                  <h4>{{ summary.txnCount }}</h4>
-                </div>
+  <v-container fluid class="pa-0">
+    <v-col cols="12" class="pa-0">
+      <v-card tile class="pa-2 border-bottom">
+        <v-row no-gutters>
+          <v-col cols="12" md="8" sm="12" xs="12">
+            <v-row no-gutters>
+              <v-col cols="12" md="6" sm="6" xs="12">
+                <v-list dense>
+                  <v-list-item class="border-right">
+                    <v-list-item-avatar>
+                      <v-icon>mdi-cash</v-icon>
+                    </v-list-item-avatar>
+                    <v-list-item-content>
+                      <v-list-item-title>UBQ PRICE</v-list-item-title>
+                      <v-list-item-subtitle>
+                        ${{ prices.ubq.usd.toFixed(3) }} @
+                        {{ prices.ubq.btc }} BTC/UBQ
+                      </v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+                  <v-list-item class="border-right">
+                    <v-list-item-avatar>
+                      <v-icon>mdi-cash-multiple</v-icon>
+                    </v-list-item-avatar>
+                    <v-list-item-content>
+                      <v-list-item-title>MARKET CAP</v-list-item-title>
+                      <v-list-item-subtitle>
+                        ${{
+                          calcMarketcap(
+                            fromWei(stats.supply / 1000000, -1),
+                            prices.ubq.usd
+                          )
+                        }}
+                        MILLION
+                      </v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+                  <v-list-item class="border-right">
+                    <v-list-item-avatar>
+                      <v-icon>mdi-bank-transfer</v-icon>
+                    </v-list-item-avatar>
+                    <v-list-item-content>
+                      <v-list-item-title>TRANSACTIONS</v-list-item-title>
+                      <v-list-item-subtitle>
+                        {{ number.format(summary.txnCount) }}
+                      </v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
               </v-col>
-              <v-spacer></v-spacer>
-              <v-col cols="4" class="text-right">
-                <div>
-                  <h3 style="margin-bottom: 0px;">Hash Rate</h3>
-                  <h4>{{ summary.hashrate }} GH/s</h4>
-                </div>
-                <div>
-                  <h3 style="margin-bottom: 0px;">Network Difficulty</h3>
-                  <h4>{{ summary.difficulty }} TH</h4>
-                </div>
+              <v-col cols="12" md="6" sm="6" xs="12">
+                <v-list dense>
+                  <v-list-item class="border-right">
+                    <v-list-item-avatar>
+                      <v-icon>mdi-cube-scan</v-icon>
+                    </v-list-item-avatar>
+                    <v-list-item-content>
+                      <v-list-item-title>BLOCK HEIGHT</v-list-item-title>
+                      <v-list-item-subtitle>
+                        {{ number.format(latestBlock) }} ({{
+                          summary.blocktime
+                        }}s)
+                      </v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+                  <v-list-item class="border-right">
+                    <v-list-item-avatar>
+                      <v-icon>mdi-pickaxe</v-icon>
+                    </v-list-item-avatar>
+                    <v-list-item-content>
+                      <v-list-item-title>Difficulty</v-list-item-title>
+                      <v-list-item-subtitle>
+                        {{ summary.difficulty }} TH
+                      </v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+                  <v-list-item class="border-right">
+                    <v-list-item-avatar>
+                      <v-icon>mdi-gauge-full</v-icon>
+                    </v-list-item-avatar>
+                    <v-list-item-content>
+                      <v-list-item-title>HASHRATE</v-list-item-title>
+                      <v-list-item-subtitle>
+                        {{ summary.hashrate }} GH/s
+                      </v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
               </v-col>
             </v-row>
-          </v-card-text>
-        </v-card>
-      </v-col>
-      <v-col sm="7" md="10" lg="5">
-        <v-card class="">
-          <v-card-title>
-            <h6>28 day Ubiq transaction history</h6>
-          </v-card-title>
-          <v-card-text>
+          </v-col>
+          <v-col cols="12" md="4" sm="12" xs="12">
             <chart-wrapper
               light-toolbar
               :series="chartData"
               :options="chartOptions"
             />
-          </v-card-text>
-        </v-card>
-      </v-col>
-      <v-col sm="7" md="10" lg="5">
-        <v-card class="">
-          <v-card-title>
-            <h3>
-              Latest Blocks
-            </h3>
-          </v-card-title>
-          <preview-list max-height="545px" :items="summary.blocks">
-            <template v-slot:default="item">
-              <preview-block :info="item"></preview-block>
-            </template>
-          </preview-list>
-        </v-card>
-      </v-col>
-      <v-col sm="7" md="10" lg="5">
-        <v-card class="">
-          <v-card-title>
-            <h3>
-              Latest Transactions
-            </h3>
-          </v-card-title>
-          <preview-list max-height="545px" :items="summary.txns">
-            <template v-slot:default="item">
-              <preview-txn :info="item"></preview-txn>
-            </template>
-          </preview-list>
-        </v-card>
-      </v-col>
-    </v-row>
-  </div>
+          </v-col>
+        </v-row>
+      </v-card>
+      <v-row no-gutters class="elevation-0">
+        <v-col cols="12" lg="6" md="12" sm="12" xs="12" class="border-right">
+          <v-card tile>
+            <v-card-title class="pl-8">
+              <h5>
+                <v-icon>mdi-cube-send</v-icon>
+                Latest Blocks
+              </h5>
+            </v-card-title>
+            <preview-list :items="summary.blocks">
+              <template v-slot:default="item">
+                <preview-block :info="item"></preview-block>
+              </template>
+            </preview-list>
+          </v-card>
+        </v-col>
+        <v-col cols="12" lg="6" md="12" sm="12" xs="12">
+          <v-card tile>
+            <v-card-title class="pl-8">
+              <h5>
+                <v-icon>mdi-send</v-icon>
+                Latest Transactions
+              </h5>
+            </v-card-title>
+            <preview-list :items="summary.txns">
+              <template v-slot:default="item">
+                <preview-txn :info="item"></preview-txn>
+              </template>
+            </preview-list>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-col>
+  </v-container>
 </template>
 
 <script>
@@ -139,7 +170,7 @@ export default {
           width: 2,
           dashArray: 0,
         },
-        colors: ['#00ea90'],
+        colors: ['#6fceb7'],
         yaxis: {
           min(min) {
             return min - 750
@@ -154,13 +185,13 @@ export default {
         xaxis: {
           type: 'datetime',
           labels: {
-            show: false,
+            show: true,
           },
           axisTicks: {
-            show: false,
+            show: true,
           },
           crosshairs: {
-            show: false,
+            show: true,
           },
         },
         tooltip: {
@@ -170,7 +201,7 @@ export default {
             show: false,
           },
           y: {
-            show: true,
+            show: false,
           },
           fixed: {
             enabled: true,
@@ -178,6 +209,7 @@ export default {
           },
         },
       },
+      number: new Intl.NumberFormat('en', {}),
     }
   },
   computed: {
@@ -201,16 +233,6 @@ export default {
         },
       ]
     },
-    // chartData() {
-    //   return {
-    //     labels: this.stats.txnCounts.labels.slice(-14),
-    //     series: [
-    //       {
-    //         data: this.stats.txnCounts.data.slice(-14)
-    //       }
-    //     ]
-    //   }
-    // }
   },
   created() {
     const self = this

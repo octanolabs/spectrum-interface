@@ -1,14 +1,29 @@
 <template>
-  <v-data-table hide-default-header :items="items" :headers="headers">
+  <v-data-table
+    hide-default-header
+    :items="items"
+    :headers="headers"
+    :loading="loading"
+    :options="options"
+    :class="{ 'body-2': dense }"
+    dense
+  >
     <template v-slot:top>
+      <!-- With v-bind=$attrs" on breadcrumb-spinner we can optionally turn off path or spinner or both-->
       <breadcrumb-spinner
         v-bind="$attrs"
         :loading="loading"
         @refresh="$emit('refresh')"
       />
-      <v-card>
-        <v-card-text>
-          <slot name="topMessage"></slot>
+      <v-card tile class="pa-0">
+        <v-card-text class="px-6 py-1">
+          <small>
+            <slot
+              v-if="items.length > 0 && !loading"
+              name="topMessage"
+              v-bind="items"
+            ></slot>
+          </small>
         </v-card-text>
       </v-card>
     </template>
@@ -16,15 +31,13 @@
       <thead>
         <v-expansion-panels readonly class="expansion-table-header">
           <v-expansion-panel>
-            <v-expansion-panel-header>
-              <div class="d-flex justify-space-around body-2">
-                <v-col
-                  v-for="({ text: headerText }, idx) in headeritems"
-                  :key="idx"
-                >
-                  {{ headerText }}
-                </v-col>
-              </div>
+            <v-expansion-panel-header style="border: 1px solid #2e2e2e;">
+              <v-col
+                v-for="({ text: headerText }, idx) in headeritems"
+                :key="idx"
+              >
+                {{ headerText }}
+              </v-col>
               <template v-slot:actions>
                 <v-icon color="transparent">mdi-chevron-up</v-icon>
               </template>
@@ -92,16 +105,27 @@ export default {
       required: true,
       default: () => [],
     },
-    loading: {
+    options: {
+      // Table options
+      type: Object,
+      default: () => {
+        return {
+          page: 1,
+          itemsPerPage: 25,
+        }
+      },
+    },
+    dense: {
       type: Boolean,
       required: false,
+      default: () => {
+        return false
+      },
+    },
+    loading: {
+      type: Boolean,
       default: false,
     },
-    // 'expansion-key': {
-    //   type: String,
-    //   required: true,
-    //   default: () => ''
-    // }
   },
 }
 </script>

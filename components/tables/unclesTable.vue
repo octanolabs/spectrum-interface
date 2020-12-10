@@ -26,7 +26,7 @@
     </template>
     <template v-slot:item.hash="{ item: { hash } }">
       <nuxt-link :to="{ name: 'uncle-hash', params: { hash: hash } }">{{
-        hash
+        formatUncleHash(hash)
       }}</nuxt-link>
     </template>
     <template v-slot:item.miner="{ value: miner }">
@@ -106,6 +106,9 @@ export default {
     },
     formatNumber(val) {
       return common.formatNumber(val)
+    },
+    formatUncleHash(hash) {
+      return hash.substr(0, 10) + '...' + hash.substr(hash.length - 8)
     },
   },
 }

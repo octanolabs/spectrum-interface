@@ -1,46 +1,36 @@
 <template>
-  <v-row align="center" style="height: 105px;">
-    <v-spacer></v-spacer>
-    <v-col cols="3">
-      <v-card light>
-        <v-card-text>
-          <div class="d-flex flex-column align-center">
-            <label>
-              Block <nuxt-link :to="`/block/${number}`">{{ number }}</nuxt-link>
-            </label>
-            <label>
-              <small>{{ timeSince }}</small>
-            </label>
-          </div>
-        </v-card-text>
-      </v-card>
-    </v-col>
-    <v-spacer></v-spacer>
-
-    <v-col cols="8">
-      <v-row>
-        <strong>
-          Mined By
-          <nuxt-link
-            :to="{ name: 'account-address', params: { address: miner.full } }"
-          >
-            {{ miner.short }}
-          </nuxt-link>
-        </strong>
-      </v-row>
-      <v-row>
+  <v-list-item style="border-bottom: 1px solid #2e2e2e;">
+    <v-list-item-avatar tile color="#333">
+      <v-icon>mdi-cube-outline</v-icon>
+    </v-list-item-avatar>
+    <v-list-item-content style="max-width: 200px;">
+      <v-list-item-title>
+        <nuxt-link :to="`/block/${number}`">{{ number }}</nuxt-link>
+      </v-list-item-title>
+      <v-list-item-subtitle>{{ timeSince }}</v-list-item-subtitle>
+    </v-list-item-content>
+    <v-list-item-content>
+      <v-list-item-title>
+        <v-icon small>mdi-pickaxe</v-icon>
+        <nuxt-link
+          :to="{ name: 'account-address', params: { address: miner.full } }"
+        >
+          {{ miner.short }}
+        </nuxt-link>
+      </v-list-item-title>
+      <v-list-item-subtitle>
         <label v-if="txns > 0">
           <nuxt-link :to="`/block/${number}?show=transactions`">
             {{ txns }} txns
           </nuxt-link>
         </label>
         <label v-else> {{ txns }} txns </label>
-      </v-row>
-      <v-row>
-        <label>Block Reward {{ reward }} UBQ</label>
-      </v-row>
-    </v-col>
-  </v-row>
+      </v-list-item-subtitle>
+    </v-list-item-content>
+    <v-list-item-action>
+      <v-chip label small>{{ reward }} ubq</v-chip>
+    </v-list-item-action>
+  </v-list-item>
 </template>
 
 <script>
@@ -91,7 +81,11 @@ export default {
           val.miner.substring(0, 17) + '...',
         full: val.miner,
       }
-      this.reward = rewards.calculateMintedCoins(val.number, val.uncles)
+      this.reward = rewards.calculateTotalRewards(
+        val.blockReward,
+        val.uncles,
+        val.txFees
+      )
       this.time = val.timestamp * 1000
       this.timeSince = this.$moment().to(this.time)
     },

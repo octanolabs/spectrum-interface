@@ -9,7 +9,8 @@ const options = {
     dark: true,
     themes: {
       dark: {
-        primary: '#00ea90',
+        primary: '#6fceb7',
+        secondary: '#e76754',
       },
     },
   },
