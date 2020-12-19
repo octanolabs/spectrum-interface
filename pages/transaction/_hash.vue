@@ -3,6 +3,7 @@
     <v-col lg="8" md="10" sm="12">
       <transaction-page
         :transaction="txn"
+        :trace="txnTrace"
         :price-usd="priceUSD"
         :confirmations="confirmations"
         :contract-deployed="contractDeployed"
@@ -26,19 +27,34 @@ export default {
     await store.dispatch('fetchStats')
   },
   async fetch() {
-    const {
-      data: { result },
-    } = await axios.post(process.env.config.apiUrl, {
-      jsonrpc: '2.0',
-      method: 'explorer_transactionByHash',
-      params: [this.$route.params.hash],
-      id: 88,
-    })
-    this.txn = result
+    const [
+      {
+        data: { result: txn },
+      },
+      {
+        data: { result: trace },
+      },
+    ] = await Promise.all([
+      axios.post(process.env.config.apiUrl, {
+        jsonrpc: '2.0',
+        method: 'explorer_transactionByHash',
+        params: [this.$route.params.hash],
+        id: 88,
+      }),
+      axios.post(process.env.config.apiUrl, {
+        jsonrpc: '2.0',
+        method: 'explorer_txTrace',
+        params: [this.$route.params.hash],
+        id: 88,
+      }),
+    ])
+    this.txn = txn
+    this.txnTrace = trace
   },
   data() {
     return {
       txn: {},
+      txnTrace: {},
     }
   },
   computed: {

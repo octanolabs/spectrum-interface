@@ -132,6 +132,14 @@
     <template v-if="showLogs" v-slot:eventLogs>
       <tx-logs-card :event-logs="eventLogs" />
     </template>
+    <template v-slot:txnTrace>
+      <v-card>
+        <v-card-text>
+          Showing transaction trace of {{ transaction.hash }}
+        </v-card-text>
+      </v-card>
+      <tx-trace-card :traces="[trace]" />
+    </template>
   </data-view>
 </template>
 
@@ -139,6 +147,7 @@
 import dataView from '~/components/util/DataView.vue'
 import inputDataCard from '~/components/util/cards/inputDataCard.vue'
 import txLogsCard from '~/components/util/cards/txLogsCard.vue'
+import txTraceCard from '~/components/util/cards/txTraceCard.vue'
 
 import addresses from '~/scripts/addresses'
 import common from '~/scripts/common'
@@ -150,6 +159,7 @@ export default {
     dataView,
     inputDataCard,
     txLogsCard,
+    txTraceCard,
   },
   filters: {
     shortenAddress(hash = '0x00000000000000000000000000000000') {
@@ -158,6 +168,13 @@ export default {
   },
   props: {
     transaction: {
+      type: Object,
+      required: true,
+      default: () => {
+        return {}
+      },
+    },
+    trace: {
       type: Object,
       required: true,
       default: () => {
