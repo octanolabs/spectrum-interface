@@ -1,5 +1,5 @@
 <template>
-  <perfect-scrollbar style="height: 100%;" :options="{ suppressScrollX: true }">
+  <perfect-scrollbar style="height: 100%" :options="{ suppressScrollX: true }">
     <v-app>
       <!-- app bar -->
       <v-app-bar app fixed>
@@ -24,19 +24,19 @@
       </v-app-bar>
       <!-- nav drawer -->
       <v-navigation-drawer v-model="drawer" fixed app class="abstract-drawer">
-        <v-toolbar style="background-color: #272727;">
+        <v-toolbar style="background-color: #272727">
           <v-list dense class="pa-0">
             <v-list-item>
               <v-list-item-avatar>
                 <img
                   src="../assets/logo.svg"
                   height="36px"
-                  style="height: 36px;"
+                  style="height: 36px"
                 />
               </v-list-item-avatar>
               <v-list-item-content class="text-right">
-                <h1 style="color: #6fceb7;">spectrum</h1>
-                <v-list-item-subtitle style="color: #e76754;">
+                <h1 style="color: #6fceb7">spectrum</h1>
+                <v-list-item-subtitle style="color: #e76754">
                   block explorer
                 </v-list-item-subtitle>
               </v-list-item-content>
@@ -63,7 +63,7 @@
               v-for="([title, icon, path], i) in pData"
               :key="i"
               link
-              style="padding-left: 56px;"
+              style="padding-left: 56px"
               :to="path"
             >
               <v-list-item-title v-text="title"></v-list-item-title>
@@ -88,7 +88,7 @@
         app
         fixed
         height="22px"
-        style="background-color: #6fceb7;"
+        style="background-color: #6fceb7"
       >
         <v-tooltip top>
           <template v-slot:activator="{ on }">
@@ -103,7 +103,7 @@
               "
               v-on="on"
             >
-              <span style="margin-top: 2px;">
+              <span style="margin-top: 2px">
                 ${{ prices.ubq.usd.toFixed(3) }} @ {{ prices.ubq.btc }} BTC/UBQ
               </span>
             </v-btn>
@@ -128,7 +128,7 @@
               v-on="on"
             >
               <v-icon small class="mr-1">mdi-gauge</v-icon>
-              <span style="margin-top: 2px;">
+              <span style="margin-top: 2px">
                 {{ number.format(summary.hashrate) }} GH/s
               </span>
             </v-btn>
@@ -149,9 +149,7 @@
               v-on="on"
             >
               <v-icon small class="mr-1">mdi-pickaxe</v-icon>
-              <span style="margin-top: 2px;">
-                {{ summary.difficulty }} TH
-              </span>
+              <span style="margin-top: 2px">{{ summary.difficulty }} TH</span>
             </v-btn>
           </template>
           <span>Difficulty: {{ summary.difficulty }} TH</span>
@@ -170,7 +168,7 @@
               v-on="on"
             >
               <v-icon small class="mr-1">mdi-cube-scan</v-icon>
-              <span style="margin-top: 2px;">
+              <span style="margin-top: 2px">
                 {{ number.format(blockHeight) }}
               </span>
             </v-btn>

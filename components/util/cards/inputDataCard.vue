@@ -13,9 +13,7 @@
           <v-list-item v-if="hasInputData" @click="viewType = 'Default view'">
             Default view
           </v-list-item>
-          <v-list-item @click="viewType = 'Original'">
-            Original
-          </v-list-item>
+          <v-list-item @click="viewType = 'Original'">Original</v-list-item>
         </v-list>
       </v-menu>
     </v-card-title>

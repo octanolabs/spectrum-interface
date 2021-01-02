@@ -7,7 +7,7 @@
           type="chip, list-item-two-line"
         ></v-skeleton-loader>
         <slot v-else v-bind="item"></slot>
-        <hr style="margin: 5px 0 3px 0;" />
+        <hr style="margin: 5px 0 3px 0" />
       </v-list-item>
     </v-list>
   </perfect-scrollbar>

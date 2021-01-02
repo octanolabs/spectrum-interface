@@ -33,24 +33,18 @@
         <template v-slot:overview.balance="{ balance }">
           {{ fromWei(balance) }} UBQ
         </template>
-        <template v-slot:overview.balance.key>
-          Balance (UBQ)
-        </template>
+        <template v-slot:overview.balance.key>Balance (UBQ)</template>
         <template v-slot:overview.balance_usd="{ balance }">
           {{ calcValue(balance, 'usd') }} $
         </template>
-        <template v-slot:overview.balance_usd.key>
-          Balance (USD)
-        </template>
+        <template v-slot:overview.balance_usd.key>Balance (USD)</template>
         <template v-slot:overview.transactions="{ transactions }">
           {{ formatNumber(transactions) }}
         </template>
         <template v-slot:tokens="{ tokenBalances }">
           <div class="d-flex align-items-stretch">
             <v-card outlined rounded elevation="6">
-              <v-card-text>
-                Token balances:
-              </v-card-text>
+              <v-card-text>Token balances:</v-card-text>
               <v-card-text>
                 <v-list>
                   <v-list-item

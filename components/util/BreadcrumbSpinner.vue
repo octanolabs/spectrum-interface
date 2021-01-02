@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar height="24px;" style="background-color: #171717;" class="pa-0">
+  <v-toolbar height="24px;" style="background-color: #171717" class="pa-0">
     <v-breadcrumbs
       v-if="!noBreadcrumbs"
       :items="[{ text: 'Home', to: '/' }, ...pathItems]"

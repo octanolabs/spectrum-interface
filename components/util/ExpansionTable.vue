@@ -31,7 +31,7 @@
       <thead>
         <v-expansion-panels readonly class="expansion-table-header">
           <v-expansion-panel>
-            <v-expansion-panel-header style="border: 1px solid #2e2e2e;">
+            <v-expansion-panel-header style="border: 1px solid #2e2e2e">
               <v-col
                 v-for="({ text: headerText }, idx) in headeritems"
                 :key="idx"
@@ -50,7 +50,7 @@
     <template v-if="loading" v-slot:body="{ pagination: { itemsPerPage } }">
       <tbody>
         <v-skeleton-loader
-          style="padding: 16px 16px 0;"
+          style="padding: 16px 16px 0"
           :type="`list-item-two-line@${itemsPerPage}`"
         />
       </tbody>

@@ -43,14 +43,14 @@
       </tbody>
       <tbody v-else>
         <v-skeleton-loader
-          style="padding: 16px 16px 0;"
+          style="padding: 16px 16px 0"
           :type="`table-row-divider@${itemsPerPage}`"
         />
       </tbody>
     </template>
     <template v-if="loading" v-slot:header>
       <v-skeleton-loader type="table-thead"></v-skeleton-loader>
-      <div style="padding: 0 16px;">
+      <div style="padding: 0 16px">
         <v-progress-linear indeterminate color="primary"></v-progress-linear>
       </div>
     </template>

@@ -3,11 +3,11 @@
     <v-expansion-panel
       v-for="(trace, idx) in traces"
       :key="depth * 10 + idx"
-      style="filter: brightness(80%); background-color: #333333;"
+      style="filter: brightness(80%); background-color: #333333"
     >
       <v-expansion-panel-header>{{ trace.type }}</v-expansion-panel-header>
       <v-expansion-panel-content>
-        <pre style="white-space: pre-wrap;">
+        <pre style="white-space: pre-wrap">
         <span>From      {{ trace.from }}</span>
 
         <span>To        {{ trace.to }}</span>

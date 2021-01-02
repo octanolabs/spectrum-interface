@@ -1,9 +1,9 @@
 <template>
-  <v-list-item style="border-bottom: 1px solid #2e2e2e;">
+  <v-list-item style="border-bottom: 1px solid #2e2e2e">
     <v-list-item-avatar tile color="#333">
       <v-icon>mdi-bank-transfer</v-icon>
     </v-list-item-avatar>
-    <v-list-item-content style="max-width: 200px;">
+    <v-list-item-content style="max-width: 200px">
       <v-list-item-title>
         <nuxt-link
           :to="{ name: 'transaction-hash', params: { hash: hash.full } }"

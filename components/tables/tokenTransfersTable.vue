@@ -24,7 +24,7 @@
       <!--      TODO: address route-->
       <span
         v-if="fromAddress === '0x0000000000000000000000000000000000000000'"
-        style="color: #00ea90;"
+        style="color: #00ea90"
       >
         <v-tooltip attach="#icon" nudge-right="150" nudge-bottom="60">
           <template v-slot:activator="{ on }">

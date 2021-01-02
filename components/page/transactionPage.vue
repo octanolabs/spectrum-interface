@@ -7,9 +7,7 @@
       </nuxt-link>
       ({{ confirmations }} block confirmations)
     </template>
-    <template v-slot:transaction.hash.key>
-      TxHash:
-    </template>
+    <template v-slot:transaction.hash.key>TxHash:</template>
     <template v-slot:transaction.hash="{ hash }">
       {{ hash }}
     </template>
@@ -56,9 +54,7 @@
     <template v-slot:transaction.value="{ value }">
       {{ fromWei(value) }} UBQ (${{ calcValue(fromWei(value), 2) }})
     </template>
-    <template v-slot:transaction.gas.key>
-      Gas Limit:
-    </template>
+    <template v-slot:transaction.gas.key>Gas Limit:</template>
     <template v-slot:transaction.gas="{ gas }">
       <template v-if="pending">
         {{ formatNumber(toDecimal(gas)) }}
@@ -70,37 +66,25 @@
     <template v-slot:transaction.gasPrice="{ gasPrice }">
       {{ fromWeiToGwei(gasPrice) }} Gwei
     </template>
-    <template v-slot:transaction.gasUsed.key>
-      Gas Used By Txn:
-    </template>
+    <template v-slot:transaction.gasUsed.key>Gas Used By Txn:</template>
     <template v-slot:transaction.gasUsed="{ gasUsed }">
       {{ formatNumber(gasUsed) }}
     </template>
-    <template v-slot:transaction.txFee.key>
-      Actual Tx Cost/Fee:
-    </template>
+    <template v-slot:transaction.txFee.key>Actual Tx Cost/Fee:</template>
     <template v-slot:transaction.txFee>
       <!--   Sometimes tx changes but txfee is not calculted again   -->
       {{ txFee }} UBQ
       <template> (${{ calcValue(txFee, 4) }}) </template>
     </template>
-    <template v-slot:transaction.nonce.key>
-      Nonce & [Position]:
-    </template>
+    <template v-slot:transaction.nonce.key>Nonce & [Position]:</template>
     <template v-slot:transaction.nonce="{ nonce, transactionIndex: position }">
       {{ nonce }} [{{ position }}]
     </template>
     <template v-slot:transaction.status="{ status }">
-      <v-chip v-if="status" outlined color="primary">
-        Success
-      </v-chip>
-      <v-chip v-else outlined color="error">
-        Failed
-      </v-chip>
+      <v-chip v-if="status" outlined color="primary">Success</v-chip>
+      <v-chip v-else outlined color="error">Failed</v-chip>
     </template>
-    <template v-slot:transaction.input.key>
-      Input Data:
-    </template>
+    <template v-slot:transaction.input.key>Input Data:</template>
     <template v-slot:transaction.input="{ input }">
       <template v-if="computedInputData">
         <input-data-card
