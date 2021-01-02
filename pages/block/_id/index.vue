@@ -1,15 +1,13 @@
 <template>
-  <v-row justify="center">
-    <v-col lg="8" md="10" sm="12">
-      <blockPage
-        :latest-block="this.$store.state.stats.latestBlock"
-        :block="block"
-        :transactions="transactions"
-        :open-transactions="openTransactions"
-        :loading="$fetchState.pending"
-      />
-    </v-col>
-  </v-row>
+  <v-col cols="12" class="pa-0">
+    <blockPage
+      :latest-block="this.$store.state.stats.latestBlock"
+      :block="block"
+      :transactions="transactions"
+      :open-transactions="openTransactions"
+      :loading="$fetchState.pending"
+    />
+  </v-col>
 </template>
 
 <router>

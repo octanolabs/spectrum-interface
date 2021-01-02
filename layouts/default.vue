@@ -103,12 +103,12 @@
               "
               v-on="on"
             >
-              <span style="margin-top: 2px">
+              <span v-if="!!prices.ubq" style="margin-top: 2px">
                 ${{ prices.ubq.usd.toFixed(3) }} @ {{ prices.ubq.btc }} BTC/UBQ
               </span>
             </v-btn>
           </template>
-          <span>
+          <span v-if="!!prices.ubq">
             Price: ${{ prices.ubq.usd.toFixed(3) }} @
             {{ prices.ubq.btc }} BTC/UBQ
           </span>

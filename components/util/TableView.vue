@@ -10,6 +10,7 @@
     :class="{ 'body-2': dense }"
     :footer-props="footerProps"
     dense
+    flat
   >
     <template v-slot:top>
       <!-- With v-bind=$attrs" on breadcrumb-spinner we can optionally turn off path or spinner or both-->
