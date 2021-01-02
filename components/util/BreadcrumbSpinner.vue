@@ -1,5 +1,10 @@
 <template>
-  <v-toolbar height="26px" style="background-color: #1e1e1e" flat class="pa-0">
+  <v-toolbar
+    flat
+    height="26px"
+    style="background-color: #1e1e1e; font-size: 10px"
+    class="pa-0"
+  >
     <v-breadcrumbs
       v-if="!noBreadcrumbs"
       :items="[{ text: 'Home', to: '/' }, ...pathItems]"
@@ -54,11 +59,24 @@ export default {
       const split = route.fullPath
         .split('/')
         .filter((item) => !item.includes('?'))
-
       for (const [index, item] of split.entries()) {
         if (index > 0) {
+          console.log(index + ': ' + route.name)
+          let append = ''
+          if (
+            (route.name === 'block-id' && item === 'block') ||
+            (route.name === 'transaction-hash' && item === 'transaction')
+          ) {
+            append = 's'
+            split[1] = split[1] + 's'
+          } else {
+            pathItems.push({
+              text: item.charAt(0).toUpperCase() + item.slice(1),
+            })
+            break
+          }
           const pathItem = {
-            text: item.charAt(0).toUpperCase() + item.slice(1),
+            text: item.charAt(0).toUpperCase() + item.slice(1) + append,
             to: split.slice(0, index + 1).join('/'),
           }
 
