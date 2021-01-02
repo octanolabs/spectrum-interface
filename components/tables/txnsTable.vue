@@ -67,6 +67,10 @@
     <template v-else v-slot:item.gasPrice="{ item: { gasPrice } }">
       {{ fromWeiToGwei(gasPrice) }} Gwei
     </template>
+    <template v-slot:item.status="{ value: status }">
+      <v-icon color="success" v-if="status">mdi-check-circle</v-icon>
+      <v-icon v-else color="error">mdi-alert-circle</v-icon>
+    </template>
   </table-view>
 </template>
 
@@ -193,6 +197,11 @@ export default {
           {
             text: 'Txfee',
             value: 'txFee',
+            sortable: false,
+          },
+          {
+            text: '',
+            value: 'status',
             sortable: false,
           },
         ]
