@@ -2,7 +2,6 @@
   <v-col cols="12" class="pa-0">
     <txnsTable
       v-if="type === 'pending'"
-      no-breadcrumbs
       :loading="$fetchState.pending"
       :transactions="txStore.pending"
       :total="txStore.total"
@@ -11,7 +10,6 @@
     />
     <txnsTable
       v-else-if="type === 'failed'"
-      no-breadcrumbs
       :loading="$fetchState.pending"
       :transactions="txStore.failed"
       :total="txStore.total"
@@ -19,7 +17,6 @@
     />
     <txnsTable
       v-else-if="type === 'contracts'"
-      no-breadcrumbs
       :loading="$fetchState.pending"
       :transactions="txStore.contracts"
       :total="txStore.total"
@@ -28,7 +25,6 @@
     />
     <txnsTable
       v-else-if="type === 'calls'"
-      no-breadcrumbs
       :loading="$fetchState.pending"
       :transactions="txStore.calls"
       :total="txStore.total"
@@ -36,7 +32,6 @@
     />
     <txnsTable
       v-else
-      no-breadcrumbs
       :loading="$fetchState.pending"
       :transactions="txStore.latest"
       :total="txStore.total"

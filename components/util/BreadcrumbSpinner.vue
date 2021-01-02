@@ -61,23 +61,35 @@ export default {
         .filter((item) => !item.includes('?'))
       for (const [index, item] of split.entries()) {
         if (index > 0) {
-          console.log(index + ': ' + route.name)
+          console.log('r: ' + route.name)
+          console.log('i: ' + item)
           let append = ''
-          if (
-            (route.name === 'block-id' && item === 'block') ||
-            (route.name === 'transaction-hash' && item === 'transaction')
-          ) {
-            append = 's'
-            split[1] = split[1] + 's'
-          } else {
-            pathItems.push({
-              text: item.charAt(0).toUpperCase() + item.slice(1),
-            })
-            break
+          if (route.name === 'block-id' || route.name === 'transaction-hash') {
+            if (item === 'block' || item === 'transaction') {
+              append = 's'
+              split[1] = split[1] + 's'
+            } else {
+              pathItems.push({
+                text: item.charAt(0).toUpperCase() + item.slice(1),
+              })
+              break
+            }
+          }
+          let to = split.slice(0, index + 1).join('/')
+          if (route.name === 'transactions' && item === 'transactions') {
+            if (split[index + 1] && split[index + 1] !== 'latest') {
+              to = split.slice(0, index).join('/') + 'latest'
+            } else {
+              pathItems.push({
+                text: item.charAt(0).toUpperCase() + item.slice(1),
+                to: split.slice(0, index + 1).join('/'),
+              })
+              break
+            }
           }
           const pathItem = {
             text: item.charAt(0).toUpperCase() + item.slice(1) + append,
-            to: split.slice(0, index + 1).join('/'),
+            to,
           }
 
           pathItems.push(pathItem)
