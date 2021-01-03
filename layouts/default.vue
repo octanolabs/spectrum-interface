@@ -59,18 +59,35 @@
             <template v-slot:activator>
               <v-list-item-title>{{ pTitle }}</v-list-item-title>
             </template>
-            <v-list-item
-              v-for="([title, icon, path], i) in pData"
-              :key="i"
-              link
-              style="padding-left: 56px"
-              :to="path"
-            >
-              <v-list-item-title v-text="title"></v-list-item-title>
-              <v-list-item-icon>
-                <v-icon small v-text="icon"></v-icon>
-              </v-list-item-icon>
-            </v-list-item>
+            <template v-if="pTitle !== 'Misc'">
+              <v-list-item
+                v-for="([title, icon, path], i) in pData"
+                :key="i"
+                link
+                style="padding-left: 56px"
+                :to="path"
+              >
+                <v-list-item-title v-text="title"></v-list-item-title>
+                <v-list-item-icon>
+                  <v-icon small v-text="icon"></v-icon>
+                </v-list-item-icon>
+              </v-list-item>
+            </template>
+            <template else>
+              <v-list-item
+                v-for="([title, icon, path], i) in pData"
+                :key="i"
+                link
+                style="padding-left: 56px"
+                :href="path"
+                target="_blank"
+              >
+                <v-list-item-title v-text="title"></v-list-item-title>
+                <v-list-item-icon>
+                  <v-icon small v-text="icon"></v-icon>
+                </v-list-item-icon>
+              </v-list-item>
+            </template>
           </v-list-group>
         </v-list>
         <template v-slot:append></template>
