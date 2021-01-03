@@ -390,6 +390,7 @@
           :transactions="transactions"
           :total="transactions.length"
           :block-number="block.number"
+          no-breadcrumbs
           block
         />
       </v-tab-item>
