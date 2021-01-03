@@ -1,21 +1,27 @@
+import config from './params/config.json'
+
 export default {
-  mode: 'spa',
+  // Disable server-side rendering (https://go.nuxtjs.dev/ssr-mode)
+  ssr: false,
+
+  // Target (https://go.nuxtjs.dev/config-target)
+  target: 'static',
   /*
    ** Headers of the page
    */
   head: {
-    titleTemplate: '%s - ' + process.env.npm_package_name,
-    title: process.env.npm_package_name || '',
+    titleTemplate: '%s',
+    title: config.title || '',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       {
         hid: 'description',
         name: 'description',
-        content: process.env.npm_package_description || '',
+        content: config.description || '',
       },
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    link: [{ rel: 'icon', type: 'image/x-icon', href: config.favicon }],
   },
   /*
    ** Customize the progress-bar color
@@ -28,14 +34,11 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  // Vuetify is probably useless here and as a plugin
   plugins: [
-    '~plugins/vuetify.js',
     '~plugins/apexcharts.js',
-    '~plugins/perfectscrollbar.js',
-    '~plugins/smoothreflow.js',
     '~plugins/notifications.js',
     '~plugins/qrcode.js',
+    '~plugins/smoothreflow.js',
   ],
   /*
    ** Nuxt.js dev-modules
@@ -60,8 +63,8 @@ export default {
    */
   env: {
     config: {
-      apiUrl: 'http://127.0.0.1:8080/v4/',
-      rpcUrl: 'http://127.0.0.1:8588',
+      apiUrl: config.api + '/v4/',
+      rpcUrl: config.rpc,
       pollData: 30000, // interval to poll api, in ms
     },
   },
@@ -77,9 +80,8 @@ export default {
    ** https://github.com/nuxt-community/vuetify-module
    */
   vuetify: {
-    // treeShake: true,
     customVariables: ['~/assets/scss/style.scss'],
-    optionsPath: '~plugins/vuetify.js',
+    theme: config.theme,
   },
   /*
    ** moment module configuration

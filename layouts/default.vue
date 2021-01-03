@@ -387,3 +387,20 @@ export default {
   },
 }
 </script>
+
+<style lang="scss">
+::-webkit-scrollbar {
+  width: 6px; /* for vertical scrollbars */
+  height: 6px; /* for horizontal scrollbars */
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-track {
+  background: #2e2e2e !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--v-primary-base) !important;
+  border-radius: 3px;
+}
+</style>
