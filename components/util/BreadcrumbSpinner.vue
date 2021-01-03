@@ -87,6 +87,23 @@ export default {
               break
             }
           }
+          if (route.name === 'uncles' && item === 'uncles') {
+            pathItems.push({
+              text: 'Blocks',
+              to: 'blocks',
+            })
+          }
+          if (route.name === 'forkedBlocks' && item === 'forkedBlocks') {
+            pathItems.push({
+              text: 'Blocks',
+              to: 'blocks',
+            })
+            pathItems.push({
+              text: 'Forked',
+              to: split.slice(0, index + 1).join('/'),
+            })
+            break
+          }
           const pathItem = {
             text: item.charAt(0).toUpperCase() + item.slice(1) + append,
             to,

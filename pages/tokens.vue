@@ -1,9 +1,7 @@
 <template>
-  <v-row justify="center">
-    <v-col cols="10">
-      <tokens-table :tokens="getTokens()" />
-    </v-col>
-  </v-row>
+  <v-col cols="12">
+    <tokens-table :tokens="getTokens()" />
+  </v-col>
 </template>
 
 <script>

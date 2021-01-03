@@ -1,6 +1,6 @@
 <template>
   <v-row justify="center">
-    <v-col lg="8" md="10" sm="12">
+    <v-col cols="12">
       <transaction-page
         :transaction="txn"
         :trace="txnTrace"
