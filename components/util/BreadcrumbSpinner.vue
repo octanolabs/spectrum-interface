@@ -2,7 +2,7 @@
   <v-toolbar
     flat
     height="26px"
-    style="background-color: #1e1e1e; font-size: 10px"
+    style="background-color: #2e2e2e; font-size: 8px"
     class="pa-0"
   >
     <v-breadcrumbs

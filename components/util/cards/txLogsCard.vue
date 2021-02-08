@@ -1,13 +1,10 @@
 <template>
-  <v-card flat color="#303030">
-    <v-card-title>
-      {{ 'Event Logs (' + eventLogs.length + ')' }}
-    </v-card-title>
+  <v-card flat tile>
     <!-- leave this gross indentation for correct formatting inside pre -->
     <v-card-text class="body-2">
       <pre>
 <strong>Transaction Receipt Event Logs</strong>
-<p v-for="(item, index) in eventLogs" :key="index">
+<p class="mb-0 pt-0" v-for="(item, index) in eventLogs" :key="index">
 [{{index}}]  Address    {{ item.address }}
      <span v-if="item.isKnown">Name       {{ item.name }}</span>
 
@@ -15,7 +12,7 @@
                 [{{ tindex }}] {{ topic }}</span>
 
      Data<span v-for="(data, dindex) in item.data" :key="dindex">
-                {{ data }}</span>
+                {{ data }}</span><v-divider class="mt-4 mb-0" />
 </p>
             </pre>
     </v-card-text>
