@@ -1,7 +1,7 @@
 <template>
   <v-col cols="12" class="pa-0">
     <breadcrumbSpinner v-bind="$attrs" no-loading />
-    <v-tabs show-arrows v-model="tab">
+    <v-tabs grow show-arrows v-model="tab">
       <v-tab>Overview</v-tab>
       <v-tab>
         Transactions

@@ -1,8 +1,8 @@
 <template>
-  <v-toolbar
+  <v-app-bar
     flat
     height="26px"
-    style="background-color: #2e2e2e; font-size: 8px"
+    style="background-color: #1e1e1e; border-bottom: 1px solid #2e2e2e"
     class="pa-0"
   >
     <v-breadcrumbs
@@ -30,7 +30,7 @@
         </span>
       </template>
     </v-btn>
-  </v-toolbar>
+  </v-app-bar>
 </template>
 
 <script>

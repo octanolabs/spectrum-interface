@@ -62,7 +62,9 @@ export default {
     inputString: {
       type: String,
       required: true,
-      default: () => {},
+      default() {
+        return '0x'
+      },
     },
     output: {
       type: Boolean,

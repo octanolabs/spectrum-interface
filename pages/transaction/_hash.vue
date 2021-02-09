@@ -1,10 +1,10 @@
 <template>
   <v-col cols="12" class="pa-0">
     <breadcrumbSpinner v-bind="$attrs" no-loading />
-    <v-tabs show-arrows v-model="tab">
+    <v-tabs grow show-arrows v-model="tab">
       <v-tab>Overview</v-tab>
       <v-tab v-if="showLogs">
-        Logs
+        Events
         <v-chip v-if="!!txn.logs" label small class="ml-1">
           {{ txn.logs.length }}
         </v-chip>
@@ -37,7 +37,7 @@
             >
               <template v-slot:subtitle>
                 <nuxt-link
-                  :to="{ name: 'block-id', params: { id: blockNumber } }"
+                  :to="{ name: 'block-id', params: { id: txn.blockNumber } }"
                 >
                   {{ txn.blockNumber }}
                 </nuxt-link>
@@ -271,6 +271,7 @@ export default {
       tokenTransferred: false,
       showLogs: false,
       computedInputData: false,
+      tab: null,
     }
   },
   computed: {

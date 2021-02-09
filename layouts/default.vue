@@ -1,200 +1,191 @@
 <template>
-  <perfect-scrollbar style="height: 100%" :options="{ suppressScrollX: true }">
-    <v-app>
-      <!-- app bar -->
-      <v-app-bar app fixed>
-        <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-        <v-spacer />
-        <v-input hide-details class="pt-2 mr-1">
-          <v-text-field
-            v-model="search"
-            hide-details
-            clearable
-            type="text"
-            label="Search by Address / Txhash / Block"
-            append-outer-icon="mdi-magnify"
-            @keydown="handleEvent"
-            @click:append-outer="handleEvent"
-          >
-          </v-text-field>
-        </v-input>
-        <v-app-bar-nav-icon class="mr-1">
-          <img src="../assets/logo.svg" width="26" height="26" />
-        </v-app-bar-nav-icon>
-      </v-app-bar>
-      <!-- nav drawer -->
-      <v-navigation-drawer v-model="drawer" fixed app class="abstract-drawer">
-        <v-toolbar style="background-color: #272727">
-          <v-list dense class="pa-0">
-            <v-list-item>
-              <v-list-item-avatar>
-                <img
-                  src="../assets/logo.svg"
-                  height="36px"
-                  style="height: 36px"
-                />
-              </v-list-item-avatar>
-              <v-list-item-content class="text-right">
-                <h1 style="color: #6fceb7">spectrum</h1>
-                <v-list-item-subtitle style="color: #e76754">
-                  block explorer
-                </v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
-        </v-toolbar>
-        <v-list dense>
-          <v-list-item link to="/">
-            <v-list-item-icon>
-              <v-icon>mdi-home</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Home</v-list-item-title>
+  <v-app>
+    <!-- app bar -->
+    <v-app-bar app fixed>
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-spacer />
+      <v-input hide-details class="pt-2 mr-1">
+        <v-text-field
+          v-model="search"
+          hide-details
+          clearable
+          type="text"
+          label="Search by Address / Txhash / Block"
+          append-outer-icon="mdi-magnify"
+          @keydown="handleEvent"
+          @click:append-outer="handleEvent"
+        >
+        </v-text-field>
+      </v-input>
+      <v-app-bar-nav-icon class="mr-1">
+        <img src="../assets/logo.svg" width="26" height="26" />
+      </v-app-bar-nav-icon>
+    </v-app-bar>
+    <!-- nav drawer -->
+    <v-navigation-drawer v-model="drawer" fixed app class="abstract-drawer">
+      <v-toolbar style="background-color: #272727">
+        <v-list dense class="pa-0">
+          <v-list-item>
+            <v-list-item-avatar>
+              <img
+                src="../assets/logo.svg"
+                height="36px"
+                style="height: 36px"
+              />
+            </v-list-item-avatar>
+            <v-list-item-content class="text-right">
+              <h1 style="color: #6fceb7">spectrum</h1>
+              <v-list-item-subtitle style="color: #e76754">
+                block explorer
+              </v-list-item-subtitle>
+            </v-list-item-content>
           </v-list-item>
-
-          <v-list-group
-            v-for="([pTitle, pIcon, pLinks, pData], p) in items"
-            :key="p"
-            :prepend-icon="pIcon"
-          >
-            <template v-slot:activator>
-              <v-list-item-title>{{ pTitle }}</v-list-item-title>
-            </template>
-            <template v-if="pLinks">
-              <v-list-item
-                v-for="([title, icon, path], i) in pData"
-                :key="i"
-                link
-                style="padding-left: 56px"
-                :href="path"
-                target="_blank"
-              >
-                <v-list-item-title v-text="title"></v-list-item-title>
-                <v-list-item-icon>
-                  <v-icon small v-text="icon"></v-icon>
-                </v-list-item-icon>
-              </v-list-item>
-            </template>
-            <template v-if="!pLinks">
-              <v-list-item
-                v-for="([title, icon, path], i) in pData"
-                :key="i"
-                link
-                style="padding-left: 56px"
-                :to="path"
-              >
-                <v-list-item-title v-text="title"></v-list-item-title>
-                <v-list-item-icon>
-                  <v-icon small v-text="icon"></v-icon>
-                </v-list-item-icon>
-              </v-list-item>
-            </template>
-          </v-list-group>
         </v-list>
-        <template v-slot:append></template>
-      </v-navigation-drawer>
-      <notifications position="bottom right" group="normal" />
+      </v-toolbar>
+      <v-list dense>
+        <v-list-item link to="/">
+          <v-list-item-icon>
+            <v-icon>mdi-home</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>Home</v-list-item-title>
+        </v-list-item>
 
-      <!-- Sizes your content based upon application components -->
-      <!-- AppBar's smooth reflow doesn't play nice with nuxt's auto resizing shenanigans, this padding makes it so the content under the appbar is not moved-->
-      <v-main>
-        <!-- Provides the application the proper gutter -->
-        <nuxt></nuxt>
-      </v-main>
-      <v-footer
-        padless
-        app
-        fixed
-        height="22px"
-        style="background-color: #6fceb7"
-      >
-        <v-tooltip top>
-          <template v-slot:activator="{ on }">
-            <v-btn
-              text
-              tile
-              style="
-                height: 22px;
-                display: flex;
-                align-items: center;
-                font-size: 12px;
-              "
-              v-on="on"
-            >
-              <span v-if="!!prices.ubq" style="margin-top: 2px">
-                ${{ prices.ubq.usd.toFixed(3) }} @ {{ prices.ubq.btc }} BTC/UBQ
-              </span>
-            </v-btn>
+        <v-list-group
+          v-for="([pTitle, pIcon, pLinks, pData], p) in items"
+          :key="p"
+          :prepend-icon="pIcon"
+        >
+          <template v-slot:activator>
+            <v-list-item-title>{{ pTitle }}</v-list-item-title>
           </template>
-          <span v-if="!!prices.ubq">
-            Price: ${{ prices.ubq.usd.toFixed(3) }} @
-            {{ prices.ubq.btc }} BTC/UBQ
-          </span>
-        </v-tooltip>
-        <v-spacer />
-        <v-tooltip top>
-          <template v-slot:activator="{ on }">
-            <v-btn
-              text
-              tile
-              style="
-                height: 22px;
-                display: flex;
-                align-items: center;
-                font-size: 12px;
-              "
-              v-on="on"
+          <template v-if="pLinks">
+            <v-list-item
+              v-for="([title, icon, path], i) in pData"
+              :key="i"
+              link
+              style="padding-left: 56px"
+              :href="path"
+              target="_blank"
             >
-              <v-icon small class="mr-1">mdi-gauge</v-icon>
-              <span style="margin-top: 2px">
-                {{ number.format(summary.hashrate) }} GH/s
-              </span>
-            </v-btn>
+              <v-list-item-title v-text="title"></v-list-item-title>
+              <v-list-item-icon>
+                <v-icon small v-text="icon"></v-icon>
+              </v-list-item-icon>
+            </v-list-item>
           </template>
-          <span>Hashrate: {{ summary.hashrate }} GH/s</span>
-        </v-tooltip>
-        <v-tooltip top>
-          <template v-slot:activator="{ on }">
-            <v-btn
-              text
-              tile
-              style="
-                height: 22px;
-                display: flex;
-                align-items: center;
-                font-size: 12px;
-              "
-              v-on="on"
+          <template v-if="!pLinks">
+            <v-list-item
+              v-for="([title, icon, path], i) in pData"
+              :key="i"
+              link
+              style="padding-left: 56px"
+              :to="path"
             >
-              <v-icon small class="mr-1">mdi-pickaxe</v-icon>
-              <span style="margin-top: 2px">{{ summary.difficulty }} TH</span>
-            </v-btn>
+              <v-list-item-title v-text="title"></v-list-item-title>
+              <v-list-item-icon>
+                <v-icon small v-text="icon"></v-icon>
+              </v-list-item-icon>
+            </v-list-item>
           </template>
-          <span>Difficulty: {{ summary.difficulty }} TH</span>
-        </v-tooltip>
-        <v-tooltip top>
-          <template v-slot:activator="{ on }">
-            <v-btn
-              text
-              tile
-              style="
-                height: 22px;
-                display: flex;
-                align-items: center;
-                font-size: 12px;
-              "
-              v-on="on"
-            >
-              <v-icon small class="mr-1">mdi-cube-scan</v-icon>
-              <span style="margin-top: 2px">
-                {{ number.format(blockHeight) }}
-              </span>
-            </v-btn>
-          </template>
-          <span>Block Height: {{ number.format(blockHeight) }}</span>
-        </v-tooltip>
-      </v-footer>
-    </v-app>
-  </perfect-scrollbar>
+        </v-list-group>
+      </v-list>
+      <template v-slot:append></template>
+    </v-navigation-drawer>
+    <notifications position="bottom right" group="normal" />
+
+    <!-- Sizes your content based upon application components -->
+    <!-- AppBar's smooth reflow doesn't play nice with nuxt's auto resizing shenanigans, this padding makes it so the content under the appbar is not moved-->
+    <v-main>
+      <!-- Provides the application the proper gutter -->
+      <nuxt></nuxt>
+    </v-main>
+    <v-footer padless app fixed height="22px" style="background-color: #6fceb7">
+      <v-tooltip top>
+        <template v-slot:activator="{ on }">
+          <v-btn
+            text
+            tile
+            style="
+              height: 22px;
+              display: flex;
+              align-items: center;
+              font-size: 12px;
+            "
+            v-on="on"
+          >
+            <span v-if="!!prices.ubq" style="margin-top: 2px">
+              ${{ prices.ubq.usd.toFixed(3) }} @ {{ prices.ubq.btc }} BTC/UBQ
+            </span>
+          </v-btn>
+        </template>
+        <span v-if="!!prices.ubq">
+          Price: ${{ prices.ubq.usd.toFixed(3) }} @ {{ prices.ubq.btc }} BTC/UBQ
+        </span>
+      </v-tooltip>
+      <v-spacer />
+      <v-tooltip top>
+        <template v-slot:activator="{ on }">
+          <v-btn
+            text
+            tile
+            style="
+              height: 22px;
+              display: flex;
+              align-items: center;
+              font-size: 12px;
+            "
+            v-on="on"
+          >
+            <v-icon small class="mr-1">mdi-gauge</v-icon>
+            <span style="margin-top: 2px">
+              {{ number.format(summary.hashrate) }} GH/s
+            </span>
+          </v-btn>
+        </template>
+        <span>Hashrate: {{ summary.hashrate }} GH/s</span>
+      </v-tooltip>
+      <v-tooltip top>
+        <template v-slot:activator="{ on }">
+          <v-btn
+            text
+            tile
+            style="
+              height: 22px;
+              display: flex;
+              align-items: center;
+              font-size: 12px;
+            "
+            v-on="on"
+          >
+            <v-icon small class="mr-1">mdi-pickaxe</v-icon>
+            <span style="margin-top: 2px">{{ summary.difficulty }} TH</span>
+          </v-btn>
+        </template>
+        <span>Difficulty: {{ summary.difficulty }} TH</span>
+      </v-tooltip>
+      <v-tooltip top>
+        <template v-slot:activator="{ on }">
+          <v-btn
+            text
+            tile
+            style="
+              height: 22px;
+              display: flex;
+              align-items: center;
+              font-size: 12px;
+            "
+            v-on="on"
+          >
+            <v-icon small class="mr-1">mdi-cube-scan</v-icon>
+            <span style="margin-top: 2px">
+              {{ number.format(blockHeight) }}
+            </span>
+          </v-btn>
+        </template>
+        <span>Block Height: {{ number.format(blockHeight) }}</span>
+      </v-tooltip>
+    </v-footer>
+  </v-app>
 </template>
 
 <script>
