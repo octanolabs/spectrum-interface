@@ -26,10 +26,10 @@
       <template v-if="item.symbol === 'WUBQ'">UBQ</template>
     </template>
     <template v-slot:item.derivedETH="{ value: derivedUBQ }">
-      ${{ (derivedUBQ * ubqPrice).toFixed(4) }}
+      ${{ nf.format(derivedUBQ * ubqPrice) }}
     </template>
     <template v-slot:item.totalLiquidity="{ item }">
-      ${{ (item.totalLiquidity * (item.derivedETH * ubqPrice)).toFixed(2) }}
+      ${{ nf.format(item.totalLiquidity * (item.derivedETH * ubqPrice)) }}
     </template>
   </table-view>
 </template>
@@ -57,6 +57,7 @@ export default {
   },
   data() {
     return {
+      nf: new Intl.NumberFormat('en', {}),
       headers: [
         {
           value: 'name',
@@ -67,12 +68,12 @@ export default {
           text: 'Symbol',
         },
         {
-          value: 'derivedETH',
-          text: 'Value (USD)',
-        },
-        {
           value: 'totalLiquidity',
           text: 'Liquidity (USD)',
+        },
+        {
+          value: 'derivedETH',
+          text: 'Value (USD)',
         },
       ],
     }
@@ -80,6 +81,13 @@ export default {
   methods: {
     checksumHash(hash) {
       return toChecksumAddress(hash)
+    },
+    formatNumber(val) {
+      if (val) {
+        return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+      } else {
+        return ''
+      }
     },
   },
 }

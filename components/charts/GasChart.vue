@@ -16,6 +16,7 @@
 
 <script>
 import ChartView from '../util/charts/ChartView'
+import common from '~/scripts/common'
 
 export default {
   components: { ChartView },
@@ -46,21 +47,36 @@ export default {
       required: false,
       default: () => [],
     },
+    avgGasPrice: {
+      type: Array,
+      required: false,
+      default: () => [],
+    },
   },
   data() {
     return {
       activeChart: 0,
+      chartData: [
+        [
+          { name: 'Gas Limit', type: 'area', data: this.gasLimit },
+          { name: 'Gas Used', type: 'area', data: this.gasUsed },
+          { name: 'Avg. Gas Price', type: 'line', data: this.avgGasPrice },
+        ],
+        this.gasPriceLevels.map(({ name, data }) => {
+          return { name, data, type: 'area' }
+        }),
+        this.gasUsedLevels.map(({ name, data }) => {
+          return { name, data, type: 'area' }
+        }),
+        this.gasLevels.map(({ name, data }) => {
+          return { name, data, type: 'area' }
+        }),
+      ],
       chartOptions: [
         {
-          title: {
-            text:
-              'Max Daily Block Capacity (mined blocks * gasLimit) / Total gas used in transactions',
-            style: {
-              fontFamily: 'Courier New',
-            },
-          },
           fill: {
-            opacity: 0.3,
+            opacity: [1, 1, 0.5, 0.5],
+            type: 'solid',
           },
           stroke: {
             show: true,
@@ -68,7 +84,7 @@ export default {
             width: 1,
             dashArray: 0,
           },
-          colors: ['#ea9c00', '#ea0000'],
+          colors: ['#2e2e2e', '#6fceb7', '#ff00ff'],
           xaxis: {
             type: 'datetime',
             labels: {
@@ -83,13 +99,37 @@ export default {
           },
           yaxis: [
             {
-              forceNiceScale: true,
-              logarithmic: false,
+              seriesName: 'Gas Limit',
               labels: {
                 show: false,
               },
+              forceNiceScale: false,
+              logarithmic: false,
+            },
+            {
+              seriesName: 'Gas Limit',
+              labels: {
+                show: false,
+              },
+              forceNiceScale: false,
+              logarithmic: false,
+            },
+            {
+              opposite: true,
+              seriesName: 'Avg. Gas Price',
+              labels: {
+                show: false,
+                formatter: (label) => `${common.fromWeiToGwei(label, 2)} Gwei`,
+              },
             },
           ],
+          tooltip: {
+            enabled: true,
+            fixed: {
+              enabled: true,
+              position: 'topLeft',
+            },
+          },
         },
         this.defaultChartLevelOptions({
           xaxis: {
@@ -140,21 +180,6 @@ export default {
               },
             },
           ],
-        }),
-      ],
-      chartData: [
-        [
-          { name: 'Gaslimit', type: 'area', data: this.gasLimit },
-          { name: 'GasUsed', type: 'line', data: this.gasUsed },
-        ],
-        this.gasPriceLevels.map(({ name, data }) => {
-          return { name, data, type: 'area' }
-        }),
-        this.gasUsedLevels.map(({ name, data }) => {
-          return { name, data, type: 'area' }
-        }),
-        this.gasLevels.map(({ name, data }) => {
-          return { name, data, type: 'area' }
         }),
       ],
     }

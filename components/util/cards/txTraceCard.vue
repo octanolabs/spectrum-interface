@@ -125,23 +125,27 @@ export default {
     let count = 0
     // we need to add id to calls for treeview
     for (let t = 0; t < traces.length; t++) {
-      traces[t].id = count
-      count++
-      const deepcalls = function (calls) {
-        for (let c = 0; c < calls.length; c++) {
-          calls[c].id = count
-          count++
-          if (calls[c].calls) {
-            deepcalls(calls[c].calls)
+      if (traces[t]) {
+        traces[t].id = count
+        count++
+        const deepcalls = function (calls) {
+          for (let c = 0; c < calls.length; c++) {
+            if (calls[c]) {
+              calls[c].id = count
+              count++
+              if (calls[c].calls) {
+                deepcalls(calls[c].calls)
+              }
+            }
           }
         }
-      }
-      if (traces[t].calls) {
-        deepcalls(traces[t].calls)
+        if (traces[t].calls) {
+          deepcalls(traces[t].calls)
+        }
       }
     }
     this.iTraces = traces
-    this.selected.push(this.iTraces[0])
+    this.selected = [this.iTraces[0]]
   },
   methods: {
     getAddressTag(hash) {

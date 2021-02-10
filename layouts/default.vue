@@ -244,9 +244,9 @@ export default {
           'mdi-chart-box-outline',
           false,
           [
-            ['Txns', 'mdi-bank-transfer', '/analytics/charts'],
-            ['Blocks', 'mdi-cube-send', '/transactions/contracts'],
-            ['Gas', 'mdi-gas-station-outline', '/transactions/contracts'],
+            ['Txns', 'mdi-bank-transfer', '/analytics/txns'],
+            ['Blocks', 'mdi-cube-send', '/analytics/blocks'],
+            ['Gas', 'mdi-gas-station-outline', '/analytics/gas'],
           ],
         ],
         [

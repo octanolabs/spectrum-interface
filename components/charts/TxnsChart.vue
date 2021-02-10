@@ -41,16 +41,13 @@ export default {
       activeChart: 0,
       chartOptions: [
         {
-          colors: [
-            'rgba(0,234,144,0.2)',
-            'rgba(225,239,33,0.75)',
-            '#00ea90',
-            '#2261cd',
-          ],
+          colors: ['#2e2e2e', '#6fceb7', '#e76754', '#FF00FF'],
+          fill: {
+            opacity: [1, 1, 1, 1],
+          },
           stroke: {
             show: true,
-            curve: 'smooth',
-            lineCap: 'butt',
+            curve: 'straight',
             width: 1,
             dashArray: 0,
           },
@@ -72,7 +69,7 @@ export default {
             },
           },
           tooltip: {
-            enabledOnSeries: [0, 1, 2],
+            enabledOnSeries: [0, 1, 2, 3],
           },
           yaxis: [
             {
@@ -90,24 +87,17 @@ export default {
               },
             },
             {
-              seriesName: 'Cumulative Tx fees',
+              seriesName: 'Cumulative Txn fees',
               labels: {
                 show: false,
-                formatter(label, { series, dataPointIndex }) {
-                  return `
-                  ${series[2][dataPointIndex]} UBQ
-                  (${common.mulFiat(
-                    series[2][dataPointIndex],
-                    series[3][dataPointIndex],
-                    2
-                  )} $)`
-                },
+                formatter: (label) => `${label} UBQ`,
               },
             },
             {
-              seriesName: 'Price',
+              seriesName: 'UBQ Price (USD)',
               labels: {
                 show: false,
+                formatter: (label) => `$${label.toFixed(4)} USD`,
               },
             },
           ],
@@ -136,8 +126,8 @@ export default {
         [
           { name: 'Transactions', type: 'column', data: this.txns },
           { name: 'Avg. Gas Price', type: 'line', data: this.avgGasPrice },
-          { name: 'Cumulative Tx fees', type: 'line', data: this.txFees },
-          { name: 'Price', type: 'line', data: this.prices },
+          { name: 'Cumulative Txn fees', type: 'line', data: this.txFees },
+          { name: 'Ubiq Price', type: 'line', data: this.prices },
         ],
       ],
     }

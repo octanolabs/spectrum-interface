@@ -147,7 +147,7 @@ async function fetchNumberStringChart(name = '', limit = 0) {
   return { name: chartName, data }
 }
 
-async function fetchMultiSeriesChart(name = '') {
+async function fetchMultiSeriesChart(name) {
   const {
     data: { result },
   } = await axios.post(process.env.config.apiUrl, {
@@ -160,7 +160,8 @@ async function fetchMultiSeriesChart(name = '') {
   const data = []
 
   const { name: chartName, timestamps, datasets } = result
-
+  console.log('datasets')
+  console.log(datasets)
   for (let i = 0; i < datasets.length / 88; i++) {
     const obj = {
       name: '',
@@ -238,7 +239,7 @@ export const actions = {
     await dispatch('fetchTransactions')
     await dispatch('fetchTxFees')
     await dispatch('fetchGasUsed')
-    await dispatch('fetchValues')
+    // await dispatch('fetchValues')
     await dispatch('fetchGasPriceLevels')
     await dispatch('fetchGasUsedLevels')
     await dispatch('fetchGasLevels')
@@ -366,10 +367,10 @@ export const actions = {
     const chartData = await fetchNumberStringChart('gasUsed', 0)
     commit('SET_GASUSED', chartData)
   },
-  async fetchValues({ commit }) {
+  /* async fetchValues({ commit }) {
     const chartData = await fetchNumberStringChart('values', 0)
     commit('SET_VALUES', chartData)
-  },
+  }, */
 
   async fetchGasPriceLevels({ commit }) {
     const chartData = await fetchMultiSeriesChart('gasPriceLevels')

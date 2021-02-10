@@ -1,7 +1,7 @@
 <template>
   <v-container fluid class="pa-0">
     <v-col cols="12" class="pa-0">
-      <v-card tile class="pa-2 border-bottom">
+      <v-card flat tile class="pa-2 border-bottom">
         <v-row no-gutters>
           <v-col cols="12" md="8" sm="12" xs="12">
             <v-row no-gutters>
@@ -95,13 +95,14 @@
               light-toolbar
               :series="chartData"
               :options="chartOptions"
+              height="180"
             />
           </v-col>
         </v-row>
       </v-card>
       <v-row no-gutters class="elevation-0">
         <v-col cols="12" lg="6" md="12" sm="12" xs="12" class="border-right">
-          <v-card tile>
+          <v-card flat tile>
             <v-card-title class="pl-8">
               <h5>
                 <v-icon>mdi-cube-send</v-icon>
@@ -116,7 +117,7 @@
           </v-card>
         </v-col>
         <v-col cols="12" lg="6" md="12" sm="12" xs="12">
-          <v-card tile>
+          <v-card flat tile>
             <v-card-title class="pl-8">
               <h5>
                 <v-icon>mdi-send</v-icon>
@@ -160,24 +161,21 @@ export default {
       errors: [],
       chartOptions: {
         chart: {
-          type: 'line',
+          type: 'bar',
+        },
+        title: {
+          text: 'Daily txns',
+          offsetX: 20,
+          offsetY: 20,
         },
         stroke: {
           show: true,
           curve: 'smooth',
-          lineCap: 'butt',
-          colors: undefined,
-          width: 2,
+          width: 1,
           dashArray: 0,
         },
         colors: ['#6fceb7'],
         yaxis: {
-          min(min) {
-            return min - 750
-          },
-          max(max) {
-            return max + 750
-          },
           labels: {
             show: false,
           },
@@ -185,27 +183,23 @@ export default {
         xaxis: {
           type: 'datetime',
           labels: {
-            show: true,
+            show: false,
           },
           axisTicks: {
-            show: true,
+            show: false,
           },
-          crosshairs: {
-            show: true,
-          },
+        },
+        dataLabels: {
+          enabled: false,
         },
         tooltip: {
           enabled: true,
           fillSeriesColor: true,
-          x: {
-            show: false,
-          },
-          y: {
-            show: false,
-          },
           fixed: {
             enabled: true,
             position: 'topLeft',
+            offsetX: 10,
+            offsetY: 20,
           },
         },
       },
