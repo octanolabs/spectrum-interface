@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import util from 'ethereumjs-util'
+import { toChecksumAddress } from 'ethereumjs-util'
 import utf8 from 'utf8'
 import moment from 'moment'
 
@@ -100,7 +100,7 @@ export default {
     }
   },
   toChecksumAddress(address) {
-    return util.toChecksumAddress(address)
+    return toChecksumAddress(address)
   },
   calcTime(timestamp) {
     return (

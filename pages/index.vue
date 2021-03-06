@@ -14,8 +14,7 @@
                     <v-list-item-content>
                       <v-list-item-title>UBQ PRICE</v-list-item-title>
                       <v-list-item-subtitle>
-                        ${{ prices.ubq.usd.toFixed(3) }} @
-                        {{ prices.ubq.btc }} BTC/UBQ
+                        ${{ price }}
                       </v-list-item-subtitle>
                     </v-list-item-content>
                   </v-list-item>
@@ -29,7 +28,7 @@
                         ${{
                           calcMarketcap(
                             fromWei(stats.supply / 1000000, -1),
-                            prices.ubq.usd
+                            price
                           )
                         }}
                         MILLION
@@ -152,7 +151,6 @@ export default {
   },
   async middleware({ store }) {
     await store.dispatch('fetchStats')
-    await store.dispatch('fetchPrices')
     await store.dispatch('fetchChainSummary')
     await store.dispatch('charts/fetchTransactions')
   },
@@ -213,8 +211,8 @@ export default {
     summary() {
       return this.$store.state.summary
     },
-    prices() {
-      return this.$store.state.prices
+    price() {
+      return this.$store.state.tokens.ubqPrice
     },
     latestBlock() {
       return this.stats.latestBlock.number
@@ -234,7 +232,6 @@ export default {
       self.now = self.$moment
       self.$store.dispatch('fetchStats')
       self.$store.dispatch('fetchChainSummary')
-      self.$store.dispatch('fetchPrices')
     }, process.env.config.pollData)
   },
   methods: {

@@ -57,6 +57,9 @@ const misc = {
   '0x1cac28619f78cdf8da22f9cf523f995d3fe7e98c': 'ESCH Airdrop #3',
   '0xfcd0b547b89f001c17d50df98cf10ce406da5518': 'UIP #1',
   '0x96cf38c234d5e513c4fc783a3ba73d7320f2900b': 'UIP #2',
+  // Shinobi
+  '0xba831e62ac14d8500cef0367b14f383d7b1b1b0a': 'Shinobi (Factory)',
+  '0xf3ce4655a44146c8eefbf45651f6479f9d67a77a': 'Shinobi (Router02)',
 }
 
 export default {

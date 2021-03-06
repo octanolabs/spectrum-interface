@@ -266,6 +266,9 @@ export default {
       number: new Intl.NumberFormat('en', {}),
     }
   },
+  async middleware({ store }) {
+    await store.dispatch('tokens/getNativePriceUsd')
+  },
   computed: {
     blockHeight() {
       return this.$store.state.summary.blocks[0]?.number | 0

@@ -57,7 +57,10 @@ export default {
   },
   data() {
     return {
-      nf: new Intl.NumberFormat('en', {}),
+      nf: new Intl.NumberFormat('en', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 18,
+      }),
       headers: [
         {
           value: 'name',

@@ -30,7 +30,10 @@
           </v-btn>
         </template>
         <v-list>
-          <v-list-item v-if="!!inputData" @click="viewType = 'Method view'">
+          <v-list-item
+            v-if="inputData.isKnown"
+            @click="viewType = 'Method view'"
+          >
             Method view
           </v-list-item>
           <v-list-item @click="viewType = 'Raw view'">Raw view</v-list-item>
@@ -39,7 +42,7 @@
     </v-card-title>
     <v-card-text>
       <template v-if="viewType === 'Method view'">
-        <pre>
+        <pre style="overflow-x: auto">
 Function: {{ inputData.function }}
 
 MethodID: {{ inputData.methodId }}

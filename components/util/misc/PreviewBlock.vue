@@ -28,7 +28,7 @@
       </v-list-item-subtitle>
     </v-list-item-content>
     <v-list-item-action>
-      <v-chip label small>{{ reward }} ubq</v-chip>
+      <v-chip label small>{{ nf.format(reward) }} ubq</v-chip>
     </v-list-item-action>
   </v-list-item>
 </template>
@@ -55,6 +55,10 @@ export default {
       reward: 0,
       time: 0,
       timeSince: 0,
+      nf: new Intl.NumberFormat('en', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 6,
+      }),
     }
   },
   watch: {

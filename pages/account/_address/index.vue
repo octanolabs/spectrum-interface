@@ -98,9 +98,6 @@ export default {
   validate({ params }) {
     return /^0x([A-Fa-f0-9]{40})$/.test(params.address)
   },
-  async middleware({ store }) {
-    await store.dispatch('fetchPrices')
-  },
   methods: {
     async setToken(address) {
       await this.$store.dispatch('account/setToken', address)

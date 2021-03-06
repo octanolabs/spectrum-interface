@@ -63,6 +63,10 @@ export default {
         if (index > 0) {
           console.log('r: ' + route.name)
           console.log('i: ' + item)
+          let nItem = item
+          if (item.length > 30) {
+            nItem = item.substr(0, 12)
+          }
           let append = ''
           if (route.name === 'block-id' || route.name === 'transaction-hash') {
             if (item === 'block' || item === 'transaction') {
@@ -70,7 +74,7 @@ export default {
               split[1] = split[1] + 's'
             } else {
               pathItems.push({
-                text: item.charAt(0).toUpperCase() + item.slice(1),
+                text: nItem,
               })
               break
             }

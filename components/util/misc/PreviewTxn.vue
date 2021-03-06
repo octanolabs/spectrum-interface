@@ -78,7 +78,7 @@ export default {
         addresses.getAddressTag(this.info.to) ||
         this.info.to.substring(0, 17) + '...',
     }
-    this.value = common.fromWei(this.info.value, 4)
+    this.value = common.fromWei(this.info.value, 6)
     this.time = this.info.timestamp * 1000
     this.timeSince = this.$moment().to(this.time)
   },

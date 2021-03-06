@@ -1,113 +1,5 @@
 import BigNumber from 'bignumber.js'
 
-const tokens = {
-  // Tokens
-  // Ensure address is lowercase
-  // display: true to show on tokens view.
-  '0xd245207cfbf6eb6f34970db2a807ab1d178fde6c': {
-    name: 'APX',
-    symbol: 'APX',
-    decimals: 8,
-    display: true,
-  },
-  '0xff3bf057adf3b0e015b6465331a6236e55688274': {
-    name: 'BeerToken',
-    symbol: 'BEER',
-    decimals: 0,
-    display: true,
-  },
-  '0x79755ea6ccb143b0bd8e1b670efffd59ae874991': {
-    name: 'BettingWin',
-    symbol: 'BTW',
-    decimals: 2,
-    display: false,
-  },
-  '0x0319b92eb57929684c27531da133b0d2bbf691af': {
-    name: 'Cauli',
-    symbol: 'CAULI',
-    decimals: 8,
-    display: false,
-  },
-  '0x08533d6a06ce365298b12ef92eb407cba8aa8273': {
-    name: 'CryptopiaFeeShare',
-    symbol: 'CEFS',
-    decimals: 8,
-    display: false,
-  },
-  '0x94ad7e41c1d44022c4f47cb1ba019fd1a022c536': {
-    name: 'Dotcoin',
-    symbol: 'DOT',
-    decimals: 8,
-    display: true,
-  },
-  '0xcf3222b7fda7a7563b9e1e6c966bead04ac23c36': {
-    name: 'Escher',
-    symbol: 'ESCH',
-    decimals: 18,
-    display: true,
-  },
-  '0x105bbb0fd91329bec3f12546cbe7edfe624ec3ad': {
-    name: 'Giveaway',
-    symbol: 'LOOT',
-    decimals: 0,
-    display: false,
-  },
-  '0x500684ce0d4f04abedff3e54fcf8acc5e6cfc4bd': {
-    name: 'GeoCoin',
-    symbol: 'GEO',
-    decimals: 8,
-    display: true,
-    traded: true,
-  },
-  '0x0826180a4c981d5095cb5c48bb2a098a44cf6f73': {
-    name: '10grans',
-    symbol: 'GRANS',
-    decimals: 18,
-    display: true,
-  },
-  '0x5e1715bb79805bd672729760b3f7f34d6f485098': {
-    name: 'PickleRicks',
-    symbol: 'RICKS',
-    decimals: 8,
-    display: true,
-  },
-  '0x497e20586f86c35592ff8f65cde94f296514c387': {
-    name: 'Snarg01',
-    symbol: 'SNARG',
-    decimals: 0,
-    display: true,
-  },
-  '0x20e3dd746ddf519b23ffbbb6da7a5d33ea6349d6': {
-    name: 'Sphere',
-    symbol: 'SPHR',
-    decimals: 8,
-    display: true,
-    traded: true,
-  },
-  '0xbc3e373d2b24faf1dfe5b3f3acff9d66a7b48869': {
-    name: 'WorldBit Token',
-    symbol: 'WBT',
-    decimals: 18,
-    display: false,
-  },
-}
-
-function tokenSymbols(address) {
-  if (tokens[address]) {
-    return tokens[address].symbol
-  } else {
-    return 'UNKNOWN'
-  }
-}
-
-function tokenDecimals(address) {
-  if (tokens[address]) {
-    return new BigNumber(10).pow(tokens[address].decimals)
-  } else {
-    return new BigNumber(1)
-  }
-}
-
 function stripHexPrefix(str) {
   if (typeof str !== 'string') {
     return str
@@ -150,91 +42,200 @@ function toBigNumber(str) {
 
 export default {
   processInputData(txn, inputData) {
+    let v1 = []
+    let v2 = []
+    let v3 = []
+    let a1 = ''
+    let a2 = ''
+    // let a3 = ''
     switch (inputData.methodId) {
       case '0xa9059cbb': // transfer
-        return {
-          isTokenTxn: true,
-          from: txn.from,
-          to: toAddress(inputData.params[0]),
-          value: toBigNumber(inputData.params[1])
-            .div(tokenDecimals(txn.to))
-            .toString(),
-          symbol: tokenSymbols(txn.to),
-          contract: txn.to,
-        }
+        return [
+          {
+            type: 'erc20',
+            from: txn.from,
+            to: toAddress(inputData.params[0]),
+            value: toBigNumber(inputData.params[1]),
+            contract: txn.to,
+          },
+        ]
       case '0x23b872dd': // transferFrom
-        return {
-          isTokenTxn: true,
-          from: toAddress(inputData.params[0]),
-          to: toAddress(inputData.params[1]),
-          value: toBigNumber(inputData.params[2])
-            .div(tokenDecimals(txn.to))
-            .toString(),
-          symbol: tokenSymbols(txn.to),
-          contract: txn.to,
-        }
+        return [
+          {
+            type: 'erc20',
+            from: toAddress(inputData.params[0]),
+            to: toAddress(inputData.params[1]),
+            value: toBigNumber(inputData.params[2]),
+            contract: txn.to,
+          },
+        ]
       case '0x6ea056a9': // sweep
-        return {
-          isTokenTxn: true,
-          from: txn.to,
-          to: txn.from,
-          value: toBigNumber(inputData.params[1])
-            .div(tokenDecimals(toAddress(inputData.params[0])))
-            .toString(),
-          symbol: tokenSymbols(toAddress(inputData.params[0])),
-          contract: toAddress(inputData.params[0]),
-        }
+        return [
+          {
+            type: 'erc20', // bittrex
+            from: txn.to,
+            to: txn.from,
+            value: toBigNumber(inputData.params[1]),
+            contract: toAddress(inputData.params[0]),
+          },
+        ]
       case '0x40c10f19': // mint
-        return {
-          isTokenTxn: true,
-          from: '0x0000000000000000000000000000000000000000',
-          to: toAddress(inputData.params[0]),
-          value: toBigNumber(inputData.params[1])
-            .div(tokenDecimals(txn.to))
-            .toString(),
-          symbol: tokenSymbols(txn.to),
-          contract: txn.to,
+        return [
+          {
+            type: 'erc20',
+            from: '0x0',
+            to: toAddress(inputData.params[0]),
+            value: toBigNumber(inputData.params[1]),
+            contract: txn.to,
+          },
+        ]
+      case '0x7ff36ab5': // swapExactETHForTokens - shinobi
+        v1 = txn.logs[2].data.match(/.{1,66}/g)
+        return [
+          {
+            type: 'native',
+            from: txn.from,
+            to: txn.to,
+            value: txn.value,
+          },
+          {
+            type: 'erc20',
+            from: txn.to,
+            to: toAddress(inputData.params[2]),
+            value: toBigNumber(v1[0]),
+            contract: toAddress(inputData.params[6]),
+          },
+        ]
+      case '0x18cbafe5': // swapExactTokensForETH - shinobi
+        v1 = txn.logs[4].data.match(/.{1,66}/g)
+        return [
+          {
+            type: 'erc20',
+            from: toAddress(inputData.params[3]),
+            to: txn.to,
+            value: toBigNumber(inputData.params[0]),
+            contract: toAddress(inputData.params[6]),
+          },
+          {
+            type: 'native',
+            from: txn.to,
+            to: txn.from,
+            value: toBigNumber(v1[0]),
+          },
+        ]
+      case '0xf305d719': // addLiquidityETH - shinobi
+        if (txn.logs.length === 6) {
+          // add UBQ and ERC20
+          a1 = txn.logs[3].address
+          v1 = txn.logs[3].data.match(/.{1,66}/g)
+        } else {
+          // add ERC20 and UBQ
+          a1 = txn.logs[4].address
+          v1 = txn.logs[4].data.match(/.{1,66}/g)
         }
+        return [
+          {
+            type: 'native',
+            from: txn.from,
+            to: txn.to,
+            value: txn.value,
+          },
+          {
+            type: 'erc20',
+            from: txn.from,
+            to: txn.to,
+            value: toBigNumber(inputData.params[1]),
+            contract: toAddress(inputData.params[0]),
+          },
+          {
+            type: 'erc20',
+            action: 'Minted',
+            from: '0x0',
+            to: txn.from,
+            value: toBigNumber(v1[0]),
+            contract: a1,
+          },
+        ]
+      case '0x02751cec': // removeLiquidityETH - shinobi
+        if (txn.logs.length === 6) {
+          // add UBQ and ERC20
+          a1 = txn.logs[3].address
+          v1 = txn.logs[3].data.match(/.{1,66}/g)
+        } else {
+          // remove ERC20 and UBQ
+          a1 = txn.logs[3].address
+          a2 = txn.logs[1].address
+          v1 = txn.logs[2].data.match(/.{1,66}/g)
+          v2 = txn.logs[3].data.match(/.{1,66}/g)
+          v3 = txn.logs[1].data.match(/.{1,66}/g)
+        }
+        return [
+          {
+            type: 'native',
+            from: txn.to,
+            to: txn.from,
+            value: toBigNumber(v1[0]),
+          },
+          {
+            type: 'erc20',
+            from: txn.to,
+            to: txn.from,
+            value: toBigNumber(v2[0]),
+            contract: a1,
+          },
+          {
+            type: 'erc20',
+            action: 'Burned',
+            from: txn.from,
+            to: '0x0',
+            value: toBigNumber(v3[0]),
+            contract: a2,
+          },
+        ]
+      case '0xe8e33700': // addLiquidity - shinobi
+        a1 = txn.logs[3].address
+        v1 = txn.logs[0].data.match(/.{1,66}/g)
+        v2 = txn.logs[1].data.match(/.{1,66}/g)
+        v3 = txn.logs[3].data.match(/.{1,66}/g)
+        return [
+          {
+            type: 'erc20',
+            from: txn.from,
+            to: txn.to,
+            value: toBigNumber(v1[0]),
+            contract: toAddress(inputData.params[0]),
+          },
+          {
+            type: 'erc20',
+            from: txn.from,
+            to: txn.to,
+            value: toBigNumber(v2[0]),
+            contract: toAddress(inputData.params[1]),
+          },
+          {
+            type: 'erc20',
+            action: 'Minted',
+            from: '0x0',
+            to: txn.from,
+            value: toBigNumber(v3[0]),
+            contract: toAddress(a1),
+          },
+        ]
       default:
-        return {
-          isTokenTxn: false, // not a token transaction
-        }
+        return [
+          {
+            type: 'native',
+            from: txn.from,
+            to: txn.to,
+            value: txn.value,
+          },
+        ]
     }
-  },
-  formatValue(val, contract) {
-    if (tokens[contract]) {
-      return new BigNumber(val).div(tokenDecimals(contract)).toString()
-    } else {
-      return val
-    }
-  },
-  getName(contract) {
-    if (tokens[contract]) {
-      return tokens[contract].name
-    } else {
-      return contract
-    }
-  },
-  getToken(hash) {
-    return tokens[hash] || null
-  },
-  getTokens() {
-    return tokens
   },
   zeroPadAddress(str) {
     if (typeof str !== 'string') {
       return str
     }
     return zeroPad(24) + stripHexPrefix(str)
-  },
-  toBalance(hex, contract) {
-    return new BigNumber(hex, 16).div(tokenDecimals(contract)).toString()
-  },
-  toToken(supply, contract) {
-    if (tokens[contract]) {
-      return new BigNumber(supply).div(tokenDecimals(contract)).toString()
-    } else {
-      return supply
-    }
   },
 }

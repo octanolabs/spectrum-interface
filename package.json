@@ -7,9 +7,11 @@
   "scripts": {
     "build": "nuxt build",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
+    "lint-fix": "eslint --ext .js,.vue --ignore-path .gitignore --fix .",
     "dev": "nuxt",
     "generate": "nuxt generate",
-    "start": "nuxt start"
+    "start": "nuxt start",
+    "test": "jest"
   },
   "dependencies": {
     "@chenfengyuan/vue-qrcode": "^1.0.2",
@@ -20,6 +22,7 @@
     "apollo-client": "^2.6.10",
     "apollo-link-http": "^1.5.17",
     "ethereumjs-util": "^7.0.8",
+    "ethers": "^5.0.31",
     "graphql": "^15.5.0",
     "graphql-tag": "^2.11.0",
     "nuxt": "^2.14.12",
@@ -41,6 +44,7 @@
     "eslint-plugin-nuxt": "^1.0.0",
     "eslint-plugin-prettier": "^3.3.0",
     "husky": "^4.3.6",
+    "jest": "^26.6.3",
     "lint-staged": "^10.5.3",
     "prettier": "^2.2.1",
     "vue-cli-plugin-vuetify-preset-rally": "^1.0.4"

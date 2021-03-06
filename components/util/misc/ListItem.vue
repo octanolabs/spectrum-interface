@@ -15,9 +15,17 @@
       <v-list-item-subtitle>
         <slot name="subtitle" />
       </v-list-item-subtitle>
+      <v-list-item-subtitle v-if="threeLine">
+        <slot name="subtitle2" />
+      </v-list-item-subtitle>
     </v-list-item-content>
     <v-list-item-action>
-      <slot name="action" />
+      <v-list-item-action-text>
+        <slot name="action" />
+      </v-list-item-action-text>
+      <v-list-item-action-text>
+        <slot name="action2" />
+      </v-list-item-action-text>
     </v-list-item-action>
   </v-list-item>
 </template>
@@ -35,6 +43,12 @@ export default {
       type: String,
       default() {
         return ''
+      },
+    },
+    threeLine: {
+      type: Boolean,
+      default() {
+        return false
       },
     },
   },

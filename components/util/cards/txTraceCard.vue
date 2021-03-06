@@ -62,7 +62,7 @@
             >
               <template v-slot:subtitle>
                 {{ fromWei(selected[0].value) }} UBQ (${{
-                  calcValue(fromWei(selected[0].value), 6)
+                  calcValue(fromWei(selected[0].value), 3)
                 }})
               </template>
             </spectrum-list-item>
@@ -120,6 +120,11 @@ export default {
     selected: [],
     iTraces: [],
   }),
+  computed: {
+    priceUSD() {
+      return this.$store.state.prices.ubq.usd
+    },
+  },
   created() {
     const traces = this.traces
     let count = 0

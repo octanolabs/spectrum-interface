@@ -1,7 +1,7 @@
 <template>
   <v-col cols="12" class="pa-0">
     <breadcrumbSpinner v-bind="$attrs" no-loading />
-    <v-tabs grow show-arrows v-model="tab">
+    <v-tabs v-model="tab" grow show-arrows>
       <v-tab>Overview</v-tab>
       <v-tab v-if="showLogs">
         Events
@@ -21,72 +21,120 @@
                 {{ txn.hash }}
               </template>
               <template v-slot:action>
-                <v-chip v-if="txn.status" outlined label color="primary">
-                  <v-icon class="pr-2">mdi-check-circle-outline</v-icon>
+                <v-chip v-if="txn.status" small outlined label color="primary">
+                  <v-icon class="pr-2" small>mdi-check-circle-outline</v-icon>
                   <strong>SUCCESS</strong>
                 </v-chip>
-                <v-chip v-else outlined label color="error">
-                  <v-icon class="pr-2">mdi-alert-circle-outline</v-icon>
+                <v-chip v-else small outlined label color="error">
+                  <v-icon class="pr-2" small>mdi-alert-circle-outline</v-icon>
                   <strong>FAILED</strong>
                 </v-chip>
               </template>
             </spectrum-list-item>
             <spectrum-list-item
-              title="Block Number"
+              title="Timestamp"
               tooltip="The number of the block in which the transaction was recorded. Block confirmation indicate how many blocks since the transaction is mined."
+              three-line
             >
               <template v-slot:subtitle>
+                {{ calcTimeTo(txn.timestamp) }}
+              </template>
+              <template v-slot:subtitle2>
+                {{ calcTimeUTC(txn.timestamp) }}
+              </template>
+              <template v-slot:action>
                 <nuxt-link
                   :to="{ name: 'block-id', params: { id: txn.blockNumber } }"
                 >
+                  <v-icon small class="mr">mdi-cube-outline</v-icon>
                   {{ txn.blockNumber }}
                 </nuxt-link>
-                ({{ confirmations }} block confirmations)
+              </template>
+              <template v-slot:action2>
+                <strong>{{ confirmations }} CONFIRMATIONS</strong>
               </template>
             </spectrum-list-item>
             <spectrum-list-item
-              title="Timestamp"
-              tooltip="The date and time at which a transaction is mined."
+              v-for="(token, index) of transfers"
+              :key="index"
+              :title="
+                token.type === 'erc20'
+                  ? 'Token ' + (token.action ? token.action : 'Transferred')
+                  : 'Ubiq Transferred'
+              "
+              :tooltip="
+                'Asset ' +
+                (token.action ? token.action.toLowerCase() : 'transferred') +
+                ' in the transaction.'
+              "
+              :three-line="token.from !== '0x0'"
             >
-              <template v-slot:subtitle>
-                {{ calcTime(txn.timestamp) }}
-              </template>
-            </spectrum-list-item>
-            <spectrum-list-item
-              title="From"
-              tooltip="The sending party of the transaction (could be from a contract address)."
-            >
-              <template v-slot:subtitle>
+              <template v-if="token.from !== '0x0'" v-slot:subtitle2>
+                From
                 <nuxt-link
                   :to="{
                     name: 'account-address',
-                    params: { address: txn.from },
+                    params: { address: token.from },
                   }"
                 >
-                  {{ txn.from }}
+                  {{ formatAddress(token.from) }}
                 </nuxt-link>
-                {{ getAddressTag(txn.from) }}
               </template>
-            </spectrum-list-item>
-            <spectrum-list-item
-              v-if="!contractDeployed"
-              title="Interacted With (To)"
-              tooltip="The receiving party of the transaction (could be a contract address)."
-            >
               <template v-slot:subtitle>
+                To
                 <nuxt-link
                   :to="{
                     name: 'account-address',
-                    params: { address: txn.to },
+                    params: { address: token.to },
                   }"
                 >
-                  {{ txn.to }}
+                  {{ formatAddress(token.to) }}
                 </nuxt-link>
-                {{ getAddressTag(txn.to) }}
+              </template>
+              <template v-slot:action>
+                <v-row v-if="token.fetched" no-gutters>
+                  <strong>
+                    {{ nf.format(token.value) }}
+                    <v-avatar size="16">
+                      <v-img
+                        :src="
+                          'https://raw.githubusercontent.com/octanolabs/assets/master/blockchains/ubiq/assets/' +
+                          token.checksumAddress +
+                          '/logo.png'
+                        "
+                      >
+                        <template v-slot:placeholder>
+                          <blockie :address="token.contract" size="xs" inline />
+                        </template>
+                      </v-img>
+                    </v-avatar>
+                    <template v-if="token.type === 'erc20'">
+                      <nuxt-link
+                        :to="{
+                          name: 'account-address',
+                          params: { address: token.contract },
+                        }"
+                      >
+                        {{ token.symbol }}
+                      </nuxt-link>
+                    </template>
+                    <template v-else>
+                      {{ token.symbol }}
+                    </template>
+                  </strong>
+                </v-row>
+                <v-row v-else no-gutters>
+                  <v-icon>mdi-loading mdi-spin</v-icon>
+                </v-row>
+              </template>
+              <template v-slot:action2>
+                <v-row v-if="token.derivedUBQ && token.fetched" no-gutters>
+                  ${{ nf.format(token.derivedUBQ) }}
+                </v-row>
               </template>
             </spectrum-list-item>
             <spectrum-list-item
-              v-else
+              v-if="contractDeployed"
               title="Contract Deployed"
               tooltip="A contract was deployed to this address."
             >
@@ -97,61 +145,44 @@
                     params: { address: txn.contractAddress },
                   }"
                 >
-                  {{ txn.contractAddress }}
+                  {{ formatAddress(txn.contractAddress) }}
                 </nuxt-link>
-                {{ getAddressTag(txn.contractAddress) }}
-              </template>
-            </spectrum-list-item>
-            <spectrum-list-item
-              v-if="tokenTransferred"
-              title="Token Transferred"
-              tooltip="Token transferred in the transaction."
-            >
-              <template v-slot:subtitle>
-                From
-                <nuxt-link
-                  :to="{ name: 'Address', params: { hash: token.from } }"
-                >
-                  {{ token.from | shortenAddress }}
-                </nuxt-link>
-                To
-                <nuxt-link
-                  :to="{ name: 'Address', params: { hash: token.to } }"
-                >
-                  {{ token.to | shortenAddress }}
-                </nuxt-link>
-                for {{ token.value }}
-                <nuxt-link
-                  :to="{ name: 'Token', params: { hash: token.contract } }"
-                >
-                  {{ token.symbol }}
-                </nuxt-link>
-              </template>
-            </spectrum-list-item>
-            <spectrum-list-item
-              title="Value"
-              tooltip="The value being transacted in UBQ and fiat value."
-            >
-              <template v-slot:subtitle>
-                {{ fromWei(txn.value) }} UBQ (${{
-                  calcValue(fromWei(txn.value), 6)
-                }})
               </template>
             </spectrum-list-item>
             <spectrum-list-item
               title="Transaction Fee"
-              tooltip="Amount paid to the miner for processing the transaction."
+              tooltip="Amount paid to miner for processing the transaction."
+              three-line
             >
               <template v-slot:subtitle>
-                {{ txFee }} UBQ (${{ calcValue(txFee, 6) }})
-              </template>
-            </spectrum-list-item>
-            <spectrum-list-item
-              title="Gas Price"
-              tooltip="Cost per unit of gas specified for the transaction, in gwei (2e-8 UBQ). The higher the gas price the higher chance of getting included in a block."
-            >
-              <template v-slot:subtitle>
+                Gas Price <v-icon small>mdi-gas-station</v-icon>
                 {{ fromWeiToGwei(txn.gasPrice) }} gwei
+              </template>
+              <template v-slot:subtitle2>
+                Gas Used <v-icon small>mdi-fire</v-icon>
+                {{ nf.format(txn.gasUsed) }}
+              </template>
+              <template v-slot:action>
+                <v-row no-gutters>
+                  <strong>
+                    {{ txFee }}
+                    <v-avatar size="16">
+                      <v-img
+                        :src="
+                          'https://raw.githubusercontent.com/octanolabs/assets/master/blockchains/ubiq/assets/' +
+                          '0x1FA6A37c64804C0D797bA6bC1955E50068FbF362' +
+                          '/logo.png'
+                        "
+                      />
+                    </v-avatar>
+                    UBQ
+                  </strong>
+                </v-row>
+              </template>
+              <template v-slot:action2>
+                <v-row v-if="priceUSD" no-gutters>
+                  ${{ calcValue(txFee, 6) }}
+                </v-row>
               </template>
             </spectrum-list-item>
             <spectrum-list-item
@@ -159,16 +190,10 @@
               tooltip="Maximum amount of gas provided for the transaction. For normal UBQ transfers, the value is 21,000. For contracts this value is higher and bound by block gas limit."
             >
               <template v-slot:subtitle>
-                {{ formatNumber(txn.gas) }}
+                {{ nf.format(txn.gas) }}
               </template>
-            </spectrum-list-item>
-            <spectrum-list-item
-              title="Gas Used by Transaction"
-              tooltip="The exact units of gas that was used for the transaction."
-            >
-              <template v-slot:subtitle>
-                {{ formatNumber(txn.gasUsed) }}
-              </template>
+              <template v-slot:action></template>
+              <template v-slot:action2></template>
             </spectrum-list-item>
             <spectrum-list-item
               v-if="txn.nonce"
@@ -195,11 +220,14 @@
 
 <script>
 import axios from 'axios'
+import { ethers } from 'ethers'
+import BigNumber from 'bignumber.js'
 import breadcrumbSpinner from '~/components/util/BreadcrumbSpinner.vue'
 import SpectrumListItem from '~/components/util/misc/ListItem.vue'
 import inputDataCard from '~/components/util/cards/inputDataCard.vue'
 import txTraceCard from '~/components/util/cards/txTraceCard.vue'
 import txLogsCard from '~/components/util/cards/txLogsCard.vue'
+import Blockie from '~/components/util/misc/Blockie'
 import addresses from '~/scripts/addresses'
 import contracts from '~/scripts/contracts'
 import tokens from '~/scripts/tokens'
@@ -213,23 +241,17 @@ export default {
     inputDataCard,
     txLogsCard,
     txTraceCard,
-  },
-  filters: {
-    shortenAddress(hash = '0x00000000000000000000000000000000') {
-      return hash.substring(0, 26) + '...'
-    },
+    Blockie,
   },
   async middleware({ store }) {
-    await store.dispatch('fetchPrices')
     await store.dispatch('fetchStats')
+    await store.dispatch('tokens/getDefaultTokens')
+    await store.dispatch('tokens/getShinobiTokens')
   },
   async fetch() {
     const [
       {
         data: { result: txn },
-      },
-      {
-        data: { result: trace },
       },
     ] = await Promise.all([
       axios.post(process.env.config.apiUrl, {
@@ -238,6 +260,89 @@ export default {
         params: [this.$route.params.hash],
         id: 88,
       }),
+    ])
+    this.txn = txn
+    this.txFee = this.calcTxFee(this.txn.gasUsed, this.txn.gasPrice)
+    if (this.txn.logs.length > 0) {
+      this.showLogs = true
+      this.eventLogs = contracts.processEventLogs(this.txn.logs)
+    }
+    if (this.txn.input !== '0x') {
+      this.inputData = contracts.processTxnInput(this.txn.input)
+    }
+
+    this.transfers = tokens.processInputData(this.txn, this.inputData)
+    if (this.transfers) {
+      const provider = new ethers.providers.JsonRpcProvider(
+        'https://rpc.octano.dev'
+      )
+      const erc20Abi = [
+        'function name() view returns (string)',
+        'function symbol() view returns (string)',
+        'function decimals() view returns (uint8)',
+      ]
+
+      for (const transfer of this.transfers) {
+        if (transfer.type === 'erc20') {
+          if (this.tokens[transfer.contract]) {
+            console.log(transfer.value)
+            // token info is already in state, use it.
+            transfer.name = this.tokens[transfer.contract].name
+            transfer.symbol = this.tokens[transfer.contract].symbol
+            transfer.decimals = this.tokens[transfer.contract].decimals
+            const decimals = new BigNumber(10).pow(
+              this.tokens[transfer.contract].decimals
+            )
+            const value = transfer.value.div(decimals).toString()
+            transfer.value = value
+          } else {
+            // fetch the info from the token contract itself.
+            const tokenContract = new ethers.Contract(
+              transfer.contract,
+              erc20Abi,
+              provider
+            )
+            transfer.name = await tokenContract.name()
+            transfer.symbol = await tokenContract.symbol()
+            transfer.decimals = await tokenContract.decimals()
+            this.$store.dispatch('tokens/addERC20', transfer)
+            const decimals = new BigNumber(10).pow(transfer.decimals)
+            const value = new BigNumber(transfer.value).div(decimals).toString()
+            transfer.value = value
+          }
+          transfer.checksumAddress = common.toChecksumAddress(transfer.contract)
+          if (this.shinobiTokens[transfer.contract] && transfer.value) {
+            transfer.derivedUBQ =
+              this.shinobiTokens[transfer.contract].derivedETH *
+              this.$store.state.tokens.ubqPrice *
+              transfer.value
+
+            transfer.derivedUBQ = transfer.derivedUBQ.toFixed(4)
+          }
+          transfer.fetched = true
+        } else {
+          // assume native for now
+          transfer.decimals = 18
+          const decimals = new BigNumber(10).pow(transfer.decimals)
+          transfer.symbol = 'UBQ'
+          transfer.name = 'Ubiq'
+          transfer.value = new BigNumber(transfer.value)
+            .div(decimals)
+            .toString()
+          transfer.checksumAddress =
+            '0x1FA6A37c64804C0D797bA6bC1955E50068FbF362' // wubq hack
+          transfer.derivedUBQ =
+            this.$store.state.tokens.ubqPrice * transfer.value
+          transfer.derivedUBQ = transfer.derivedUBQ.toFixed(4)
+          transfer.fetched = true
+        }
+      }
+    }
+    const [
+      {
+        data: { result: trace },
+      },
+    ] = await Promise.all([
       axios.post(process.env.config.apiUrl, {
         jsonrpc: '2.0',
         method: 'explorer_txTrace',
@@ -245,33 +350,23 @@ export default {
         id: 88,
       }),
     ])
-    this.txn = txn
     this.txnTrace = trace
-    console.log(trace)
-    this.txFee = this.calcTxFee(this.txn.gasUsed, this.txn.gasPrice)
-    if (this.txn.logs.length > 0) {
-      this.showLogs = true
-      this.eventLogs = contracts.processEventLogs(this.txn.logs)
-    }
-    if (this.txn.input !== '0x') {
-      this.token = tokens.processInputData(this.txn, this.inputData)
-      if (this.token.isTokenTxn) {
-        this.tokenTransferred = true
-      }
-    }
   },
   data() {
     return {
       txFee: 0,
       txn: {},
       txnTrace: {},
-      token: {},
+      transfers: null,
       inputData: {},
       eventLogs: [],
-      tokenTransferred: false,
       showLogs: false,
       computedInputData: false,
       tab: null,
+      nf: new Intl.NumberFormat('en', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 18,
+      }),
     }
   },
   computed: {
@@ -287,10 +382,16 @@ export default {
       return this.$store.state.stats.latestBlock.number
     },
     priceUSD() {
-      return this.$store.state.prices.ubq.usd
+      return this.$store.state.tokens.ubqPrice
     },
     deployedContract() {
       return this.txn.to === '' && !!this.txn.contractAddress
+    },
+    tokens() {
+      return this.$store.state.tokens.erc20
+    },
+    shinobiTokens() {
+      return this.$store.state.tokens.shinobi
     },
   },
   watch: {
@@ -299,6 +400,20 @@ export default {
     },
   },
   methods: {
+    formatAddress(hash, len) {
+      if (hash) {
+        const name = addresses.getAddressTag(hash)
+        if (name) {
+          return name
+        } else {
+          let account = common.toChecksumAddress(hash)
+          if (len) {
+            account = account.substr(0, len)
+          }
+          return account
+        }
+      }
+    },
     getAddressTag(hash) {
       const tag = addresses.getAddressTag(hash)
       if (tag) {
@@ -307,20 +422,11 @@ export default {
         return ''
       }
     },
-    calcTime(timestamp) {
-      return (
-        this.$moment().to(timestamp * 1000) +
-        ' (' +
-        this.$moment.utc(timestamp * 1000).format('lll') +
-        ' UTC)'
-      )
+    calcTimeTo(timestamp) {
+      return this.$moment().to(timestamp * 1000)
     },
-    formatNumber(val) {
-      if (val) {
-        return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-      } else {
-        return ''
-      }
+    calcTimeUTC(timestamp) {
+      return this.$moment.utc(timestamp * 1000).format('lll') + ' UTC'
     },
     fromWei(val, roundTo) {
       return common.fromWei(val, roundTo)
@@ -342,6 +448,9 @@ export default {
     },
     calcValue(ubq, decimals) {
       return common.mulFiat(ubq, this.priceUSD, decimals)
+    },
+    toChecksumAddress(address) {
+      return common.toChecksumAddress(address)
     },
   },
 }

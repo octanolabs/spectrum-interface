@@ -21,7 +21,7 @@
         <v-tab-item v-for="tab in tabSlots()" :key="tab" :value="tab" eager>
           <!-- If the selected tab has at least one slot, use normal layout-->
           <v-col v-if="slotsWithTab(tab).length > 0" cols="12">
-            <v-row class="pa-0" v-for="slot of slotsWithTab(tab)" :key="slot">
+            <v-row v-for="slot of slotsWithTab(tab)" :key="slot" class="pa-0">
               <template v-if="slot.includes('.hr')">
                 <v-col cols="12" class="pa-1">
                   <slot :name="slot">

@@ -68,7 +68,7 @@
       {{ fromWeiToGwei(gasPrice) }} Gwei
     </template>
     <template v-slot:item.status="{ value: status }">
-      <v-icon color="success" v-if="status">mdi-check-circle</v-icon>
+      <v-icon v-if="status" color="success">mdi-check-circle</v-icon>
       <v-icon v-else color="error">mdi-alert-circle</v-icon>
     </template>
   </table-view>

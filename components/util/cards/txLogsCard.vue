@@ -4,7 +4,7 @@
     <v-card-text class="body-2">
       <pre>
 <strong>Transaction Receipt Event Logs</strong>
-<p class="mb-0 pt-0" v-for="(item, index) in eventLogs" :key="index">
+<p v-for="(item, index) in eventLogs" :key="index" class="mb-0 pt-0">
 [{{index}}]  Address    {{ item.address }}
      <span v-if="item.isKnown">Name       {{ item.name }}</span>
 

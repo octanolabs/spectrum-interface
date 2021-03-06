@@ -49,9 +49,9 @@
         </template>
         <template
           v-if="price !== null"
-          v-slot:overview.marketCap="{ supply, price }"
+          v-slot:overview.marketCap="{ supply, bprice }"
         >
-          {{ calcMarketcap(supply, price.btc) }} BTC
+          {{ calcMarketcap(supply, bprice.btc) }} BTC
         </template>
         <template v-slot:overview.transfers="{ transfersTotal }">
           {{ formatNumber(transfersTotal) }}

@@ -193,6 +193,9 @@ export default {
         theme: {
           pallette: 'pallette3',
         },
+        fill: {
+          opacity: 0.3,
+        },
         stroke: {
           show: true,
           curve: 'smooth',
@@ -210,8 +213,7 @@ export default {
           enabled: true,
           fixed: {
             enabled: true,
-            position: 'topRight',
-            offsetX: -200,
+            position: 'topLeft',
           },
         },
         ...obj,

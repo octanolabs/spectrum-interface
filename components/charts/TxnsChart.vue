@@ -70,6 +70,10 @@ export default {
           },
           tooltip: {
             enabledOnSeries: [0, 1, 2, 3],
+            fixed: {
+              enabled: true,
+              position: 'topLeft',
+            },
           },
           yaxis: [
             {
