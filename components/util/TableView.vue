@@ -12,7 +12,7 @@
     dense
     flat
   >
-    <template v-slot:top>
+    <template v-if="!noBar" v-slot:top>
       <!-- With v-bind=$attrs" on breadcrumb-spinner we can optionally turn off path or spinner or both-->
       <breadcrumb-spinner
         v-bind="$attrs"
@@ -88,6 +88,12 @@ export default {
       required: true,
       default: () => {
         return ''
+      },
+    },
+    noBar: {
+      type: Boolean,
+      default: () => {
+        return false
       },
     },
     headers: {

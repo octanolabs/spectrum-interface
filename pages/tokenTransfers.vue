@@ -22,6 +22,12 @@ export default {
   async fetch() {
     await this.$store.dispatch('tokentransfers/fetchLatest')
   },
+  async middleware({ store }) {
+    await store.dispatch('fetchStats')
+    await store.dispatch('tokens/getDefaultTokens')
+    await store.dispatch('tokens/getShinobiTokens')
+    await store.dispatch('tokens/getShinobiPairs')
+  },
   computed: {
     transfersStore() {
       return this.$store.state.tokentransfers

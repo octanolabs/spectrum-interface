@@ -21,6 +21,7 @@ const client = new ApolloClient({
 export const getDefaultState = () => ({
   erc20: {},
   shinobi: {},
+  list: [],
   pairs: {},
   ubqPrice: 0,
   lastSync: {},
@@ -34,7 +35,9 @@ export const mutations = {
     state.lastSync.erc20 = Date.now()
   },
   SET_SHINOBI_TOKENS(state, payload) {
-    state.shinobi = payload
+    state.shinobi = payload.object
+    state.list = payload.array
+    state.erc20 = { ...state.erc20, ...payload.object }
     state.lastSync.shinobiTokens = Date.now()
   },
   SET_SHINOBI_PAIRS(state, payload) {
@@ -105,6 +108,7 @@ export const actions = {
             id
             name
             symbol
+            decimals
             derivedETH
             tradeVolume
             tradeVolumeUSD
@@ -136,10 +140,20 @@ export const actions = {
           }
           skipCount = skipCount += TOKENS_TO_FETCH
         }
-        const payload = {}
-        for (const i in shinobiTokens) {
-          payload[shinobiTokens[i].id] = shinobiTokens[i]
+        const payload = {
+          array: [],
+          object: {},
         }
+        for (const i in shinobiTokens) {
+          // uWEXP name fix
+          if (
+            shinobiTokens[i].id === '0x068adbc25efa195f13e70812904761100046059c'
+          ) {
+            shinobiTokens[i].name = 'Expanse (Wrapped)'
+          }
+          payload.object[shinobiTokens[i].id] = shinobiTokens[i]
+        }
+        payload.array = shinobiTokens
         commit('SET_SHINOBI_TOKENS', payload)
       } catch (e) {
         consola.log(e)
@@ -217,6 +231,7 @@ export const actions = {
         const payload = {}
         for (const i in tokens) {
           payload[tokens[i].address.toLowerCase()] = tokens[i]
+          payload[tokens[i].address.toLowerCase()].checksum = tokens[i].address
         }
         commit('SET_ERC20S', payload)
       } catch (e) {

@@ -514,9 +514,6 @@ export default {
     calcValue(ubq, decimals) {
       return common.mulFiat(ubq, this.priceUSD, decimals)
     },
-    toChecksumAddress(address) {
-      return common.toChecksumAddress(address)
-    },
   },
 }
 </script>

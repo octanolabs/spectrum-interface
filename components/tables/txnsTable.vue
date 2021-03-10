@@ -221,9 +221,10 @@ export default {
       return common.fromWeiToGwei(value)
     },
     getAddressTag(hash) {
+      const checksum = common.toChecksumAddress(hash)
       return (
         addresses.getAddressTag(hash) ||
-        hash.substr(0, 8) + '...' + hash.substr(hash.length - 6)
+        checksum.substr(0, 8) + '...' + checksum.substr(hash.length - 6)
       )
     },
     calcTxFee(gasUsed, gasPrice) {

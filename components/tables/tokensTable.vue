@@ -1,5 +1,14 @@
 <template>
-  <table-view no-loading :headers="headers" :items="tokens" item-key="id">
+  <table-view
+    no-loading
+    :headers="headers"
+    :items="tokens"
+    item-key="id"
+    :options="{
+      itemsPerPage: 100,
+    }"
+    no-bar
+  >
     <template v-slot:item.name="{ item }">
       <v-avatar size="24">
         <v-img
@@ -8,7 +17,11 @@
             checksumHash(item.id) +
             '/logo.png'
           "
-        />
+        >
+          <template v-slot:placeholder>
+            <blockie :address="item.id" size="sm" inline />
+          </template>
+        </v-img>
       </v-avatar>
       <template v-if="item.symbol !== 'WUBQ'">
         <nuxt-link
@@ -37,9 +50,11 @@
 <script>
 import { toChecksumAddress } from 'ethereumjs-util'
 import tableView from '~/components/util/TableView'
+import Blockie from '~/components/util/misc/Blockie'
 export default {
   components: {
     tableView,
+    Blockie,
   },
   props: {
     tokens: {
@@ -48,18 +63,18 @@ export default {
       default: () => [],
     },
     ubqPrice: {
-      type: Number,
+      type: String,
       required: true,
       default() {
-        return 0
+        return '0'
       },
     },
   },
   data() {
     return {
       nf: new Intl.NumberFormat('en', {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 18,
+        minimumFractionDigits: 4,
+        maximumFractionDigits: 4,
       }),
       headers: [
         {
@@ -73,10 +88,12 @@ export default {
         {
           value: 'totalLiquidity',
           text: 'Liquidity (USD)',
+          align: 'right',
         },
         {
           value: 'derivedETH',
           text: 'Value (USD)',
+          align: 'right',
         },
       ],
     }
@@ -84,13 +101,6 @@ export default {
   methods: {
     checksumHash(hash) {
       return toChecksumAddress(hash)
-    },
-    formatNumber(val) {
-      if (val) {
-        return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-      } else {
-        return ''
-      }
     },
   },
 }
