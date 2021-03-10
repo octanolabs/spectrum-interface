@@ -3,6 +3,7 @@ import { ApolloClient } from 'apollo-client'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { HttpLink } from 'apollo-link-http'
 import axios from 'axios'
+import consola from 'consola'
 
 const syncInterval = 600000
 
@@ -20,6 +21,7 @@ const client = new ApolloClient({
 export const getDefaultState = () => ({
   erc20: {},
   shinobi: {},
+  pairs: {},
   ubqPrice: 0,
   lastSync: {},
 })
@@ -31,9 +33,13 @@ export const mutations = {
     state.erc20 = payload
     state.lastSync.erc20 = Date.now()
   },
-  SET_SHINOBI(state, payload) {
+  SET_SHINOBI_TOKENS(state, payload) {
     state.shinobi = payload
-    state.lastSync.shinobi = Date.now()
+    state.lastSync.shinobiTokens = Date.now()
+  },
+  SET_SHINOBI_PAIRS(state, payload) {
+    state.pairs = payload
+    state.lastSync.shinobiPairs = Date.now()
   },
   ADD_ERC20(state, payload) {
     state.erc20[payload.contract] = {
@@ -78,14 +84,14 @@ export const actions = {
         })
         commit('SET_UBQ_PRICE', price.data.bundles[0].ethPrice)
       } catch (e) {
-        console.log(e)
+        consola.log(e)
       }
     }
   },
   async getShinobiTokens({ commit, state }) {
     if (
-      !state.lastSync.shinobi ||
-      state.lastSync.shinobi < Date.now() - syncInterval
+      !state.lastSync.shinobiTokens ||
+      state.lastSync.shinobiTokens < Date.now() - syncInterval
     ) {
       const TOKENS_TO_FETCH = 100
       const ALL_TOKENS = gql`
@@ -134,9 +140,69 @@ export const actions = {
         for (const i in shinobiTokens) {
           payload[shinobiTokens[i].id] = shinobiTokens[i]
         }
-        commit('SET_SHINOBI', payload)
+        commit('SET_SHINOBI_TOKENS', payload)
       } catch (e) {
-        console.log(e)
+        consola.log(e)
+      }
+    }
+  },
+  async getShinobiPairs({ commit, state }) {
+    if (
+      !state.lastSync.shinobiPairs ||
+      state.lastSync.shinobiPairs < Date.now() - syncInterval
+    ) {
+      const PAIRS_TO_FETCH = 100
+      const ALL_PAIRS = gql`
+        query pairs($skip: Int!) {
+          pairs(
+            first: 500
+            skip: $skip
+            orderBy: trackedReserveETH
+            orderDirection: desc
+          ) {
+            id
+            token0 {
+              id
+              symbol
+              name
+            }
+            token1 {
+              id
+              symbol
+              name
+            }
+          }
+        }
+      `
+      try {
+        let allFound = false
+        let skipCount = 0
+        let shinobiPairs = []
+        // shinobi pairs
+        while (!allFound) {
+          const result = await client.query({
+            query: ALL_PAIRS,
+            variables: {
+              skip: skipCount,
+            },
+            fetchPolicy: 'cache-first',
+          })
+          shinobiPairs = shinobiPairs.concat(result?.data?.pairs)
+          if (
+            result?.data?.pairs?.length < PAIRS_TO_FETCH ||
+            shinobiPairs.length > PAIRS_TO_FETCH
+          ) {
+            allFound = true
+          }
+          skipCount = skipCount += PAIRS_TO_FETCH
+        }
+        const payload = {}
+        for (const i in shinobiPairs) {
+          payload[shinobiPairs[i].id] = shinobiPairs[i]
+        }
+        commit('SET_SHINOBI_PAIRS', payload)
+      } catch (e) {
+        consola.log(e)
       }
     }
   },
@@ -154,7 +220,7 @@ export const actions = {
         }
         commit('SET_ERC20S', payload)
       } catch (e) {
-        console.log(e)
+        consola.log(e)
       }
     }
   },

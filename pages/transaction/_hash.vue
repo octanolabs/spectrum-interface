@@ -55,22 +55,61 @@
               </template>
             </spectrum-list-item>
             <spectrum-list-item
+              title="From"
+              tooltip="The sending party of the transaction."
+            >
+              <template v-slot:subtitle>
+                <v-avatar size="16">
+                  <blockie :address="txn.from" size="xs" inline />
+                </v-avatar>
+                <nuxt-link
+                  :to="{
+                    name: 'account-address',
+                    params: { address: txn.from },
+                  }"
+                >
+                  {{ formatAddress(txn.from) }}
+                </nuxt-link>
+              </template>
+            </spectrum-list-item>
+            <spectrum-list-item
+              title="Interacted with"
+              tooltip="The receiving party of the transaction. May be a contract."
+            >
+              <template v-slot:subtitle>
+                <v-avatar size="16">
+                  <blockie :address="txn.to" size="xs" inline />
+                </v-avatar>
+                <nuxt-link
+                  :to="{
+                    name: 'account-address',
+                    params: { address: txn.to },
+                  }"
+                >
+                  {{ formatAddress(txn.to) }}
+                </nuxt-link>
+              </template>
+            </spectrum-list-item>
+            <spectrum-list-item
               v-for="(token, index) of transfers"
               :key="index"
               :title="
                 token.type === 'erc20'
-                  ? 'Token ' + (token.action ? token.action : 'Transferred')
-                  : 'Ubiq Transferred'
+                  ? 'Token ' + token.action
+                  : 'Ubiq ' + token.action
               "
               :tooltip="
                 'Asset ' +
                 (token.action ? token.action.toLowerCase() : 'transferred') +
                 ' in the transaction.'
               "
-              :three-line="token.from !== '0x0'"
+              three-line
             >
-              <template v-if="token.from !== '0x0'" v-slot:subtitle2>
-                From
+              <template v-if="token.action !== 'Minted'" v-slot:subtitle>
+                <v-avatar size="16">
+                  <blockie :address="token.from" size="xs" inline />
+                </v-avatar>
+                {{ fromPrefix(token.action) }}
                 <nuxt-link
                   :to="{
                     name: 'account-address',
@@ -80,7 +119,15 @@
                   {{ formatAddress(token.from) }}
                 </nuxt-link>
               </template>
-              <template v-slot:subtitle>
+              <template
+                v-if="
+                  token.action === 'Transferred' || token.action === 'Minted'
+                "
+                v-slot:subtitle2
+              >
+                <v-avatar size="16">
+                  <blockie :address="token.to" size="xs" inline />
+                </v-avatar>
                 To
                 <nuxt-link
                   :to="{
@@ -247,6 +294,7 @@ export default {
     await store.dispatch('fetchStats')
     await store.dispatch('tokens/getDefaultTokens')
     await store.dispatch('tokens/getShinobiTokens')
+    await store.dispatch('tokens/getShinobiPairs')
   },
   async fetch() {
     const [
@@ -285,7 +333,6 @@ export default {
       for (const transfer of this.transfers) {
         if (transfer.type === 'erc20') {
           if (this.tokens[transfer.contract]) {
-            console.log(transfer.value)
             // token info is already in state, use it.
             transfer.name = this.tokens[transfer.contract].name
             transfer.symbol = this.tokens[transfer.contract].symbol
@@ -393,6 +440,9 @@ export default {
     shinobiTokens() {
       return this.$store.state.tokens.shinobi
     },
+    shinobiPairs() {
+      return this.$store.state.tokens.pairs
+    },
   },
   watch: {
     $route() {
@@ -405,21 +455,39 @@ export default {
         const name = addresses.getAddressTag(hash)
         if (name) {
           return name
-        } else {
-          let account = common.toChecksumAddress(hash)
-          if (len) {
-            account = account.substr(0, len)
-          }
-          return account
         }
+        /* if (this.tokens[hash]) {
+          return this.tokens[hash].name
+        }
+        if (this.shinobiTokens[hash]) {
+          return this.shinobiTokens[hash].name
+        } */
+        if (this.shinobiPairs[hash]) {
+          return (
+            'Shinobi (' +
+            this.shinobiPairs[hash].token0.symbol +
+            '/' +
+            this.shinobiPairs[hash].token1.symbol +
+            ')'
+          )
+        }
+
+        let account = common.toChecksumAddress(hash)
+        if (len) {
+          account = account.substr(0, len)
+        }
+        return account
       }
     },
-    getAddressTag(hash) {
-      const tag = addresses.getAddressTag(hash)
-      if (tag) {
-        return '(' + tag + ')'
+    fromPrefix(action) {
+      if (
+        action === 'Wrapped' ||
+        action === 'Burned' ||
+        action === 'Unwrapped'
+      ) {
+        return 'By'
       } else {
-        return ''
+        return 'From'
       }
     },
     calcTimeTo(timestamp) {
@@ -442,9 +510,6 @@ export default {
     },
     toUtf8(val) {
       return common.toUtf8(val)
-    },
-    processEventTopic(topic) {
-      return contracts.processEventTopic(topic)
     },
     calcValue(ubq, decimals) {
       return common.mulFiat(ubq, this.priceUSD, decimals)

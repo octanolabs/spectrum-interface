@@ -13,10 +13,10 @@ export default {
   },
   computed: {
     tokens() {
-      return this.$store.state.shinobi.tokens
+      return this.$store.state.tokens.shinobi
     },
     price() {
-      return this.$store.state.shinobi.ubqPrice
+      return this.$store.state.tokens.ubqPrice
     },
   },
 }

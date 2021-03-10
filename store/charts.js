@@ -1,5 +1,6 @@
 import axios from 'axios'
 import moment from 'moment'
+import consola from 'consola'
 import common from '../scripts/common'
 
 export const state = () => ({
@@ -160,8 +161,8 @@ async function fetchMultiSeriesChart(name) {
   const data = []
 
   const { name: chartName, timestamps, datasets } = result
-  console.log('datasets')
-  console.log(datasets)
+  consola.log('datasets')
+  consola.log(datasets)
   for (let i = 0; i < datasets.length / 88; i++) {
     const obj = {
       name: '',

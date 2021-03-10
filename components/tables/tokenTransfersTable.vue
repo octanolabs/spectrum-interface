@@ -80,7 +80,6 @@
 <script>
 import common from '~/scripts/common'
 import addresses from '~/scripts/addresses'
-import tokens from '~/scripts/tokens'
 import TableView from '~/components/util/TableView'
 
 export default {
@@ -159,10 +158,10 @@ export default {
       return this.$moment().to(timestamp * 1000)
     },
     formatValue(val, contract) {
-      return tokens.formatValue(val, contract)
+      return val // tokens.formatValue(val, contract) // TODO
     },
     getName(contract) {
-      return tokens.getName(contract)
+      return contract // tokens.getName(contract) // TODO
     },
     formatNumber(val) {
       return common.formatNumber(val)

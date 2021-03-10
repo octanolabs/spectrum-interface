@@ -125,6 +125,8 @@ const functions = {
     'safeTransferFrom(address from, address to, uint256 id, uint256 amount, bytes data)',
   '0x2eb2c2d6':
     'safeBatchTransferFrom(address from, address to, uint256[] ids, uint256[] amounts, bytes data)',
+  // WUBQ
+  '0xd0e30db0': 'deposit()',
 }
 
 const events = {
@@ -183,6 +185,8 @@ const events = {
   '0xc3d58168':
     'TransferSingle(index_topic_1 address operator, index_topic_2 address from, index_topic_3 address to, uint256 id, uint256 value)',
   '0x6bb7ff70': 'URI(string value, index_topic_1 uint256 id)',
+  // WUBQ
+  '0x7fcf532c': 'Withdrawal(index_topic_1 address src, uint256 wad)',
 }
 
 export default {

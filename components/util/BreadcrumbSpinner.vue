@@ -61,8 +61,6 @@ export default {
         .filter((item) => !item.includes('?'))
       for (const [index, item] of split.entries()) {
         if (index > 0) {
-          console.log('r: ' + route.name)
-          console.log('i: ' + item)
           let nItem = item
           if (item.length > 30) {
             nItem = item.substr(0, 12)

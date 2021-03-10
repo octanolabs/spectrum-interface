@@ -24,18 +24,24 @@ const pools = {
   '0x7b9a3f220e2820f0da3d0e365a729f2fb8b351c6': 'Miner-hash.cloud',
   '0x0ebf873b343ab004d5a95479c58645bd75f4c42b': 'ReiDoCoin.com.br',
   '0x59b5ff7ef75bdbbf78f341eeb1bcbc2a908edd67': 'Mole-pool.net',
+  '0xab36ab822061b832f3415d4f03c279c33c372b81': 'WattPool.net',
+  '0x444431cc65abe2d63d32831f53da9911ad5e2771': 'Kryptex.org',
+  '0xc41c97958872dc4e041985ec7812d3fb9e6bdfc9': 'Phoenixmax.org',
+  '0xf7f646c39f4af456b77eee3c38b74bcc5d0cffda': 'Minefitz.com',
 }
 
 const misc = {
   // Exchanges
   '0xb3c4e9ca7c12a6277deb9eef2dece65953d1c864': 'Bittrex',
   '0xde89c4687984d7cb91cacdd084003ffdf36e493a': 'Cryptopia', // UBQ
-  '0x6b7bcaebcbe0b92f879cfe5ed2cdb34247d49f0d': 'Cryptopia', // ERC20
+  '0x6b7bcaebcbe0b92f879cfe5ed2cdb34247d49f0d': 'Cryptopia', // ERC20 OLD
+  '0x81e8416fabcfb122964b61e24e8b005fb1c7081b': 'Cryptopia', // ERC20
   '0x57e0ebfade42211c8a4837ad1bb9c1c290ee265b': 'Einstein',
   '0x11e328fd0ee99a2c2f5e929a8f25afb94cecb660': 'ERC20 Exchange',
   // Other
   '0x2300b30dfd91306a5acfa8ae00a3a47d519303ee': 'Infinitum Card',
   '0xae3f04584446aa081cd98011f80f19977f8c10e0': 'Infinitum Flame',
+  '0x8b26b5712399447ea6dc9def5ddace05f08122c8': 'Augmentum',
   // Tokens
   '0xd245207cfbf6eb6f34970db2a807ab1d178fde6c': 'APX',
   '0xff3bf057adf3b0e015b6465331a6236e55688274': 'BeerToken',
@@ -51,15 +57,19 @@ const misc = {
   '0x5e1715bb79805bd672729760b3f7f34d6f485098': 'PickleRicks',
   '0x497e20586f86c35592ff8f65cde94f296514c387': 'Snarg01',
   '0xbc3e373d2b24faf1dfe5b3f3acff9d66a7b48869': 'WorldBit Token',
+  '0x1fa6a37c64804c0d797ba6bc1955e50068fbf362': 'Wrapped Ubiq (UBQ)',
   // Contracts
   '0x256009e4687ab2183bbca3e4ea54ba6f0a7ad21e': 'ESCH Airdrop #1',
   '0x36ae3bdbbd19bc55f2fe3cccf41bf12c4c3afb42': 'ESCH Airdrop #2',
   '0x1cac28619f78cdf8da22f9cf523f995d3fe7e98c': 'ESCH Airdrop #3',
+  '0x0AB4aB630841F93bA2CC588DB4a7e646A38B58Ed': 'ESCH Airdrop #4',
+  '0x9c4d9c73FDbEa2eF0a96E8651122576E5449f113': 'ESCH Airdrop #5',
   '0xfcd0b547b89f001c17d50df98cf10ce406da5518': 'UIP #1',
   '0x96cf38c234d5e513c4fc783a3ba73d7320f2900b': 'UIP #2',
+  '0x073c6b68ba00c59163fa3ae79d7C3D263f78981E': 'UIP #4',
   // Shinobi
   '0xba831e62ac14d8500cef0367b14f383d7b1b1b0a': 'Shinobi (Factory)',
-  '0xf3ce4655a44146c8eefbf45651f6479f9d67a77a': 'Shinobi (Router02)',
+  '0xf3ce4655a44146c8eefbf45651f6479f9d67a77a': 'Shinobi (Router)',
 }
 
 export default {
