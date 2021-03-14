@@ -122,7 +122,7 @@ export default {
   }),
   computed: {
     priceUSD() {
-      return this.$store.state.prices.ubq.usd
+      return this.$store.state.tokens.ubqPrice
     },
   },
   created() {
