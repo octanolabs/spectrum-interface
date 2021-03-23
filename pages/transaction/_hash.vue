@@ -9,7 +9,7 @@
           {{ txn.logs.length }}
         </v-chip>
       </v-tab>
-      <v-tab>Trace</v-tab>
+      <v-tab v-if="txnTrace">Trace</v-tab>
       <v-tab-item eager>
         <v-col cols="12" calss="pa-1">
           <v-list dense>
@@ -266,7 +266,7 @@
       <v-tab-item v-if="showLogs">
         <tx-logs-card :event-logs="eventLogs" />
       </v-tab-item>
-      <v-tab-item>
+      <v-tab-item v-if="txnTrace">
         <tx-trace-card :traces="[txnTrace]" />
       </v-tab-item>
     </v-tabs>
@@ -406,13 +406,15 @@ export default {
         id: 88,
       }),
     ])
-    this.txnTrace = trace
+    if (trace) {
+      this.txnTrace = trace
+    }
   },
   data() {
     return {
       txFee: 0,
       txn: {},
-      txnTrace: {},
+      txnTrace: null,
       transfers: null,
       inputData: {},
       eventLogs: [],
