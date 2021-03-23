@@ -82,15 +82,39 @@
         {{ getName(contractAddress) }}
       </nuxt-link>
     </template>
-    <template v-slot:item.status="{ value: status }">
-      <v-icon v-if="status" color="success">mdi-check-circle</v-icon>
-      <v-icon v-else color="error">mdi-alert-circle</v-icon>
+    <template v-slot:item.status="{ item }">
+      <v-tooltip v-if="item.status" bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-icon small color="primary" v-bind="attrs" v-on="on">
+            mdi-check-circle
+          </v-icon>
+        </template>
+        <span>Success.</span>
+      </v-tooltip>
+      <v-tooltip v-else-if="!isByzantium(item.blockNumber)" bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-icon small v-bind="attrs" v-on="on">mdi-information</v-icon>
+        </template>
+        <span>
+          This transaction predates the activation of Andromeda. Status is
+          unavailble.
+        </span>
+      </v-tooltip>
+      <v-tooltip v-else bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-icon small color="secondary" v-bind="attrs" v-on="on">
+            mdi-alert-circle
+          </v-icon>
+        </template>
+        <span>Failed to execute.</span>
+      </v-tooltip>
     </template>
   </table-view>
 </template>
 
 <script>
 import BigNumber from 'bignumber.js'
+import config from '~/params/config.json'
 import common from '~/scripts/common'
 import addresses from '~/scripts/addresses'
 import TableView from '~/components/util/TableView'
@@ -172,6 +196,9 @@ export default {
     },
   },
   methods: {
+    isByzantium(blockNumber) {
+      return blockNumber >= config.byzantium
+    },
     getRowCount(items) {
       return items.length
     },

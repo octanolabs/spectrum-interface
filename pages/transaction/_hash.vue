@@ -21,14 +21,22 @@
                 {{ txn.hash }}
               </template>
               <template v-slot:action>
-                <v-chip v-if="txn.status" small outlined label color="primary">
-                  <v-icon class="pr-2" small>mdi-check-circle-outline</v-icon>
-                  <strong>SUCCESS</strong>
-                </v-chip>
-                <v-chip v-else small outlined label color="error">
-                  <v-icon class="pr-2" small>mdi-alert-circle-outline</v-icon>
-                  <strong>FAILED</strong>
-                </v-chip>
+                <template v-if="isByzantium(txn.blockNumber)">
+                  <v-chip
+                    v-if="txn.status"
+                    small
+                    outlined
+                    label
+                    color="primary"
+                  >
+                    <v-icon class="pr-2" small>mdi-check-circle-outline</v-icon>
+                    <strong>SUCCESS</strong>
+                  </v-chip>
+                  <v-chip v-else small outlined label color="error">
+                    <v-icon class="pr-2" small>mdi-alert-circle-outline</v-icon>
+                    <strong>FAILED</strong>
+                  </v-chip>
+                </template>
               </template>
             </spectrum-list-item>
             <spectrum-list-item
@@ -279,6 +287,7 @@ import addresses from '~/scripts/addresses'
 import contracts from '~/scripts/contracts'
 import tokens from '~/scripts/tokens'
 import common from '~/scripts/common'
+import config from '~/params/config'
 
 export default {
   name: 'Transaction',
@@ -450,6 +459,9 @@ export default {
     },
   },
   methods: {
+    isByzantium(blockNumber) {
+      return blockNumber >= config.byzantium
+    },
     formatAddress(hash, len) {
       if (hash) {
         const name = addresses.getAddressTag(hash)
