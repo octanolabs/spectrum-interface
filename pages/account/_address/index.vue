@@ -1,5 +1,6 @@
 <template>
   <v-col cols="12" class="pa-0">
+    <breadcrumbSpinner v-bind="$attrs" no-loading />
     <token-page
       v-if="isToken"
       :store="accountStore"
@@ -12,7 +13,7 @@
     <account-page
       v-else
       :store="accountStore"
-      :price="prices.ubq"
+      :price="ubqPrice"
       :address="$route.params.address"
       :loading-object="fetchStates"
       @refresh="$fetch"
@@ -27,18 +28,26 @@
 import tokens from '../../../scripts/tokens'
 import accountPage from '~/components/page/accountPage.vue'
 import tokenPage from '~/components/page/tokenPage.vue'
+import BreadcrumbSpinner from '~/components/util/BreadcrumbSpinner.vue'
 
 export default {
   name: 'Account',
   components: {
     accountPage,
     tokenPage,
+    BreadcrumbSpinner,
+  },
+  async middleware({ store }) {
+    await store.dispatch('fetchStats')
+    await store.dispatch('tokens/getDefaultTokens')
+    await store.dispatch('tokens/getShinobiTokens')
+    await store.dispatch('tokens/getShinobiPairs')
   },
   fetch() {
     const address = this.$route.params.address.toLowerCase()
-    const isToken = Object.keys(tokens.getTokens()).includes(address)
+    this.isToken = Object.keys(tokens).includes(address)
 
-    if (isToken) {
+    if (this.isToken) {
       this.setToken(address)
       this.fetchTokenSupply(address)
       this.fetchTransfersOfToken(address)
@@ -49,7 +58,6 @@ export default {
       this.fetchMinedBlocks(address)
       this.fetchTokenTransfers(address)
       this.fetchContractData(address)
-      this.fetchTokenBalances(address)
     }
   },
   data() {
@@ -61,6 +69,7 @@ export default {
         tokenTransfers: false,
         contractData: false,
         mined: false,
+        isToken: false,
       },
     }
   },
@@ -68,21 +77,11 @@ export default {
     accountStore() {
       return this.$store.state.account
     },
-    prices() {
-      return this.$store.state.prices
+    tokens() {
+      return this.$store.state.tokens.erc20
     },
-    isToken() {
-      const address = this.$route.params.address.toLowerCase()
-      return Object.keys(tokens.getTokens()).includes(address)
-    },
-    tokenPrice() {
-      const address = this.$route.params.address.toLowerCase()
-      const tk = tokens.getToken(address)
-
-      if (tk.traded) {
-        return this.prices[tk.symbol.toLowerCase()]
-      }
-      return null
+    ubqPrice() {
+      return this.$store.state.tokens.ubqPrice
     },
   },
   watch: {
@@ -137,11 +136,6 @@ export default {
       this.fetchStates.contractData = true
       await this.$store.dispatch('account/fetchContractData', address)
       this.fetchStates.contractData = false
-    },
-    async fetchTokenBalances(address) {
-      this.fetchStates.tokenBalances = true
-      await this.$store.dispatch('account/fetchTokenBalances', address)
-      this.fetchStates.tokenBalances = false
     },
   },
 }

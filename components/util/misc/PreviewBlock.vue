@@ -3,13 +3,13 @@
     <v-list-item-avatar tile color="#333">
       <v-icon>mdi-cube-outline</v-icon>
     </v-list-item-avatar>
-    <v-list-item-content style="max-width: 200px">
+    <v-list-item-content style="max-width: 120px">
       <v-list-item-title>
         <nuxt-link :to="`/block/${number}`">{{ number }}</nuxt-link>
       </v-list-item-title>
       <v-list-item-subtitle>{{ timeSince }}</v-list-item-subtitle>
     </v-list-item-content>
-    <v-list-item-content>
+    <v-list-item-content style="text-align: left">
       <v-list-item-title>
         <v-icon small>mdi-pickaxe</v-icon>
         <nuxt-link
@@ -35,6 +35,7 @@
 
 <script>
 import addresses from '../../../scripts/addresses'
+import common from '../../../scripts/common'
 import rewards from '../../../scripts/rewards'
 export default {
   props: {
@@ -75,14 +76,19 @@ export default {
     }, 10000)
   },
   methods: {
+    getAddressTag(hash) {
+      const checksum = common.toChecksumAddress(hash)
+      return (
+        addresses.getAddressTag(hash) ||
+        checksum.substr(0, 8) + '...' + checksum.substr(hash.length - 6)
+      )
+    },
     setData(val) {
       this.hash = val.hash
       this.number = val.number
       this.txns = val.transactions
       this.miner = {
-        short:
-          addresses.getAddressTag(val.miner) ||
-          val.miner.substring(0, 17) + '...',
+        short: this.getAddressTag(val.miner),
         full: val.miner,
       }
       this.reward = rewards.calculateTotalRewards(

@@ -1,7 +1,7 @@
 <template>
   <!--  TODO: add to table: when forked block is included as uncle-->
-  <v-row justify="center">
-    <v-col cols="12" class="pa-0">
+  <v-row justify="center" no-gutters>
+    <v-col cols="12">
       <expansion-table
         :items="store.forkedBlocks"
         :headers="headers"

@@ -10,7 +10,7 @@
         -->
 
   <v-card flat class="pa-0">
-    <v-card-title class="pa-0 mb-2">
+    <v-card-title v-if="!noTitle" class="pa-0 mb-2">
       <breadcrumbSpinner v-bind="$attrs" no-loading />
     </v-card-title>
     <v-card-text class="pa-0">
@@ -97,6 +97,10 @@ export default {
       default: () => '',
     },
     loading: {
+      type: Boolean,
+      default: false,
+    },
+    noTitle: {
       type: Boolean,
       default: false,
     },

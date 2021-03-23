@@ -17,9 +17,6 @@
         >
         </v-text-field>
       </v-input>
-      <v-app-bar-nav-icon class="mr-1">
-        <img src="../assets/logo.svg" width="26" height="26" />
-      </v-app-bar-nav-icon>
     </v-app-bar>
     <!-- nav drawer -->
     <v-navigation-drawer v-model="drawer" fixed app class="abstract-drawer">

@@ -55,7 +55,6 @@ export default {
     pathItems() {
       const route = this.$route
       const pathItems = []
-
       const split = route.fullPath
         .split('/')
         .filter((item) => !item.includes('?'))
@@ -73,6 +72,15 @@ export default {
             } else {
               pathItems.push({
                 text: nItem,
+              })
+              break
+            }
+          }
+          if (route.name === 'tokenTransfers') {
+            if (item === 'tokentransfers') {
+              pathItems.push({
+                text: 'Token Transfers',
+                to: 'tokentransfers',
               })
               break
             }

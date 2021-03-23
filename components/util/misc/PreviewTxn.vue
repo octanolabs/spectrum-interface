@@ -3,7 +3,7 @@
     <v-list-item-avatar tile color="#333">
       <v-icon>mdi-bank-transfer</v-icon>
     </v-list-item-avatar>
-    <v-list-item-content style="max-width: 200px">
+    <v-list-item-content style="max-width: 120px">
       <v-list-item-title>
         <nuxt-link
           :to="{ name: 'transaction-hash', params: { hash: hash.full } }"
@@ -13,7 +13,7 @@
       </v-list-item-title>
       <v-list-item-subtitle>{{ timeSince }}</v-list-item-subtitle>
     </v-list-item-content>
-    <v-list-item-content>
+    <v-list-item-content style="min-width: 120px">
       <v-list-item-title>
         From
         <nuxt-link
@@ -68,19 +68,24 @@ export default {
     }
     this.from = {
       full: this.info.from,
-      short:
-        addresses.getAddressTag(this.info.from) ||
-        this.info.from.substring(0, 17) + '...',
+      short: this.getAddressTag(this.info.from),
     }
     this.to = {
       full: this.info.to,
-      short:
-        addresses.getAddressTag(this.info.to) ||
-        this.info.to.substring(0, 17) + '...',
+      short: this.getAddressTag(this.info.to),
     }
     this.value = common.fromWei(this.info.value, 6)
     this.time = this.info.timestamp * 1000
     this.timeSince = this.$moment().to(this.time)
+  },
+  methods: {
+    getAddressTag(hash) {
+      const checksum = common.toChecksumAddress(hash)
+      return (
+        addresses.getAddressTag(hash) ||
+        checksum.substr(0, 8) + '...' + checksum.substr(hash.length - 6)
+      )
+    },
   },
 }
 </script>
