@@ -82,8 +82,8 @@
                 <v-list-item-subtitle>
                   <nuxt-link
                     :to="{
-                      name: 'account-address',
-                      params: { address: block.miner },
+                      name: 'address-account',
+                      params: { account: block.miner },
                     }"
                   >
                     {{ getAddressTag(block.miner) }}

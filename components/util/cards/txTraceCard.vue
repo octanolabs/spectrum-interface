@@ -31,8 +31,8 @@
               <template v-slot:subtitle>
                 <nuxt-link
                   :to="{
-                    name: 'account-address',
-                    params: { address: selected[0].from },
+                    name: 'address-account',
+                    params: { account: selected[0].from },
                   }"
                 >
                   {{ selected[0].from }}
@@ -47,8 +47,8 @@
               <template v-slot:subtitle>
                 <nuxt-link
                   :to="{
-                    name: 'account-address',
-                    params: { address: selected[0].to },
+                    name: 'address-account',
+                    params: { account: selected[0].to },
                   }"
                 >
                   {{ selected[0].to }}

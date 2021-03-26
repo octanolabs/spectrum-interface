@@ -183,10 +183,6 @@ export default {
       }),
     },
   },
-  created() {
-    this.getBalances()
-    this.getLiquidityPositions()
-  },
   data() {
     return {
       selectedToken: null,
@@ -204,6 +200,10 @@ export default {
     shinobiPairs() {
       return this.$store.state.tokens.pairs
     },
+  },
+  created() {
+    this.getBalances()
+    this.getLiquidityPositions()
   },
   methods: {
     async getLiquidityPositions() {

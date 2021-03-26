@@ -30,7 +30,7 @@
       }}</nuxt-link>
     </template>
     <template v-slot:item.miner="{ value: miner }">
-      <nuxt-link :to="{ name: 'account-address', params: { address: miner } }">
+      <nuxt-link :to="{ name: 'address-account', params: { account: miner } }">
         {{ getAddressTag(miner) }}
       </nuxt-link>
     </template>

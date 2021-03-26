@@ -24,7 +24,7 @@
     </template>
     <template v-slot:uncle.miner.key>Mined by:</template>
     <template v-slot:uncle.miner="{ miner }">
-      <nuxt-link :to="{ name: 'address', params: { hash: miner } }">
+      <nuxt-link :to="{ name: 'address-account', params: { hash: miner } }">
         {{ getAddressTag(miner) }}
       </nuxt-link>
     </template>

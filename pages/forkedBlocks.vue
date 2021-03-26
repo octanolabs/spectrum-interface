@@ -36,7 +36,7 @@
         </template>
         <template v-slot:item.miner="data">
           <nuxt-link
-            :to="{ name: 'account-address', params: { address: data.value } }"
+            :to="{ name: 'address-account', params: { account: data.value } }"
             >{{ getAddressTag(data.value) }}</nuxt-link
           >
         </template>
@@ -54,8 +54,8 @@
               <span class="code">Miner:</span>
               <nuxt-link
                 :to="{
-                  name: 'account-address',
-                  params: { address: item.miner },
+                  name: 'address-account',
+                  params: { account: item.miner },
                 }"
                 >{{ getAddressTag(item.miner) }}
               </nuxt-link>

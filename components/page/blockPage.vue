@@ -45,7 +45,7 @@
       {{ sha3Uncles }}
     </template>
     <template v-slot:block.miner="{ miner }">
-      <nuxt-link :to="{ name: 'account-address', params: { address: miner } }">
+      <nuxt-link :to="{ name: 'address-account', params: { account: miner } }">
         {{ getAddressTag(miner) }}
       </nuxt-link>
     </template>

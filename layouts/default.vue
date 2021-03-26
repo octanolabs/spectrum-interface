@@ -301,8 +301,8 @@ export default {
         // matches address format
 
         this.$router.push({
-          name: 'account-address',
-          params: { address: str.toLowerCase() },
+          name: 'address-account',
+          params: { account: str.toLowerCase() },
         })
         this.search = ''
       } else if (hash.test(str)) {

@@ -29,14 +29,14 @@
       {{ txHash }}
     </template>
     <template v-slot:item.from="{ value: sender }">
-      <nuxt-link :to="{ name: 'account-address', params: { address: sender } }">
+      <nuxt-link :to="{ name: 'address-account', params: { account: sender } }">
         {{ getAddressTag(sender) }}
       </nuxt-link>
     </template>
     <template v-if="!deploysContracts" v-slot:item.to="{ value: receiver }">
       <v-icon color="#333333">mdi-play</v-icon>
       <nuxt-link
-        :to="{ name: 'account-address', params: { address: receiver } }"
+        :to="{ name: 'address-account', params: { account: receiver } }"
       >
         {{ getAddressTag(receiver) }}
       </nuxt-link>
@@ -50,7 +50,7 @@
       v-slot:item.contractAddress="{ value: contractAddress }"
     >
       <nuxt-link
-        :to="{ name: 'account-address', params: { address: contractAddress } }"
+        :to="{ name: 'address-account', params: { account: contractAddress } }"
       >
         {{ getAddressTag(contractAddress) }}
       </nuxt-link>

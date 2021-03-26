@@ -15,7 +15,7 @@
       <v-list-item-title>
         From
         <nuxt-link
-          :to="{ name: 'account-address', params: { address: from.full } }"
+          :to="{ name: 'address-account', params: { account: from.full } }"
         >
           {{ from.short }}
         </nuxt-link>
@@ -23,7 +23,7 @@
       <v-list-item-subtitle>
         To
         <nuxt-link
-          :to="{ name: 'account-address', params: { address: to.full } }"
+          :to="{ name: 'address-account', params: { account: to.full } }"
         >
           {{ to.short }}
         </nuxt-link>

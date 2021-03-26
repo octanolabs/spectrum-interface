@@ -25,7 +25,7 @@
       </v-avatar>
       <template v-if="item.symbol !== 'WUBQ'">
         <nuxt-link
-          :to="{ name: 'account-address', params: { address: item.id } }"
+          :to="{ name: 'address-account', params: { account: item.id } }"
         >
           {{ item.name }}
         </nuxt-link>

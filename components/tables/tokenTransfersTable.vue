@@ -39,21 +39,21 @@
           </div>
         </v-tooltip>
         <nuxt-link
-          :to="{ to: 'account-address', params: { address: fromAddress } }"
+          :to="{ name: 'address-account', params: { account: fromAddress } }"
         >
           {{ getAddressTag(fromAddress) }}
         </nuxt-link>
       </span>
       <nuxt-link
         v-else
-        :to="{ name: 'account-address', params: { address: fromAddress } }"
+        :to="{ name: 'address-account', params: { account: fromAddress } }"
       >
         {{ getAddressTag(fromAddress) }}
       </nuxt-link>
     </template>
     <template v-slot:item.to="{ value: toAddress }">
       <nuxt-link
-        :to="{ name: 'account-address', params: { address: toAddress } }"
+        :to="{ name: 'address-account', params: { account: toAddress } }"
       >
         {{ getAddressTag(toAddress) }}
       </nuxt-link>
@@ -77,7 +77,7 @@
         </v-img>
       </v-avatar>
       <nuxt-link
-        :to="{ name: 'account-address', params: { address: contractAddress } }"
+        :to="{ name: 'address-account', params: { account: contractAddress } }"
       >
         {{ getName(contractAddress) }}
       </nuxt-link>

@@ -34,8 +34,6 @@
 </template>
 
 <script>
-import addresses from '../../scripts/addresses'
-
 export default {
   props: {
     loading: {
@@ -123,20 +121,23 @@ export default {
             })
             break
           }
+          if (route.name === 'address-account') {
+            if (item === 'address') {
+              text = 'Accounts'
+              path = ''
+            } else {
+              pathItems.push({
+                text: item.substr(0, 12),
+              })
+              break
+            }
+          }
           const pathItem = {
             text: text.charAt(0).toUpperCase() + text.slice(1),
             to: path,
           }
 
           pathItems.push(pathItem)
-        }
-      }
-
-      if (route.name === 'account-address') {
-        const addressName = addresses.getAddressTag(route.params.address)
-        if (addressName !== null) {
-          pathItems[pathItems.length - 1].text =
-            pathItems[pathItems.length - 1].text + ` (${addressName})`
         }
       }
 

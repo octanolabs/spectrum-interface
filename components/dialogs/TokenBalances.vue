@@ -12,8 +12,8 @@
           x-small
           color="primary"
           v-bind="attrs"
-          v-on="on"
           :disabled="balances.length === 0"
+          v-on="on"
         >
           {{ balances.length }}
         </v-btn>

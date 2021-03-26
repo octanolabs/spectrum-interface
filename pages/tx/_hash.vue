@@ -72,8 +72,8 @@
                 </v-avatar>
                 <nuxt-link
                   :to="{
-                    name: 'account-address',
-                    params: { address: txn.from },
+                    name: 'address-account',
+                    params: { account: txn.from },
                   }"
                 >
                   {{ formatAddress(txn.from) }}
@@ -90,8 +90,8 @@
                 </v-avatar>
                 <nuxt-link
                   :to="{
-                    name: 'account-address',
-                    params: { address: txn.to },
+                    name: 'address-account',
+                    params: { account: txn.to },
                   }"
                 >
                   {{ formatAddress(txn.to) }}
@@ -120,8 +120,8 @@
                 {{ fromPrefix(token.action) }}
                 <nuxt-link
                   :to="{
-                    name: 'account-address',
-                    params: { address: token.from },
+                    name: 'address-account',
+                    params: { account: token.from },
                   }"
                 >
                   {{ formatAddress(token.from) }}
@@ -139,8 +139,8 @@
                 To
                 <nuxt-link
                   :to="{
-                    name: 'account-address',
-                    params: { address: token.to },
+                    name: 'address-account',
+                    params: { account: token.to },
                   }"
                 >
                   {{ formatAddress(token.to) }}
@@ -166,8 +166,8 @@
                     <template v-if="token.type === 'erc20'">
                       <nuxt-link
                         :to="{
-                          name: 'account-address',
-                          params: { address: token.contract },
+                          name: 'address-account',
+                          params: { account: token.contract },
                         }"
                       >
                         {{ token.symbol }}
@@ -196,8 +196,8 @@
               <template v-slot:subtitle>
                 <nuxt-link
                   :to="{
-                    name: 'account-address',
-                    params: { address: txn.contractAddress },
+                    name: 'address-account',
+                    params: { account: txn.contractAddress },
                   }"
                 >
                   {{ formatAddress(txn.contractAddress) }}

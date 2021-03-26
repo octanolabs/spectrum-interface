@@ -13,7 +13,7 @@
       <v-list-item-title>
         <v-icon small>mdi-pickaxe</v-icon>
         <nuxt-link
-          :to="{ name: 'account-address', params: { address: miner.full } }"
+          :to="{ name: 'address-account', params: { account: miner.full } }"
         >
           {{ miner.short }}
         </nuxt-link>

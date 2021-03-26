@@ -5,7 +5,7 @@
       v-if="isToken"
       :store="accountStore"
       :price="tokenPrice"
-      :address="$route.params.address"
+      :address="$route.params.account"
       :loading-object="fetchStates"
       @refresh="$fetch"
     />
@@ -14,7 +14,7 @@
       v-else
       :store="accountStore"
       :price="ubqPrice"
-      :address="$route.params.address"
+      :address="$route.params.account"
       :loading-object="fetchStates"
       @refresh="$fetch"
     />
@@ -44,7 +44,7 @@ export default {
     await store.dispatch('tokens/getShinobiPairs')
   },
   fetch() {
-    const address = this.$route.params.address.toLowerCase()
+    const address = this.$route.params.account.toLowerCase()
     this.isToken = Object.keys(tokens).includes(address)
 
     if (this.isToken) {
@@ -85,7 +85,7 @@ export default {
     },
   },
   watch: {
-    '$route.params.address': {
+    '$route.params.account': {
       handler() {
         this.$store.dispatch('account/clearState')
         this.$fetch()
@@ -95,7 +95,7 @@ export default {
   },
 
   validate({ params }) {
-    return /^0x([A-Fa-f0-9]{40})$/.test(params.address)
+    return /^0x([A-Fa-f0-9]{40})$/.test(params.account)
   },
   methods: {
     async setToken(address) {
