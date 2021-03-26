@@ -60,18 +60,27 @@ export default {
         .filter((item) => !item.includes('?'))
       for (const [index, item] of split.entries()) {
         if (index > 0) {
-          let nItem = item
-          if (item.length > 30) {
-            nItem = item.substr(0, 12)
-          }
-          let append = ''
-          if (route.name === 'block-id' || route.name === 'transaction-hash') {
-            if (item === 'block' || item === 'transaction') {
-              append = 's'
-              split[1] = split[1] + 's'
+          let text = item
+          let path = split[1]
+
+          if (route.name === 'block-id') {
+            if (item === 'block') {
+              text = 'blocks'
+              path = '/blocks'
             } else {
               pathItems.push({
-                text: nItem,
+                text: item.substr(0, 12),
+              })
+              break
+            }
+          }
+          if (route.name === 'tx-hash') {
+            if (item === 'tx') {
+              text = 'transactions'
+              path = '/transactions'
+            } else {
+              pathItems.push({
+                text: item.substr(0, 12),
               })
               break
             }
@@ -85,10 +94,10 @@ export default {
               break
             }
           }
-          let to = split.slice(0, index + 1).join('/')
+          // path = split.slice(0, index + 1).join('/')
           if (route.name === 'transactions' && item === 'transactions') {
             if (split[index + 1] && split[index + 1] !== 'latest') {
-              to = split.slice(0, index).join('/') + 'latest'
+              path = split.slice(0, index).join('/') + 'latest'
             } else {
               pathItems.push({
                 text: item.charAt(0).toUpperCase() + item.slice(1),
@@ -115,8 +124,8 @@ export default {
             break
           }
           const pathItem = {
-            text: item.charAt(0).toUpperCase() + item.slice(1) + append,
-            to,
+            text: text.charAt(0).toUpperCase() + text.slice(1),
+            to: path,
           }
 
           pathItems.push(pathItem)
