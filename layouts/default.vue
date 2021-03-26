@@ -339,7 +339,7 @@ export default {
                   if (response.data.result) {
                     // is txn hash
                     this.$router.push({
-                      name: 'transaction-hash',
+                      name: 'tx-hash',
                       params: { hash: str.toLowerCase() },
                     })
                     this.search = ''

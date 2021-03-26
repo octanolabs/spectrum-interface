@@ -5,9 +5,7 @@
     </v-list-item-avatar>
     <v-list-item-content style="max-width: 120px">
       <v-list-item-title>
-        <nuxt-link
-          :to="{ name: 'transaction-hash', params: { hash: hash.full } }"
-        >
+        <nuxt-link :to="{ name: 'tx-hash', params: { hash: hash.full } }">
           {{ hash.short }}...
         </nuxt-link>
       </v-list-item-title>

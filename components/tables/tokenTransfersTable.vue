@@ -13,7 +13,7 @@
       <span id="icon"></span>
     </template>
     <template v-slot:item.hash="{ value: txHash }">
-      <nuxt-link :to="{ name: 'transaction-hash', params: { hash: txHash } }">
+      <nuxt-link :to="{ name: 'tx-hash', params: { hash: txHash } }">
         {{ formatHash(txHash) }}
       </nuxt-link>
     </template>
