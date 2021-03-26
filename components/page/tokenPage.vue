@@ -41,7 +41,7 @@
             <template v-slot:activator="{ on }">
               Supply <v-icon id="info" small v-on="on">mdi-information</v-icon>
             </template>
-            <div class="d-block" style="width: 250px;">
+            <div class="d-block" style="width: 250px">
               This value represents the total supply defined in the token
               contract, it may not represent current circulating supply.
             </div>
@@ -49,9 +49,9 @@
         </template>
         <template
           v-if="price !== null"
-          v-slot:overview.marketCap="{ supply, price }"
+          v-slot:overview.marketCap="{ supply, bprice }"
         >
-          {{ calcMarketcap(supply, price.btc) }} BTC
+          {{ calcMarketcap(supply, bprice.btc) }} BTC
         </template>
         <template v-slot:overview.transfers="{ transfersTotal }">
           {{ formatNumber(transfersTotal) }}
@@ -155,8 +155,8 @@ export default {
     formatNumber(val) {
       return common.formatNumber(val)
     },
-    calcMarketcap(supply, price) {
-      return common.calcMarketcap(supply, price)
+    calcMarketcap(supply, val) {
+      return common.calcMarketcap(supply, val)
     },
   },
 }

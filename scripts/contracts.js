@@ -66,6 +66,67 @@ const functions = {
     'withdraw(bytes _proof, bytes32 _root, bytes32 _nullifierHash, address _recipient, address _relayer, uint256 _fee, unit256 _refund)',
   '0x97fc007c': 'updateVerifier(address _newVerifier)',
   '0x06394c9b': 'changeOperator(address _newOperator)',
+  // uniswap-v2-core
+  '0xc9c65396': 'createPair(address tokenA, address tokenB)',
+  '0xf46901ed': 'setFeeTo(address _feeTo)',
+  '0xa2e74af6': 'setFeeToSetter(address _feeToSetter)',
+  '0x89afcb44': 'burn(address to)',
+  '0x485cc955': 'initialize(address _token0, address _token1)',
+  '0x6a627842': 'mint(address to)',
+  '0xd505accf':
+    'permit(address owner, address spender, uint256 value, uint256 deadline, uint8 v, bytes32 r, bytes32 s)',
+  '0xbc25cf77': 'skim(address to)',
+  '0x022c0d9f':
+    'swap(uint256 amount0out, uint256 amount1Out, address to, bytes data)',
+  '0xfff6cae9': 'sync()',
+  // uniswap-v2-periphery
+  '0xe8e33700':
+    'addLiquidity(address tokenA, address tokenB, uint256 amountADesired, uint256 amountAMin, uint256 amountBMin, address to, uint256 deadline)',
+  '0xf305d719':
+    'addLiquidityETH(address token, uint256 amountTokenDesired, uint256 amountTokenMin, uint256 amountETHMin, uint256 deadline)',
+  '0xbaa2abde':
+    'removeLiquidity(address tokenA, address tokenB, uint256 liquidity, uint256 amountAMin, uint256 amountBMin, address to, uint256 deadline)',
+  '0x02751cec':
+    'removeLiquidityETH(address token, uint256 liquidity, uint256 amountTokenMin, uint256 amountETHMin, address to, uint256 deadline)',
+  '0xaf2979eb':
+    'removeLiquidityETHSupportingFeeOnTransferTokens(address token, uint256 liquidity, uint256 amountTokenMin, uint256 amountETHMin, address to, uint256 deadline)',
+  '0xded9382a':
+    'removeLiquidityETHWithPermit(address token, uint256 liquidity, uint256 amountTokenMin, uint256 amountETHMin, address to, uint256 deadline, bool approveMax, uint8 v, bytes32 r, bytes32 s)',
+  '0x5b0d5984':
+    'removeLiquidityETHWithPermitSupportingFeeOnTransferTokens(address token, uint256 liquidity, uint256 amountTokenMin, uint256 amountETHMin, address to, uint256 deadline, bool approveMax, uint8 v, bytes32 r, bytes32 s)',
+  '0x2195995c':
+    'removeLiquidityWithPermit(address tokenA, address tokenB, uint256 liquidity, uint256 amountAMin, unit256 amountBMin, address to, uint256 deadline, bool approveMax, uint8 v, bytes32 r, bytes32 s)',
+  '0xfb3bdb41':
+    'swapETHForExactTokens(uint256 amountOut, address[] path, address to, uint256 deadline)',
+  '0x7ff36ab5':
+    'swapExactETHForTokens(uint256 amountOutMin, address[] path, address to, uint256 deadline)',
+  '0xb6f9de95':
+    'swapExactETHForTokensSupportingFeeOnTransferTokens(uint256 amountOutMin, address[] path, address to, uint256 deadline)',
+  '0x18cbafe5':
+    'swapExactTokensForETH(uint256 amountIn, uint256 amountOutMin, address[] path, address to, uint256 deadline)',
+  '0x791ac947':
+    'swapExactTokensForETHSupportingFeeOnTransferTokens(uint256 amountIn, uint256 amountOutMin, address[] path, address to, uint256 deadline)',
+  '0x38ed1739':
+    'swapExactTokensForTokens(uint256 amountIn, uint256 amountOutMin, address[] path, address to, uint256 deadline)',
+  '0x5c11d795':
+    'swapExactTokensForTokensSupportingFeeOnTransferTokens(uint256 amountIn, uint256 amountOutMin, address[] path, address to, uint256 deadline)',
+  '0x4a25d94a':
+    'swapTokensForExactETH(uint256 amountOut, uint256 amountInMax, address[] path, address to, uint256 deadline)',
+  '0x8803dbee':
+    'swapTokensForExactTokens(uint256 amountOut, uint256 amountInMax, address[] path, address to, uint256 deadline)',
+  // staking rewards
+  '0xa694fc3a': 'stake(uint256 amount)',
+  '0x2e1a7d4d': 'withdraw(uint256 amount)',
+  '0x3d18b912': 'getReward()',
+  '0xe9fad8ee': 'exit()',
+  // ERC1155
+  '0xa22cb465': 'setApprovalForAll(address operator, bool approved)',
+  '0xf242432a':
+    'safeTransferFrom(address from, address to, uint256 id, uint256 amount, bytes data)',
+  '0x2eb2c2d6':
+    'safeBatchTransferFrom(address from, address to, uint256[] ids, uint256[] amounts, bytes data)',
+  // WUBQ
+  '0xd0e30db0': 'deposit()',
 }
 
 const events = {
@@ -106,10 +167,35 @@ const events = {
     'Deposit(index_topic_1 bytes32 commitment, uint32 leafIndex, uint256 timestamp)',
   '0xe9e508ba':
     'Withdrawal(address to, bytes32 nullifierHash, index_topic_1 address relayer, uint256 fee)',
+  // uniswap-v2-core
+  '0x0d3648bd':
+    'PairCreated(index_topic_1 address token0, index_topic_2 address token1, address pair, uint256)',
+  '0xdccd412f':
+    'Burn(index_topic_1 address sender, uint256 amount0, uint256 amount1, index_topic_2 address to)',
+  '0x4c209b5f':
+    'Mint(index_topic_1 address sender, uint256 amount0, unint256 amount1)',
+  '0xd78ad95f':
+    'Swap(index_topic_1 address sender, uint256 amount0In, uint256 amount1In, uint256 amount0Out uint256 amount1Out, index_topic_2 address to)',
+  '0x1c411e9a': 'Sync(uint112 reserve0, uint112 reserve1)',
+  // ERC1155
+  '0x17307eab':
+    'ApprovalForAll(index_topic_1 address account, index_topic_2 address operator, bool approved)',
+  '0x4a39dc06':
+    'TransferBatch(index_topic_1 address operator, index_topic_2 address from, index_topic_3 address to, uint256[] ids, uint256[] values)',
+  '0xc3d58168':
+    'TransferSingle(index_topic_1 address operator, index_topic_2 address from, index_topic_3 address to, uint256 id, uint256 value)',
+  '0x6bb7ff70': 'URI(string value, index_topic_1 uint256 id)',
+  // WUBQ
+  '0x7fcf532c': 'Withdrawal(index_topic_1 address src, uint256 wad)',
 }
 
 export default {
   processTxnInput(str) {
+    if (!str || str.length < 10) {
+      return {
+        isKnown: false,
+      }
+    }
     const methodId = str.substr(0, 10).toLowerCase()
     if (functions[methodId]) {
       return {

@@ -1,38 +1,35 @@
 <template>
-  <v-row justify="center">
-    <v-col cols="10">
-      <tokens-table :tokens="getTokens()" />
-    </v-col>
-  </v-row>
+  <v-col cols="12">
+    <breadcrumb-spinner no-loading />
+    <v-alert color="primary" text outlined class="mt-1">
+      Token information retrieved from
+      <a href="https://shinobi-info.ubiq.ninja" target="_blank">
+        <strong>Shinobi</strong>
+      </a>
+    </v-alert>
+    <tokens-table :tokens="tokens" :ubq-price="price" />
+  </v-col>
 </template>
 
 <script>
+import breadcrumbSpinner from '~/components/util/BreadcrumbSpinner.vue'
 import tokensTable from '~/components/tables/tokensTable'
-import tokens from '~/scripts/tokens'
 
 export default {
   components: {
     tokensTable,
+    breadcrumbSpinner,
   },
-  methods: {
-    getTokens() {
-      const tks = tokens.getTokens()
-      const result = []
-
-      for (const address of Object.keys(tks)) {
-        if (tks[address].display) {
-          const token = {
-            name: tks[address].name,
-            symbol: tks[address].symbol,
-            decimals: tks[address].decimals,
-            address,
-          }
-
-          result.push(token)
-        }
-      }
-
-      return result
+  async middleware({ store }) {
+    await store.dispatch('tokens/getDefaultTokens')
+    await store.dispatch('tokens/getShinobiTokens')
+  },
+  computed: {
+    tokens() {
+      return this.$store.state.tokens.list
+    },
+    price() {
+      return this.$store.state.tokens.ubqPrice
     },
   },
 }

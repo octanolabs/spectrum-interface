@@ -14,7 +14,7 @@
     </template>
     <template v-slot:item.hash="{ value: txHash }">
       <nuxt-link :to="{ name: 'transaction-hash', params: { hash: txHash } }">
-        {{ txHash.substring(0, 23) }}...
+        {{ formatHash(txHash) }}
       </nuxt-link>
     </template>
     <template v-slot:item.timestamp="{ value: timestamp }">
@@ -24,7 +24,7 @@
       <!--      TODO: address route-->
       <span
         v-if="fromAddress === '0x0000000000000000000000000000000000000000'"
-        style="color: #00ea90;"
+        style="color: #00ea90"
       >
         <v-tooltip attach="#icon" nudge-right="150" nudge-bottom="60">
           <template v-slot:activator="{ on }">
@@ -50,7 +50,6 @@
       >
         {{ getAddressTag(fromAddress) }}
       </nuxt-link>
-      <v-icon color="#333333">mdi-play</v-icon>
     </template>
     <template v-slot:item.to="{ value: toAddress }">
       <nuxt-link
@@ -60,28 +59,71 @@
       </nuxt-link>
     </template>
     <template v-slot:item.value="{ item: { value, contract } }">
-      {{ formatValue(value, contract) }}
+      {{ nf.format(formatValue(value, contract)) }}
     </template>
 
     <template v-slot:item.contract="{ value: contractAddress }">
+      <v-avatar size="16">
+        <v-img
+          :src="
+            'https://raw.githubusercontent.com/octanolabs/assets/master/blockchains/ubiq/assets/' +
+            toChecksumAddress(contractAddress) +
+            '/logo.png'
+          "
+        >
+          <template v-slot:placeholder>
+            <blockie :address="contractAddress" size="xs" inline />
+          </template>
+        </v-img>
+      </v-avatar>
       <nuxt-link
         :to="{ name: 'account-address', params: { address: contractAddress } }"
       >
         {{ getName(contractAddress) }}
       </nuxt-link>
     </template>
+    <template v-slot:item.status="{ item }">
+      <v-tooltip v-if="item.status" bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-icon small color="primary" v-bind="attrs" v-on="on">
+            mdi-check-circle
+          </v-icon>
+        </template>
+        <span>Success.</span>
+      </v-tooltip>
+      <v-tooltip v-else-if="!isByzantium(item.blockNumber)" bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-icon small v-bind="attrs" v-on="on">mdi-information</v-icon>
+        </template>
+        <span>
+          This transaction predates the activation of Andromeda. Status is
+          unavailble.
+        </span>
+      </v-tooltip>
+      <v-tooltip v-else bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-icon small color="secondary" v-bind="attrs" v-on="on">
+            mdi-alert-circle
+          </v-icon>
+        </template>
+        <span>Failed to execute.</span>
+      </v-tooltip>
+    </template>
   </table-view>
 </template>
 
 <script>
+import BigNumber from 'bignumber.js'
+import config from '~/params/config.json'
 import common from '~/scripts/common'
 import addresses from '~/scripts/addresses'
-import tokens from '~/scripts/tokens'
 import TableView from '~/components/util/TableView'
+import Blockie from '~/components/util/misc/Blockie'
 
 export default {
   components: {
     TableView,
+    Blockie,
   },
   props: {
     transfers: {
@@ -105,6 +147,10 @@ export default {
       currentPage: 1,
       perPage: 25,
       totalRows: 0,
+      nf: new Intl.NumberFormat('en', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 18,
+      }),
       headers: [
         {
           value: 'hash',
@@ -136,27 +182,59 @@ export default {
           text: 'Token',
           sortable: false,
         },
+        {
+          text: '',
+          value: 'status',
+          sortable: false,
+        },
       ],
     }
   },
+  computed: {
+    tokens() {
+      return this.$store.state.tokens.erc20
+    },
+  },
   methods: {
+    isByzantium(blockNumber) {
+      return blockNumber >= config.byzantium
+    },
     getRowCount(items) {
       return items.length
     },
     getAddressTag(hash) {
-      return addresses.getAddressTag(hash) || hash.substring(0, 23) + '...'
+      const checksum = common.toChecksumAddress(hash)
+      return (
+        addresses.getAddressTag(hash) ||
+        checksum.substr(0, 8) + '...' + checksum.substr(hash.length - 6)
+      )
     },
     calcTime(timestamp) {
       return this.$moment().to(timestamp * 1000)
     },
     formatValue(val, contract) {
-      return tokens.formatValue(val, contract)
+      if (this.tokens[contract]) {
+        const decimals = new BigNumber(10).pow(this.tokens[contract].decimals)
+        return new BigNumber(val).div(decimals).toString()
+      }
+      return val
     },
     getName(contract) {
-      return tokens.getName(contract)
+      if (this.tokens[contract]) {
+        return (
+          this.tokens[contract].symbol + ' (' + this.tokens[contract].name + ')'
+        )
+      }
+      return common.toChecksumAddress(contract)
     },
     formatNumber(val) {
       return common.formatNumber(val)
+    },
+    toChecksumAddress(address) {
+      return common.toChecksumAddress(address)
+    },
+    formatHash(hash) {
+      return hash.substr(0, 10) + '...' + hash.substr(hash.length - 8)
     },
   },
 }

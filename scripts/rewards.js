@@ -1,5 +1,7 @@
 import BigNumber from 'bignumber.js'
 
+BigNumber.set({ DECIMAL_PLACES: 18 })
+
 export default {
   baseBlockReward(height) {
     if (height > 2508545) {
@@ -52,5 +54,19 @@ export default {
       .plus(unclesReward)
       .div(1000000000000000000)
       .toString()
+  },
+
+  calculateTotalRewards(reward, uncles, fees) {
+    BigNumber.set({ DECIMAL_PLACES: 18 })
+    // base reward
+    let r = new BigNumber(reward)
+    // add reward for including any uncles
+    const u = r.dividedBy(32).times(uncles)
+    r = r.plus(u)
+    // add txFees
+    r = r.plus(fees)
+    // from wei
+    r = r.div(1000000000000000000)
+    return r.toString()
   },
 }

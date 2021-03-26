@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-sheet v-if="loading" min-height="200px">
-      <div class="d-flex justify-center align-center" style="height: 200px;">
+      <div class="d-flex justify-center align-center" style="height: 200px">
         <v-col cols="2" class="d-flex justify-center">
           <v-progress-circular size="100" color="primary" indeterminate />
         </v-col>

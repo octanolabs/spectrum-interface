@@ -54,9 +54,6 @@ export const mutations = {
     state.isContract = true
     state.contractData = contractData
   },
-  SET_TOKENBALANCES(state, tokenBalances) {
-    state.tokenBalances = tokenBalances
-  },
 }
 export const actions = {
   //
@@ -180,35 +177,5 @@ export const actions = {
         contractDeployBy,
       })
     }
-  },
-  async fetchTokenBalances({ commit }, address) {
-    const tokenList = tokens.getTokens()
-
-    const tokenBalances = await Promise.all(
-      Object.keys(tokenList).map(async (contract) => {
-        const {
-          data: { result },
-        } = await axios.post(process.env.config.rpcUrl, {
-          jsonrpc: '2.0',
-          method: 'eth_call',
-          params: [
-            {
-              to: contract,
-              data: '0x70a08231' + tokens.zeroPadAddress(address),
-            },
-            'latest',
-          ],
-          id: 88,
-        })
-
-        return {
-          name: tokenList[contract].name,
-          symbol: tokenList[contract].symbol,
-          balance: tokens.toBalance(result, contract),
-        }
-      })
-    )
-
-    commit('SET_TOKENBALANCES', tokenBalances)
   },
 }

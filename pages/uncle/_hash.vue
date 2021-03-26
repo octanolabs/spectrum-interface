@@ -1,6 +1,6 @@
 <template>
   <v-row justify="center">
-    <v-col md="10">
+    <v-col cols="12">
       <uncle-page :uncle="uncle" />
     </v-col>
   </v-row>

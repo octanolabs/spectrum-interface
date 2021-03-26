@@ -9,49 +9,46 @@
         any slot named "hr" will add an horizontal ruler
         -->
 
-  <v-card>
-    <v-card-title>
+  <v-card flat class="pa-0">
+    <v-card-title v-if="!noTitle" class="pa-0 mb-2">
       <breadcrumbSpinner v-bind="$attrs" no-loading />
     </v-card-title>
-    <v-card-text class="body-2">
+    <v-card-text class="pa-0">
       <v-tabs show-arrows :value="activeTab">
         <v-tab v-for="tab in tabSlots()" :key="tab" :href="`#${tab}`">
           {{ tab | toSentenceCaseText }}
         </v-tab>
         <v-tab-item v-for="tab in tabSlots()" :key="tab" :value="tab" eager>
-          <v-row justify="center" grow>
-            <!-- If the selected tab has at least one slot, use normal layout-->
-            <v-col v-if="slotsWithTab(tab).length > 0" cols="10">
-              <v-row v-for="slot of slotsWithTab(tab)" :key="slot">
-                <template v-if="slot.includes('.hr')">
-                  <v-col cols="12">
-                    <slot :name="slot">
-                      <hr />
-                    </slot>
-                  </v-col>
-                </template>
-                <template v-else>
-                  <v-col cols="4">
-                    <slot v-bind="item" :name="slot + '.key'">
-                      {{
-                        slot | stripTabAndKey | toSentenceCaseText | capitalize
-                      }}:
-                    </slot>
-                  </v-col>
-                  <v-col cols="8">
-                    <!-- TODO: make this animation better -->
-                    <v-skeleton-loader v-if="loading" type="text" />
-                    <slot v-else v-bind="item" :name="slot" />
-                  </v-col>
-                </template>
-              </v-row>
-            </v-col>
-
-            <!-- Else, dump all content with no layout-->
-            <v-col v-else cols="11">
-              <slot :name="tab" v-bind="item"></slot>
-            </v-col>
-          </v-row>
+          <!-- If the selected tab has at least one slot, use normal layout-->
+          <v-col v-if="slotsWithTab(tab).length > 0" cols="12">
+            <v-row v-for="slot of slotsWithTab(tab)" :key="slot" class="pa-0">
+              <template v-if="slot.includes('.hr')">
+                <v-col cols="12" class="pa-1">
+                  <slot :name="slot">
+                    <hr />
+                  </slot>
+                </v-col>
+              </template>
+              <template v-else>
+                <v-col cols="4" class="px-4 py-1">
+                  <slot v-bind="item" :name="slot + '.key'">
+                    {{
+                      slot | stripTabAndKey | toSentenceCaseText | capitalize
+                    }}:
+                  </slot>
+                </v-col>
+                <v-col cols="8" class="pa-1">
+                  <!-- TODO: make this animation better -->
+                  <v-skeleton-loader v-if="loading" type="text" />
+                  <slot v-else v-bind="item" :name="slot" />
+                </v-col>
+              </template>
+            </v-row>
+          </v-col>
+          <!-- Else, dump all content with no layout-->
+          <v-col v-else cols="12" class="pa-1">
+            <slot :name="tab" v-bind="item"></slot>
+          </v-col>
         </v-tab-item>
       </v-tabs>
     </v-card-text>
@@ -100,6 +97,10 @@ export default {
       default: () => '',
     },
     loading: {
+      type: Boolean,
+      default: false,
+    },
+    noTitle: {
       type: Boolean,
       default: false,
     },

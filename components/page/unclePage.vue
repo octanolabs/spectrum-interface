@@ -6,9 +6,7 @@
         {{ blockNumber }}
       </nuxt-link>
     </template>
-    <template v-slot:uncle.number.key>
-      Uncle Height:
-    </template>
+    <template v-slot:uncle.number.key>Uncle Height:</template>
     <template v-slot:uncle.number="{ number }">
       {{ number }}
     </template>
@@ -24,9 +22,7 @@
     <template v-slot:uncle.sha3Uncles="{ sha3Uncles }">
       {{ sha3Uncles }}
     </template>
-    <template v-slot:uncle.miner.key>
-      Mined by:
-    </template>
+    <template v-slot:uncle.miner.key>Mined by:</template>
     <template v-slot:uncle.miner="{ miner }">
       <nuxt-link :to="{ name: 'address', params: { hash: miner } }">
         {{ getAddressTag(miner) }}

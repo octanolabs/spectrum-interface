@@ -8,21 +8,26 @@
     :options="options"
     :item-key="itemKey"
     :class="{ 'body-2': dense }"
+    :footer-props="footerProps"
+    dense
+    flat
   >
-    <template v-slot:top>
+    <template v-if="!noBar" v-slot:top>
       <!-- With v-bind=$attrs" on breadcrumb-spinner we can optionally turn off path or spinner or both-->
       <breadcrumb-spinner
         v-bind="$attrs"
         :loading="loading"
         @refresh="$emit('refresh')"
       />
-      <v-card>
-        <v-card-text>
-          <slot
-            v-if="items.length > 0 && !loading"
-            name="topMessage"
-            v-bind="items"
-          ></slot>
+      <v-card tile class="pa-0 border-bottom">
+        <v-card-text class="px-4 py-1">
+          <small>
+            <slot
+              v-if="items.length > 0 && !loading"
+              name="topMessage"
+              v-bind="items"
+            ></slot>
+          </small>
         </v-card-text>
       </v-card>
     </template>
@@ -39,14 +44,14 @@
       </tbody>
       <tbody v-else>
         <v-skeleton-loader
-          style="padding: 16px 16px 0;"
+          style="padding: 16px 16px 0"
           :type="`table-row-divider@${itemsPerPage}`"
         />
       </tbody>
     </template>
     <template v-if="loading" v-slot:header>
       <v-skeleton-loader type="table-thead"></v-skeleton-loader>
-      <div style="padding: 0 16px;">
+      <div style="padding: 0 16px">
         <v-progress-linear indeterminate color="primary"></v-progress-linear>
       </div>
     </template>
@@ -85,6 +90,12 @@ export default {
         return ''
       },
     },
+    noBar: {
+      type: Boolean,
+      default: () => {
+        return false
+      },
+    },
     headers: {
       type: Array,
       required: true,
@@ -98,7 +109,7 @@ export default {
       default: () => {
         return {
           page: 1,
-          itemsPerPage: 15,
+          itemsPerPage: 25,
         }
       },
     },
@@ -113,6 +124,13 @@ export default {
       type: Boolean,
       default: false,
     },
+  },
+  data() {
+    return {
+      footerProps: {
+        itemsPerPageOptions: [25, 50, 100],
+      },
+    }
   },
   methods: {
     formatNumber(n) {

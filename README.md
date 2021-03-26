@@ -2,6 +2,11 @@
 
 > A Ui for go-spectrum using Vue and Nuxt
 
+# configure
+
+copy params/example.config.json to params/config.json
+d
+
 ## Build Setup
 
 ``` bash

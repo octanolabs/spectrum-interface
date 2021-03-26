@@ -1,73 +1,102 @@
 <template>
-  <v-card flat color="#303030">
-    <v-card-title>
+  <v-card flat tile>
+    <v-card-title class="py-0">
+      <v-tooltip right>
+        <template v-slot:activator="{ on, attrs }">
+          <v-icon v-bind="attrs" v-on="on">mdi-information-outline</v-icon>
+        </template>
+        <span v-if="output">Information returned by a transaction.</span>
+        <span v-else>
+          Additional information that is required for the transaction.
+        </span>
+      </v-tooltip>
+      <v-subheader
+        class="pl-8"
+        style="
+          font-size: 0.8125rem;
+          font-weight: 500;
+          line-height: 1rem;
+          color: #fff;
+        "
+      >
+        {{ output ? 'Output Data' : 'Input Data' }}
+      </v-subheader>
       <v-spacer />
       <v-menu offset-y>
         <!-- FIXME: visual glitch: on mobile this v-menu opens half a page higher than where it's supposed to -->
         <template v-slot:activator="{ on }">
-          <v-btn dark text v-on="on">
+          <v-btn dark text small v-on="on">
             <h4>{{ viewType }}</h4>
           </v-btn>
         </template>
         <v-list>
-          <v-list-item v-if="hasInputData" @click="viewType = 'Default view'">
-            Default view
+          <v-list-item
+            v-if="inputData.isKnown"
+            @click="viewType = 'Method view'"
+          >
+            Method view
           </v-list-item>
-          <v-list-item @click="viewType = 'Original'">
-            Original
-          </v-list-item>
+          <v-list-item @click="viewType = 'Raw view'">Raw view</v-list-item>
         </v-list>
       </v-menu>
     </v-card-title>
     <v-card-text>
-      <perfect-scrollbar>
-        <template v-if="viewType === 'Default view'">
-          <pre>
+      <template v-if="viewType === 'Method view'">
+        <pre style="overflow-x: auto">
 Function: {{ inputData.function }}
 
 MethodID: {{ inputData.methodId }}
 <span v-for="(item, index) in inputData.params" :key="index">[{{ index }}]:  {{ item }}
 </span>
 </pre>
-        </template>
-        <template v-if="viewType === 'Original'">
-          <p>{{ inputString }}</p>
-        </template>
-      </perfect-scrollbar>
+      </template>
+      <template v-if="viewType === 'Raw view'">
+        <p>{{ inputString }}</p>
+      </template>
     </v-card-text>
   </v-card>
 </template>
 
 <script>
+import contracts from '~/scripts/contracts'
+
 export default {
   props: {
-    inputData: {
-      type: Object,
-      required: false,
-      default: () => {},
-    },
     inputString: {
       type: String,
       required: true,
-      default: () => {},
+      default() {
+        return '0x'
+      },
     },
-    hasInputData: {
+    output: {
       type: Boolean,
-      required: false,
-      default: false,
+      default() {
+        return false
+      },
     },
   },
   data() {
     return {
-      viewType: 'Original',
+      viewType: 'Raw view',
+      inputData: null,
     }
   },
   watch: {
-    hasInputData(val) {
-      if (val) {
-        this.viewType = 'Default view'
+    inputString(val) {
+      this.inputData = contracts.processTxnInput(val)
+      if (this.inputData.isKnown) {
+        this.viewType = 'Method view'
+      } else {
+        this.viewType = 'Raw view'
       }
     },
+  },
+  created() {
+    this.inputData = contracts.processTxnInput(this.inputString)
+    if (this.inputData.isKnown) {
+      this.viewType = 'Method view'
+    }
   },
 }
 </script>

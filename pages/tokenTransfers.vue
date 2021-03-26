@@ -1,6 +1,6 @@
 <template>
   <v-row justify="center">
-    <v-col cols="10">
+    <v-col cols="12">
       <transfers-table
         :loading="$fetchState.pending"
         :transfers="transfersStore.latest"
@@ -21,6 +21,12 @@ export default {
   },
   async fetch() {
     await this.$store.dispatch('tokentransfers/fetchLatest')
+  },
+  async middleware({ store }) {
+    await store.dispatch('fetchStats')
+    await store.dispatch('tokens/getDefaultTokens')
+    await store.dispatch('tokens/getShinobiTokens')
+    await store.dispatch('tokens/getShinobiPairs')
   },
   computed: {
     transfersStore() {

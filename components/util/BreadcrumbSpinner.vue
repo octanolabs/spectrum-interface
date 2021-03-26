@@ -1,31 +1,36 @@
 <template>
-  <v-row style="margin: 0;">
-    <v-col cols="11">
-      <v-breadcrumbs
-        v-if="!noBreadcrumbs"
-        :items="[{ text: 'Home', to: '/' }, ...pathItems]"
-      ></v-breadcrumbs>
-    </v-col>
+  <v-app-bar
+    flat
+    height="26px"
+    style="background-color: #1e1e1e; border-bottom: 1px solid #2e2e2e"
+    class="pa-0"
+  >
+    <v-breadcrumbs
+      v-if="!noBreadcrumbs"
+      :items="[{ text: 'Home', to: '/' }, ...pathItems]"
+      class="pa-0"
+      divider=">"
+    ></v-breadcrumbs>
     <v-spacer></v-spacer>
-    <v-col v-if="!noLoading" cols="1" class="d-flex justify-end align-center">
-      <v-btn
-        :disabled="loading"
-        :loading="loading"
-        text
-        icon
-        @click="$emit('refresh')"
-      >
-        <!--        <v-icon>mdi-atom-variant</v-icon>-->
-        <v-icon>mdi-rotate-right</v-icon>
-        <template v-slot:loader>
-          <span class="custom-loader">
-            <!--            Make custom loader component with mdi-circle-outline-1 thru mdi-circle-outline-8-->
-            <v-icon light>mdi-rotate-right</v-icon>
-          </span>
-        </template>
-      </v-btn>
-    </v-col>
-  </v-row>
+    <v-btn
+      v-if="!noLoading"
+      :disabled="loading"
+      :loading="loading"
+      tile
+      small
+      icon
+      @click="$emit('refresh')"
+    >
+      <!--        <v-icon>mdi-atom-variant</v-icon>-->
+      <v-icon small>mdi-rotate-right</v-icon>
+      <template v-slot:loader>
+        <span class="custom-loader">
+          <!--            Make custom loader component with mdi-circle-outline-1 thru mdi-circle-outline-8-->
+          <v-icon light small>mdi-rotate-right</v-icon>
+        </span>
+      </template>
+    </v-btn>
+  </v-app-bar>
 </template>
 
 <script>
@@ -50,20 +55,68 @@ export default {
     pathItems() {
       const route = this.$route
       const pathItems = []
-
       const split = route.fullPath
         .split('/')
         .filter((item) => !item.includes('?'))
-
-      // .forEach((v) => {
-      //   pathItems.push(v.charAt(0).toUpperCase() + v.slice(1))
-      // })
-
       for (const [index, item] of split.entries()) {
         if (index > 0) {
+          let nItem = item
+          if (item.length > 30) {
+            nItem = item.substr(0, 12)
+          }
+          let append = ''
+          if (route.name === 'block-id' || route.name === 'transaction-hash') {
+            if (item === 'block' || item === 'transaction') {
+              append = 's'
+              split[1] = split[1] + 's'
+            } else {
+              pathItems.push({
+                text: nItem,
+              })
+              break
+            }
+          }
+          if (route.name === 'tokenTransfers') {
+            if (item === 'tokentransfers') {
+              pathItems.push({
+                text: 'Token Transfers',
+                to: 'tokentransfers',
+              })
+              break
+            }
+          }
+          let to = split.slice(0, index + 1).join('/')
+          if (route.name === 'transactions' && item === 'transactions') {
+            if (split[index + 1] && split[index + 1] !== 'latest') {
+              to = split.slice(0, index).join('/') + 'latest'
+            } else {
+              pathItems.push({
+                text: item.charAt(0).toUpperCase() + item.slice(1),
+                to: split.slice(0, index + 1).join('/'),
+              })
+              break
+            }
+          }
+          if (route.name === 'uncles' && item === 'uncles') {
+            pathItems.push({
+              text: 'Blocks',
+              to: 'blocks',
+            })
+          }
+          if (route.name === 'forkedBlocks' && item === 'forkedBlocks') {
+            pathItems.push({
+              text: 'Blocks',
+              to: 'blocks',
+            })
+            pathItems.push({
+              text: 'Forked',
+              to: split.slice(0, index + 1).join('/'),
+            })
+            break
+          }
           const pathItem = {
-            text: item.charAt(0).toUpperCase() + item.slice(1),
-            to: split.slice(0, index + 1).join('/'),
+            text: item.charAt(0).toUpperCase() + item.slice(1) + append,
+            to,
           }
 
           pathItems.push(pathItem)
@@ -77,10 +130,6 @@ export default {
             pathItems[pathItems.length - 1].text + ` (${addressName})`
         }
       }
-
-      // const items = pathItems.map((item) => {
-      //   return { text: item.charAt(0).toUpperCase() + item.slice(1), to: '' }
-      // })
 
       return pathItems
     },

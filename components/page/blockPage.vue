@@ -5,9 +5,7 @@
     :active-tab="openTransactions ? 'transactions' : 'block'"
     :loading="loading"
   >
-    <template v-slot:block.number.key>
-      Height:
-    </template>
+    <template v-slot:block.number.key>Height:</template>
     <template v-slot:block.number="{ number: height }">
       <nuxt-link
         :to="{

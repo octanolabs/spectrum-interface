@@ -18,11 +18,11 @@
       Showing {{ formatNumber(transactions.length) }} pending transactions
     </template>
     <template v-if="!pending" v-slot:item.timestamp="{ value: ts }">
-      {{ $moment.unix(ts).format('L, LTS') }}
+      {{ calcTime(ts) }}
     </template>
     <template v-if="!pending" v-slot:item.hash="{ value: txHash }">
       <nuxt-link :to="{ name: 'transaction-hash', params: { hash: txHash } }">
-        {{ txHash.substring(0, 23) }}...
+        {{ formatHash(txHash) }}
       </nuxt-link>
     </template>
     <template v-else v-slot:item.hash="{ value: txHash }">
@@ -67,6 +67,33 @@
     <template v-else v-slot:item.gasPrice="{ item: { gasPrice } }">
       {{ fromWeiToGwei(gasPrice) }} Gwei
     </template>
+    <template v-slot:item.status="{ item }">
+      <v-tooltip v-if="item.status" bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-icon small color="primary" v-bind="attrs" v-on="on">
+            mdi-check-circle
+          </v-icon>
+        </template>
+        <span>Success.</span>
+      </v-tooltip>
+      <v-tooltip v-else-if="!isByzantium(item.blockNumber)" bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-icon small v-bind="attrs" v-on="on">mdi-information</v-icon>
+        </template>
+        <span>
+          This transaction predates the activation of Andromeda. Status is
+          unavailble.
+        </span>
+      </v-tooltip>
+      <v-tooltip v-else bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-icon small color="secondary" v-bind="attrs" v-on="on">
+            mdi-alert-circle
+          </v-icon>
+        </template>
+        <span>Failed to execute.</span>
+      </v-tooltip>
+    </template>
   </table-view>
 </template>
 
@@ -74,6 +101,7 @@
 import tableView from '../util/TableView.vue'
 import common from '~/scripts/common'
 import addresses from '~/scripts/addresses'
+import config from '~/params/config.json'
 
 export default {
   name: 'TxnsTable',
@@ -195,6 +223,11 @@ export default {
             value: 'txFee',
             sortable: false,
           },
+          {
+            text: '',
+            value: 'status',
+            sortable: false,
+          },
         ]
       }
 
@@ -202,6 +235,9 @@ export default {
     },
   },
   methods: {
+    isByzantium(blockNumber) {
+      return blockNumber >= config.byzantium
+    },
     getRowCount(items) {
       return items.length
     },
@@ -212,7 +248,11 @@ export default {
       return common.fromWeiToGwei(value)
     },
     getAddressTag(hash) {
-      return addresses.getAddressTag(hash) || hash.substring(0, 23) + '...'
+      const checksum = common.toChecksumAddress(hash)
+      return (
+        addresses.getAddressTag(hash) ||
+        checksum.substr(0, 8) + '...' + checksum.substr(hash.length - 6)
+      )
     },
     calcTxFee(gasUsed, gasPrice) {
       return common.fromWei(common.calcTxFee(gasUsed, gasPrice))
@@ -222,6 +262,12 @@ export default {
     },
     hexToDecimal(hex) {
       return common.hexToDecimal(hex)
+    },
+    calcTime(timestamp) {
+      return this.$moment().to(timestamp * 1000)
+    },
+    formatHash(hash) {
+      return hash.substr(0, 10) + '...' + hash.substr(hash.length - 8)
     },
   },
 }

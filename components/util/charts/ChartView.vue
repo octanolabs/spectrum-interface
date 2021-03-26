@@ -14,7 +14,7 @@
 <template>
   <v-card outlined>
     <v-card-title>
-      <div class="d-flex align-center" style="width: 100%;">
+      <div class="d-flex align-center" style="width: 100%">
         <v-col cols="2">
           <v-menu
             ref="menu"

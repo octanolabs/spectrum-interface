@@ -9,7 +9,7 @@
     v-else
     :key="reloadChartKey"
     ref="apexchart"
-    :height="this.$attrs.height ? this.$attrs.height : 500"
+    :height="this.$attrs.height ? this.$attrs.height : 800"
     v-bind="chartProps"
   />
 </template>

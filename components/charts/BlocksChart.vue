@@ -42,15 +42,30 @@ export default {
       activeChart: 0,
       chartOptions: [
         {
-          colors: ['#00ea90', '#ef6221', '#555555'],
           annotations: {
-            yaxis: [],
+            position: 'front',
+            yaxis: [
+              {
+                y: 982,
+                strokeDashArray: 1,
+                borderColor: '#FF00FF',
+                label: {
+                  text: '982 block target',
+                  borderColor: '#FF00FF',
+                  offsetY: -20,
+                  style: {
+                    background: 'transparent',
+                  },
+                },
+              },
+            ],
           },
+          colors: ['#6fceb7', '#e76754', '#FF00FF'],
           stroke: {
             show: true,
             curve: 'smooth',
             lineCap: 'butt',
-            width: 1,
+            width: 2,
             dashArray: 0,
           },
           fill: {
@@ -79,6 +94,13 @@ export default {
               },
             },
           ],
+          tooltip: {
+            enabled: true,
+            fixed: {
+              enabled: true,
+              position: 'topLeft',
+            },
+          },
         },
         {
           annotations: {
@@ -87,10 +109,10 @@ export default {
               {
                 y: 88,
                 strokeDashArray: 1,
-                borderColor: '#00ea90',
+                borderColor: '#FF00FF',
                 label: {
                   text: '88 second target',
-                  borderColor: '#00ea90',
+                  borderColor: '#FF00FF',
                   offsetY: -20,
                   style: {
                     background: 'transparent',
@@ -99,18 +121,17 @@ export default {
               },
             ],
           },
-          colors: ['#00ea90', '#ef6221', '#555555'],
+          colors: ['#6fceb7', '#2e2e2e', '#FF00FF'],
           fill: {
-            colors: ['#00ea90', '#ef6221', '#555555'],
             type: 'solid',
-            opacity: [1, 0.35],
+            opacity: [1, 1],
           },
           stroke: {
             show: true,
             curve: 'smooth',
             lineCap: 'butt',
             colors: undefined,
-            width: 1,
+            width: 2,
             dashArray: 0,
           },
           xaxis: {
@@ -118,13 +139,8 @@ export default {
             labels: {
               show: false,
             },
-          },
-          tooltip: {
-            enabled: true,
-            fixed: {
-              enabled: true,
-              position: 'topRight',
-              offsetX: -200,
+            axisTicks: {
+              show: false,
             },
           },
           yaxis: [
@@ -142,6 +158,13 @@ export default {
               },
             },
           ],
+          tooltip: {
+            enabled: true,
+            fixed: {
+              enabled: true,
+              position: 'topLeft',
+            },
+          },
         },
       ],
       chartData: [

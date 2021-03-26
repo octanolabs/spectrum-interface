@@ -1,61 +1,43 @@
 <template>
-  <v-row justify="center">
-    <v-col cols="10">
-      <v-card>
-        <v-tabs centered>
-          <v-tab to="/transactions/latest">Latest</v-tab>
-          <v-tab to="/transactions/pending">Pending</v-tab>
-          <v-tab to="/transactions/failed">Failed</v-tab>
-          <v-tab to="/transactions/contracts">Deployed Contracts</v-tab>
-          <v-tab to="/transactions/calls">Contract Calls</v-tab>
-        </v-tabs>
-      </v-card>
-    </v-col>
-    <v-col cols="10">
-      <txnsTable
-        v-if="type === 'pending'"
-        no-breadcrumbs
-        :loading="$fetchState.pending"
-        :transactions="txStore.pending"
-        :total="txStore.total"
-        pending
-        @refresh="$fetch"
-      />
-      <txnsTable
-        v-else-if="type === 'failed'"
-        no-breadcrumbs
-        :loading="$fetchState.pending"
-        :transactions="txStore.failed"
-        :total="txStore.total"
-        @refresh="$fetch"
-      />
-      <txnsTable
-        v-else-if="type === 'contracts'"
-        no-breadcrumbs
-        :loading="$fetchState.pending"
-        :transactions="txStore.contracts"
-        :total="txStore.total"
-        deploys-contracts
-        @refresh="$fetch"
-      />
-      <txnsTable
-        v-else-if="type === 'calls'"
-        no-breadcrumbs
-        :loading="$fetchState.pending"
-        :transactions="txStore.calls"
-        :total="txStore.total"
-        @refresh="$fetch"
-      />
-      <txnsTable
-        v-else
-        no-breadcrumbs
-        :loading="$fetchState.pending"
-        :transactions="txStore.latest"
-        :total="txStore.total"
-        @refresh="$fetch"
-      />
-    </v-col>
-  </v-row>
+  <v-col cols="12" class="pa-0">
+    <txnsTable
+      v-if="type === 'pending'"
+      :loading="$fetchState.pending"
+      :transactions="txStore.pending"
+      :total="txStore.total"
+      pending
+      @refresh="$fetch"
+    />
+    <txnsTable
+      v-else-if="type === 'failed'"
+      :loading="$fetchState.pending"
+      :transactions="txStore.failed"
+      :total="txStore.total"
+      @refresh="$fetch"
+    />
+    <txnsTable
+      v-else-if="type === 'contracts'"
+      :loading="$fetchState.pending"
+      :transactions="txStore.contracts"
+      :total="txStore.total"
+      deploys-contracts
+      @refresh="$fetch"
+    />
+    <txnsTable
+      v-else-if="type === 'calls'"
+      :loading="$fetchState.pending"
+      :transactions="txStore.calls"
+      :total="txStore.total"
+      @refresh="$fetch"
+    />
+    <txnsTable
+      v-else
+      :loading="$fetchState.pending"
+      :transactions="txStore.latest"
+      :total="txStore.total"
+      @refresh="$fetch"
+    />
+  </v-col>
 </template>
 
 <router>

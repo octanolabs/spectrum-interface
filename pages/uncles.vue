@@ -1,14 +1,12 @@
 <template>
-  <v-row justify="center">
-    <v-col cols="10">
-      <uncles-table
-        :uncles="unclesStore.uncles"
-        :total="unclesStore.total"
-        :loading="$fetchState.pending"
-        @refresh="$fetch"
-      />
-    </v-col>
-  </v-row>
+  <v-col cols="12" class="pa-0">
+    <uncles-table
+      :uncles="unclesStore.uncles"
+      :total="unclesStore.total"
+      :loading="$fetchState.pending"
+      @refresh="$fetch"
+    />
+  </v-col>
 </template>
 
 <script>
