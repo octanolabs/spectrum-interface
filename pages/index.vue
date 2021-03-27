@@ -150,8 +150,6 @@ export default {
     PreviewBlock,
   },
   async middleware({ store }) {
-    await store.dispatch('fetchStats')
-    await store.dispatch('fetchChainSummary')
     await store.dispatch('charts/fetchTransactions')
   },
   data() {
@@ -225,14 +223,6 @@ export default {
         },
       ]
     },
-  },
-  created() {
-    const self = this
-    this.loop = setInterval(function () {
-      self.now = self.$moment
-      self.$store.dispatch('fetchStats')
-      self.$store.dispatch('fetchChainSummary')
-    }, process.env.config.pollData)
   },
   methods: {
     calcMarketcap(supply, price) {

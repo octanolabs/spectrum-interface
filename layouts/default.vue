@@ -244,6 +244,14 @@ export default {
   async created() {
     await this.$store.dispatch('fetchStats')
     await this.$store.dispatch('fetchChainSummary')
+    await this.$store.dispatch('tokens/getNativePriceUsd')
+    const self = this
+    this.loop = setInterval(function () {
+      self.now = self.$moment
+      self.$store.dispatch('fetchStats')
+      self.$store.dispatch('fetchChainSummary')
+      self.$store.dispatch('tokens/getNativePriceUsd')
+    }, process.env.config.pollData)
   },
   computed: {
     blockHeight() {

@@ -300,7 +300,7 @@ export default {
     Blockie,
   },
   async middleware({ store }) {
-    await store.dispatch('fetchStats')
+    await store.dispatch('tokens/getNativePriceUsd')
     await store.dispatch('tokens/getDefaultTokens')
     await store.dispatch('tokens/getShinobiTokens')
     await store.dispatch('tokens/getShinobiPairs')
