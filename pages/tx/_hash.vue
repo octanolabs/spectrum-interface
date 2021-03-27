@@ -21,9 +21,13 @@
                 {{ txn.hash }}
               </template>
               <template v-slot:action>
+                <v-chip v-if="pending" small outlined label color="warning">
+                  <v-icon class="pr-2" small>mdi-clock-outline</v-icon>
+                  <strong>PENDING</strong>
+                </v-chip>
                 <template v-if="isByzantium(txn.blockNumber)">
                   <v-chip
-                    v-if="txn.status"
+                    v-if="!pending && txn.status"
                     small
                     outlined
                     label
@@ -32,7 +36,13 @@
                     <v-icon class="pr-2" small>mdi-check-circle-outline</v-icon>
                     <strong>SUCCESS</strong>
                   </v-chip>
-                  <v-chip v-else small outlined label color="error">
+                  <v-chip
+                    v-else-if="!pending"
+                    small
+                    outlined
+                    label
+                    color="error"
+                  >
                     <v-icon class="pr-2" small>mdi-alert-circle-outline</v-icon>
                     <strong>FAILED</strong>
                   </v-chip>
@@ -40,6 +50,7 @@
               </template>
             </spectrum-list-item>
             <spectrum-list-item
+              v-if="!pending"
               title="Timestamp"
               tooltip="The number of the block in which the transaction was recorded. Block confirmation indicate how many blocks since the transaction is mined."
               three-line
@@ -67,7 +78,7 @@
               tooltip="The sending party of the transaction."
             >
               <template v-slot:subtitle>
-                <v-avatar size="16">
+                <v-avatar v-if="txn.from" size="16">
                   <blockie :address="txn.from" size="xs" inline />
                 </v-avatar>
                 <nuxt-link
@@ -85,7 +96,7 @@
               tooltip="The receiving party of the transaction. May be a contract."
             >
               <template v-slot:subtitle>
-                <v-avatar size="16">
+                <v-avatar v-if="txn.to" size="16">
                   <blockie :address="txn.to" size="xs" inline />
                 </v-avatar>
                 <nuxt-link
@@ -128,9 +139,7 @@
                 </nuxt-link>
               </template>
               <template
-                v-if="
-                  token.action === 'Transferred' || token.action === 'Minted'
-                "
+                v-if="token.to && token.action !== 'Burned'"
                 v-slot:subtitle2
               >
                 <v-avatar size="16">
@@ -213,11 +222,11 @@
                 Gas Price <v-icon small>mdi-gas-station</v-icon>
                 {{ fromWeiToGwei(txn.gasPrice) }} gwei
               </template>
-              <template v-slot:subtitle2>
+              <template v-if="txn.gasUsed" v-slot:subtitle2>
                 Gas Used <v-icon small>mdi-fire</v-icon>
                 {{ nf.format(txn.gasUsed) }}
               </template>
-              <template v-slot:action>
+              <template v-if="txn.gasUsed" v-slot:action>
                 <v-row no-gutters>
                   <strong>
                     {{ txFee }}
@@ -234,7 +243,7 @@
                   </strong>
                 </v-row>
               </template>
-              <template v-slot:action2>
+              <template v-if="txn.gasUsed" v-slot:action2>
                 <v-row v-if="priceUSD" no-gutters>
                   ${{ calcValue(txFee, 6) }}
                 </v-row>
@@ -306,108 +315,29 @@ export default {
     await store.dispatch('tokens/getShinobiPairs')
   },
   async fetch() {
-    const [
-      {
-        data: { result: txn },
-      },
-    ] = await Promise.all([
-      axios.post(process.env.config.apiUrl, {
-        jsonrpc: '2.0',
-        method: 'explorer_transactionByHash',
-        params: [this.$route.params.hash],
-        id: 88,
-      }),
-    ])
-    this.txn = txn
-    this.txFee = this.calcTxFee(this.txn.gasUsed, this.txn.gasPrice)
-    if (this.txn.logs.length > 0) {
-      this.showLogs = true
-      this.eventLogs = contracts.processEventLogs(this.txn.logs)
-    }
-    if (this.txn.input !== '0x') {
-      this.inputData = contracts.processTxnInput(this.txn.input)
-    }
-
-    this.transfers = tokens.processInputData(this.txn, this.inputData)
-    if (this.transfers) {
-      const provider = new ethers.providers.JsonRpcProvider(
-        'https://rpc.octano.dev'
-      )
-      const erc20Abi = [
-        'function name() view returns (string)',
-        'function symbol() view returns (string)',
-        'function decimals() view returns (uint8)',
-      ]
-
-      for (const transfer of this.transfers) {
-        if (transfer.type === 'erc20') {
-          if (this.tokens[transfer.contract]) {
-            // token info is already in state, use it.
-            transfer.name = this.tokens[transfer.contract].name
-            transfer.symbol = this.tokens[transfer.contract].symbol
-            transfer.decimals = this.tokens[transfer.contract].decimals
-            const decimals = new BigNumber(10).pow(
-              this.tokens[transfer.contract].decimals
-            )
-            const value = transfer.value.div(decimals).toString()
-            transfer.value = value
-          } else {
-            // fetch the info from the token contract itself.
-            const tokenContract = new ethers.Contract(
-              transfer.contract,
-              erc20Abi,
-              provider
-            )
-            transfer.name = await tokenContract.name()
-            transfer.symbol = await tokenContract.symbol()
-            transfer.decimals = await tokenContract.decimals()
-            this.$store.dispatch('tokens/addERC20', transfer)
-            const decimals = new BigNumber(10).pow(transfer.decimals)
-            const value = new BigNumber(transfer.value).div(decimals).toString()
-            transfer.value = value
-          }
-          transfer.checksumAddress = common.toChecksumAddress(transfer.contract)
-          if (this.shinobiTokens[transfer.contract] && transfer.value) {
-            transfer.derivedUBQ =
-              this.shinobiTokens[transfer.contract].derivedETH *
-              this.$store.state.tokens.ubqPrice *
-              transfer.value
-
-            transfer.derivedUBQ = transfer.derivedUBQ.toFixed(4)
-          }
-          transfer.fetched = true
-        } else {
-          // assume native for now
-          transfer.decimals = 18
-          const decimals = new BigNumber(10).pow(transfer.decimals)
-          transfer.symbol = 'UBQ'
-          transfer.name = 'Ubiq'
-          transfer.value = new BigNumber(transfer.value)
-            .div(decimals)
-            .toString()
-          transfer.checksumAddress =
-            '0x1FA6A37c64804C0D797bA6bC1955E50068FbF362' // wubq hack
-          transfer.derivedUBQ =
-            this.$store.state.tokens.ubqPrice * transfer.value
-          transfer.derivedUBQ = transfer.derivedUBQ.toFixed(4)
-          transfer.fetched = true
-        }
-      }
-    }
-    const [
-      {
-        data: { result: trace },
-      },
-    ] = await Promise.all([
-      axios.post(process.env.config.apiUrl, {
-        jsonrpc: '2.0',
-        method: 'explorer_txTrace',
-        params: [this.$route.params.hash],
-        id: 88,
-      }),
-    ])
-    if (trace) {
-      this.txnTrace = trace
+    const txn = await this.fetchTxn()
+    if (txn === undefined) {
+      // maybe its pending?
+      const [
+        {
+          data: { result: pending },
+        },
+      ] = await Promise.all([
+        axios.post(process.env.config.rpcUrl, {
+          jsonrpc: '2.0',
+          method: 'eth_getTransactionByHash',
+          params: [this.$route.params.hash],
+          id: 88,
+        }),
+      ])
+      console.log(pending)
+      this.pending = true
+      await this.parseTxn(pending, true)
+      this.txn = pending
+      this.poll()
+    } else {
+      this.txn = txn
+      await this.parseTxn(txn, false)
     }
   },
   data() {
@@ -425,6 +355,7 @@ export default {
         minimumFractionDigits: 0,
         maximumFractionDigits: 18,
       }),
+      pending: false,
     }
   },
   computed: {
@@ -463,6 +394,135 @@ export default {
   methods: {
     isByzantium(blockNumber) {
       return blockNumber >= config.byzantium
+    },
+    async fetchTxn() {
+      const [
+        {
+          data: { result: txn },
+        },
+      ] = await Promise.all([
+        axios.post(process.env.config.apiUrl, {
+          jsonrpc: '2.0',
+          method: 'explorer_transactionByHash',
+          params: [this.$route.params.hash],
+          id: 88,
+        }),
+      ])
+      return txn
+    },
+    poll() {
+      if (this.pending) {
+        const self = this
+        setTimeout(async function () {
+          const confirmed = await self.fetchTxn()
+          if (confirmed) {
+            self.pending = false
+            await self.parseTxn(confirmed, false)
+            self.txn = confirmed
+          } else {
+            self.poll()
+          }
+        }, 10000)
+      }
+    },
+    async parseTxn(txn, pending) {
+      if (!pending) {
+        this.txFee = this.calcTxFee(txn.gasUsed, txn.gasPrice)
+        if (txn.logs && txn.logs.length > 0) {
+          this.showLogs = true
+          this.eventLogs = contracts.processEventLogs(txn.logs)
+        }
+      }
+
+      if (txn.input !== '0x') {
+        this.inputData = contracts.processTxnInput(txn.input)
+      }
+
+      this.transfers = tokens.processInputData(txn, this.inputData)
+      if (this.transfers) {
+        const provider = new ethers.providers.JsonRpcProvider(
+          'https://rpc.octano.dev'
+        )
+        const erc20Abi = [
+          'function name() view returns (string)',
+          'function symbol() view returns (string)',
+          'function decimals() view returns (uint8)',
+        ]
+
+        for (const transfer of this.transfers) {
+          if (transfer.type === 'erc20') {
+            if (this.tokens[transfer.contract]) {
+              // token info is already in state, use it.
+              transfer.name = this.tokens[transfer.contract].name
+              transfer.symbol = this.tokens[transfer.contract].symbol
+              transfer.decimals = this.tokens[transfer.contract].decimals
+              const decimals = new BigNumber(10).pow(
+                this.tokens[transfer.contract].decimals
+              )
+              const value = transfer.value.div(decimals).toString()
+              transfer.value = value
+            } else {
+              // fetch the info from the token contract itself.
+              const tokenContract = new ethers.Contract(
+                transfer.contract,
+                erc20Abi,
+                provider
+              )
+              transfer.name = await tokenContract.name()
+              transfer.symbol = await tokenContract.symbol()
+              transfer.decimals = await tokenContract.decimals()
+              this.$store.dispatch('tokens/addERC20', transfer)
+              const decimals = new BigNumber(10).pow(transfer.decimals)
+              const value = new BigNumber(transfer.value)
+                .div(decimals)
+                .toString()
+              transfer.value = value
+            }
+            transfer.checksumAddress = common.toChecksumAddress(
+              transfer.contract
+            )
+            if (this.shinobiTokens[transfer.contract] && transfer.value) {
+              transfer.derivedUBQ =
+                this.shinobiTokens[transfer.contract].derivedETH *
+                this.$store.state.tokens.ubqPrice *
+                transfer.value
+
+              transfer.derivedUBQ = transfer.derivedUBQ.toFixed(4)
+            }
+            transfer.fetched = true
+          } else {
+            // assume native for now
+            transfer.decimals = 18
+            const decimals = new BigNumber(10).pow(transfer.decimals)
+            transfer.symbol = 'UBQ'
+            transfer.name = 'Ubiq'
+            transfer.value = new BigNumber(transfer.value)
+              .div(decimals)
+              .toString()
+            transfer.checksumAddress =
+              '0x1FA6A37c64804C0D797bA6bC1955E50068FbF362' // wubq hack
+            transfer.derivedUBQ =
+              this.$store.state.tokens.ubqPrice * transfer.value
+            transfer.derivedUBQ = transfer.derivedUBQ.toFixed(4)
+            transfer.fetched = true
+          }
+        }
+      }
+      const [
+        {
+          data: { result: trace },
+        },
+      ] = await Promise.all([
+        axios.post(process.env.config.apiUrl, {
+          jsonrpc: '2.0',
+          method: 'explorer_txTrace',
+          params: [this.$route.params.hash],
+          id: 88,
+        }),
+      ])
+      if (trace) {
+        this.txnTrace = trace
+      }
     },
     formatAddress(hash, len) {
       if (hash) {

@@ -20,13 +20,10 @@
     <template v-if="!pending" v-slot:item.timestamp="{ value: ts }">
       {{ calcTime(ts) }}
     </template>
-    <template v-if="!pending" v-slot:item.hash="{ value: txHash }">
+    <template v-slot:item.hash="{ value: txHash }">
       <nuxt-link :to="{ name: 'tx-hash', params: { hash: txHash } }">
         {{ formatHash(txHash) }}
       </nuxt-link>
-    </template>
-    <template v-else v-slot:item.hash="{ value: txHash }">
-      {{ txHash }}
     </template>
     <template v-slot:item.from="{ value: sender }">
       <nuxt-link :to="{ name: 'address-account', params: { account: sender } }">
@@ -248,11 +245,15 @@ export default {
       return common.fromWeiToGwei(value)
     },
     getAddressTag(hash) {
-      const checksum = common.toChecksumAddress(hash)
-      return (
-        addresses.getAddressTag(hash) ||
-        checksum.substr(0, 8) + '...' + checksum.substr(hash.length - 6)
-      )
+      if (hash) {
+        const checksum = common.toChecksumAddress(hash)
+        return (
+          addresses.getAddressTag(hash) ||
+          checksum.substr(0, 8) + '...' + checksum.substr(hash.length - 6)
+        )
+      } else {
+        return ''
+      }
     },
     calcTxFee(gasUsed, gasPrice) {
       return common.fromWei(common.calcTxFee(gasUsed, gasPrice))

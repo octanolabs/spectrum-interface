@@ -47,7 +47,10 @@ function toBigNumber(str) {
 
 export default {
   processInputData(txn, inputData) {
-    const logs = contracts.processEventLogs(txn.logs)
+    let logs = []
+    if (txn.logs) {
+      logs = contracts.processEventLogs(txn.logs)
+    }
     const transfers = []
     // if value > 0 push default standard transfer
     if (txn.value > 0) {
