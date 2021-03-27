@@ -99,7 +99,10 @@
                       mdi-information-outline
                     </v-icon>
                   </template>
-                  <span>boom</span>
+                  <span>
+                    For each block, the miner is rewarded a finite amount of ubq
+                    on top of the fees paid for transactions in the block.
+                  </span>
                 </v-tooltip>
               </v-list-item-action>
               <v-list-item-content>
@@ -117,7 +120,12 @@
                       mdi-information-outline
                     </v-icon>
                   </template>
-                  <span>boom</span>
+                  <span>
+                    An uncle block has a significantly lower reward than a
+                    normal block. Uncles reward is valid but rejected as it is
+                    not on the longest chain which is the working mechanism of
+                    the blockchain.
+                  </span>
                 </v-tooltip>
               </v-list-item-action>
               <v-list-item-content>
@@ -135,7 +143,7 @@
                       mdi-information-outline
                     </v-icon>
                   </template>
-                  <span>boom</span>
+                  <span>Transactions fees included in this block.</span>
                 </v-tooltip>
               </v-list-item-action>
               <v-list-item-content>
@@ -153,7 +161,7 @@
                       mdi-information-outline
                     </v-icon>
                   </template>
-                  <span>boom</span>
+                  <span>Average price paid per unit of gas.</span>
                 </v-tooltip>
               </v-list-item-action>
               <v-list-item-content>
@@ -171,7 +179,10 @@
                       mdi-information-outline
                     </v-icon>
                   </template>
-                  <span>boom</span>
+                  <span>
+                    The total gas used in the block and its percentage of gas
+                    filled in the block.
+                  </span>
                 </v-tooltip>
               </v-list-item-action>
               <v-list-item-content>
@@ -190,7 +201,9 @@
                       mdi-information-outline
                     </v-icon>
                   </template>
-                  <span>boom</span>
+                  <span>
+                    Total gas limit provided by all transactions in the block.
+                  </span>
                 </v-tooltip>
               </v-list-item-action>
               <v-list-item-content>
@@ -208,7 +221,10 @@
                       mdi-information-outline
                     </v-icon>
                   </template>
-                  <span>boom</span>
+                  <span>
+                    The amount of effort required to mine a new block. The
+                    difficulty algorithm may adjust according to time.
+                  </span>
                 </v-tooltip>
               </v-list-item-action>
               <v-list-item-content>
@@ -226,7 +242,7 @@
                       mdi-information-outline
                     </v-icon>
                   </template>
-                  <span>boom</span>
+                  <span>Total difficulty of the chain until this block.</span>
                 </v-tooltip>
               </v-list-item-action>
               <v-list-item-content>
@@ -244,7 +260,10 @@
                       mdi-information-outline
                     </v-icon>
                   </template>
-                  <span>boom</span>
+                  <span>
+                    The block size is actually determined by the block's gas
+                    limit.
+                  </span>
                 </v-tooltip>
               </v-list-item-action>
               <v-list-item-content>
@@ -263,7 +282,9 @@
                       mdi-information-outline
                     </v-icon>
                   </template>
-                  <span>boom</span>
+                  <span>
+                    Any data that can be included by the miner in the block.
+                  </span>
                 </v-tooltip>
               </v-list-item-action>
               <v-list-item-content>
@@ -284,7 +305,9 @@
                       mdi-information-outline
                     </v-icon>
                   </template>
-                  <span>boom</span>
+                  <span>
+                    The hash of the block header of the current block.
+                  </span>
                 </v-tooltip>
               </v-list-item-action>
               <v-list-item-content>
@@ -300,7 +323,10 @@
                       mdi-information-outline
                     </v-icon>
                   </template>
-                  <span>boom</span>
+                  <span>
+                    The hash of the block from which this block was generated,
+                    also known as its parent block.
+                  </span>
                 </v-tooltip>
               </v-list-item-action>
               <v-list-item-content>
@@ -318,7 +344,10 @@
                       mdi-information-outline
                     </v-icon>
                   </template>
-                  <span>boom</span>
+                  <span>
+                    The mechanism which the Javascript RLP encodes an empty
+                    string.
+                  </span>
                 </v-tooltip>
               </v-list-item-action>
               <v-list-item-content>
@@ -336,7 +365,10 @@
                       mdi-information-outline
                     </v-icon>
                   </template>
-                  <span>boom</span>
+                  <span>
+                    Block nonce is a value used during mining to demonstrate
+                    proof of work for a block.
+                  </span>
                 </v-tooltip>
               </v-list-item-action>
               <v-list-item-content>
@@ -354,7 +386,7 @@
                       mdi-information-outline
                     </v-icon>
                   </template>
-                  <span>boom</span>
+                  <span>Amount of UBQ minted in this block.</span>
                 </v-tooltip>
               </v-list-item-action>
               <v-list-item-content>
@@ -372,7 +404,7 @@
                       mdi-information-outline
                     </v-icon>
                   </template>
-                  <span>boom</span>
+                  <span>Total supply of UBQ at this block height.</span>
                 </v-tooltip>
               </v-list-item-action>
               <v-list-item-content>

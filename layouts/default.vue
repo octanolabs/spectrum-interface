@@ -17,6 +17,9 @@
         >
         </v-text-field>
       </v-input>
+      <v-avatar size="36" class="ml-4">
+        <v-img :src="require('~/assets/ubiq.png')" />
+      </v-avatar>
     </v-app-bar>
     <!-- nav drawer -->
     <v-navigation-drawer v-model="drawer" fixed app class="abstract-drawer">
@@ -24,14 +27,10 @@
         <v-list dense class="pa-0">
           <v-list-item>
             <v-list-item-avatar>
-              <img
-                src="../assets/logo.svg"
-                height="36px"
-                style="height: 36px"
-              />
+              <img src="../assets/logo.svg" height="24" width="24" />
             </v-list-item-avatar>
             <v-list-item-content class="text-right">
-              <h1 style="color: #6fceb7">spectrum</h1>
+              <h1 style="color: #6fceb7">ubiqscan</h1>
               <v-list-item-subtitle style="color: #e76754">
                 block explorer
               </v-list-item-subtitle>
@@ -86,7 +85,26 @@
           </template>
         </v-list-group>
       </v-list>
-      <template v-slot:append></template>
+      <template v-slot:append>
+        <v-list dense>
+          <v-list-item
+            link
+            :href="'https://shinobi-info.ubiq.ninja'"
+            target="_blank"
+          >
+            <v-list-item-avatar tile size="24">
+              <v-img :src="require('~/assets/shinobi.svg')" height="24" />
+            </v-list-item-avatar>
+            <v-list-item-title>Shinobi Info</v-list-item-title>
+          </v-list-item>
+          <v-list-item link :href="'https://stats.ubiqscan.io'" target="_blank">
+            <v-list-item-avatar tile size="24">
+              <v-icon>mdi-gauge</v-icon>
+            </v-list-item-avatar>
+            <v-list-item-title>Network stats</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </template>
     </v-navigation-drawer>
     <notifications position="bottom right" group="normal" />
 
@@ -97,28 +115,6 @@
       <nuxt></nuxt>
     </v-main>
     <v-footer padless app fixed height="22px" style="background-color: #6fceb7">
-      <v-tooltip top>
-        <template v-slot:activator="{ on }">
-          <v-btn
-            text
-            tile
-            style="
-              height: 22px;
-              display: flex;
-              align-items: center;
-              font-size: 12px;
-            "
-            v-on="on"
-          >
-            <span v-if="!!prices.ubq" style="margin-top: 2px">
-              ${{ prices.ubq.usd.toFixed(3) }} @ {{ prices.ubq.btc }} BTC/UBQ
-            </span>
-          </v-btn>
-        </template>
-        <span v-if="!!prices.ubq">
-          Price: ${{ prices.ubq.usd.toFixed(3) }} @ {{ prices.ubq.btc }} BTC/UBQ
-        </span>
-      </v-tooltip>
       <v-spacer />
       <v-tooltip top>
         <template v-slot:activator="{ on }">
@@ -187,11 +183,9 @@
 
 <script>
 import axios from 'axios'
-import smoothReflow from 'vue-smooth-reflow'
 import common from '../scripts/common'
 
 export default {
-  mixins: [smoothReflow],
   data() {
     return {
       search: '',
@@ -216,6 +210,12 @@ export default {
             ['Latest', 'mdi-check', '/transactions/latest'],
             ['Pending', 'mdi-update', '/transactions/pending'],
             ['Failed', 'mdi-alert-circle-outline', '/transactions/failed'],
+            ['Contract Calls', 'mdi-data-matrix-scan', '/transactions/calls'],
+            [
+              'Contract Deploys',
+              'mdi-data-matrix-plus',
+              '/transactions/contracts',
+            ],
           ],
         ],
         [
@@ -223,17 +223,8 @@ export default {
           'mdi-diamond-stone',
           false,
           [
-            ['Transfers', 'mdi-bank-transfer', '/tokentransfers'],
-            ['View All', 'mdi-diamond-stone', '/tokens'],
-          ],
-        ],
-        [
-          'Contracts',
-          'mdi-file-code-outline',
-          false,
-          [
-            ['Calls', 'mdi-data-matrix-scan', '/transactions/calls'],
-            ['Created', 'mdi-data-matrix-plus', '/transactions/contracts'],
+            ['ERC20', 'mdi-diamond-stone', '/tokens'],
+            ['ERC20 Transfers', 'mdi-bank-transfer', '/tokentransfers'],
           ],
         ],
         [
@@ -246,25 +237,13 @@ export default {
             ['Gas', 'mdi-gas-station-outline', '/analytics/gas'],
           ],
         ],
-        [
-          'Misc',
-          'mdi-routes',
-          true,
-          [
-            ['Network stats', 'mdi-gauge', 'https://ubiq.gojupiter.tech'],
-            [
-              'Shinobi info',
-              'mdi-chart-areaspline-variant',
-              'https://shinobi-info.ubiq.ninja',
-            ],
-          ],
-        ],
       ],
       number: new Intl.NumberFormat('en', {}),
     }
   },
-  async middleware({ store }) {
-    await store.dispatch('tokens/getNativePriceUsd')
+  async created() {
+    await this.$store.dispatch('fetchStats')
+    await this.$store.dispatch('fetchChainSummary')
   },
   computed: {
     blockHeight() {
@@ -273,12 +252,6 @@ export default {
     summary() {
       return this.$store.state.summary
     },
-    prices() {
-      return this.$store.state.prices
-    },
-  },
-  mounted() {
-    this.$smoothReflow()
   },
   methods: {
     handleEvent(e) {

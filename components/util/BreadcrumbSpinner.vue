@@ -92,6 +92,17 @@ export default {
               break
             }
           }
+          if (route.name === 'uncle-hash') {
+            if (item === 'uncle') {
+              text = 'uncles'
+              path = '/uncles'
+            } else {
+              pathItems.push({
+                text: item.substr(0, 12),
+              })
+              break
+            }
+          }
           // path = split.slice(0, index + 1).join('/')
           if (route.name === 'transactions' && item === 'transactions') {
             if (split[index + 1] && split[index + 1] !== 'latest') {

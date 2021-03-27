@@ -32,10 +32,10 @@
       {{ difficulty }}
     </template>
     <template v-slot:uncle.gasUsed="{ gasUsed, gasLimit }">
-      {{ formatNumber(uncle.gasUsed) }} ({{ calcGasUsed(gasUsed, gasLimit) }})
+      {{ nf.format(uncle.gasUsed) }} ({{ calcGasUsed(gasUsed, gasLimit) }})
     </template>
     <template v-slot:uncle.gasLimit="{ gasLimit }">
-      {{ formatNumber(gasLimit) }}
+      {{ nf.format(gasLimit) }}
     </template>
     <template v-slot:uncle.timestamp="{ timestamp }">
       ~{{ calcTime(timestamp) }}
@@ -64,6 +64,14 @@ export default {
       },
     },
   },
+  data() {
+    return {
+      nf: new Intl.NumberFormat('en', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 18,
+      }),
+    }
+  },
   methods: {
     getAddressTag(hash) {
       return addresses.getAddressTag(hash) || hash
@@ -78,9 +86,6 @@ export default {
         this.$moment.utc(timestamp * 1000).format('lll') +
         ' UTC)'
       )
-    },
-    formatNumber(val) {
-      return common.formatNumber(val)
     },
     fromWei(val, roundTo) {
       return common.fromWei(val, roundTo)
