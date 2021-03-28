@@ -136,12 +136,12 @@ hr {
 
 // Apexcharts custom styling
 
-//.v-application {
-//  font-family: $body-font-family, sans-serif !important;
+.v-application {
+  font-family: $body-font-family, monospace !important;
 //  .title { // To pin point specific classes of some components
 //    font-family: $body-font-family, sans-serif !important;
 //  }
-//}
+}
 
 //Override rally preset background
 .v-application {

@@ -1,3 +1,5 @@
+@import 'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap';
+
 // colors
 
 $ubiq-green:              #6fceb7 !default; // ubiq green
@@ -26,8 +28,8 @@ $break-large:              1200px;
 //------------------------------------//
 
 $material-light: ( cards: #1f1f1f30);
-$body-font-family: ("Courier New", Helvetica, Arial, sans-serif);
-$heading-font-family: ("Courier New", Helvetica, Arial, sans-serif);
+$body-font-family: "IBM Plex Mono";
+$heading-font-family: "IBM Plex Mono";
 
 
 $headings: (
