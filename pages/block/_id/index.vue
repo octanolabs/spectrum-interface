@@ -2,12 +2,12 @@
   <v-col cols="12" class="pa-0">
     <breadcrumbSpinner v-bind="$attrs" no-loading />
     <v-tabs v-model="tab" grow show-arrows>
-      <v-tab>Overview</v-tab>
-      <v-tab>
+      <v-tab href="#overview">Overview</v-tab>
+      <v-tab href="#transactions">
         Transactions
         <v-chip label small class="ml-1">{{ block.transactions }}</v-chip>
       </v-tab>
-      <v-tab-item eager>
+      <v-tab-item eager value="overview">
         <!-- If the selected tab has at least one slot, use normal layout-->
         <v-col cols="12" class="pa-1">
           <v-list dense>
@@ -417,7 +417,7 @@
           </v-list>
         </v-col>
       </v-tab-item>
-      <v-tab-item>
+      <v-tab-item value="transactions">
         <txns-table
           :transactions="transactions"
           :total="transactions.length"
@@ -429,10 +429,6 @@
     </v-tabs>
   </v-col>
 </template>
-
-<router>
-  path: /block/:id/:action?
-</router>
 
 <script>
 import axios from 'axios'
@@ -490,12 +486,19 @@ export default {
     return {
       block: {},
       transactions: [],
-      tab: null,
     }
   },
   computed: {
     openTransactions() {
       return this.$route.params.action === 'transactions'
+    },
+    tab: {
+      set(tab) {
+        this.$router.replace({ query: { ...this.$route.query, tab } })
+      },
+      get() {
+        return this.$route.query.tab
+      },
     },
   },
   middleware({ store }) {

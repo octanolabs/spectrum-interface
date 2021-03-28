@@ -20,7 +20,7 @@
       </v-list-item-title>
       <v-list-item-subtitle>
         <label v-if="txns > 0">
-          <nuxt-link :to="`/block/${number}?show=transactions`">
+          <nuxt-link :to="`/block/${number}?tab=transactions`">
             {{ txns }} txns
           </nuxt-link>
         </label>

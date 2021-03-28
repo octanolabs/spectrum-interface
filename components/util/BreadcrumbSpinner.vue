@@ -53,9 +53,8 @@ export default {
     pathItems() {
       const route = this.$route
       const pathItems = []
-      const split = route.fullPath
-        .split('/')
-        .filter((item) => !item.includes('?'))
+      const trimParams = route.fullPath.split('?')[0]
+      const split = trimParams.split('/').filter((item) => !item.includes('?'))
       for (const [index, item] of split.entries()) {
         if (index > 0) {
           let text = item

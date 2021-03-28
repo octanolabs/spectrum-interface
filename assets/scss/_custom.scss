@@ -138,15 +138,12 @@ hr {
 
 .v-application {
   font-family: $body-font-family, monospace !important;
-//  .title { // To pin point specific classes of some components
-//    font-family: $body-font-family, sans-serif !important;
-//  }
+  background: #1e1e1e !important;
+  .title { // To pin point specific classes of some components
+    font-family: $body-font-family, monospace !important;
+  }
 }
 
-//Override rally preset background
-.v-application {
-  background: #1e1e1e !important;
-}
 //.theme--dark .v-card {
 //  background-color: #111;
 //}
