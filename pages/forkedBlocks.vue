@@ -78,8 +78,8 @@
               <span class="code">Miner:</span>
               <nuxt-link
                 :to="{
-                  name: 'Address',
-                  params: { hash: item.canonicalblock.miner },
+                  name: 'address-account',
+                  params: { account: item.canonicalblock.miner },
                 }"
               >
                 {{ getAddressTag(item.canonicalblock.miner) }}
