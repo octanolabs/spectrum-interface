@@ -1,16 +1,16 @@
 <template>
-  <v-dialog max-width="300">
+  <v-dialog max-width="259">
     <template v-slot:activator="{ on }">
       <v-icon v-on="on">mdi-qrcode</v-icon>
     </template>
-    <v-card>
-      <v-card-text>
-        <v-row justify="center" align="center">
+    <v-card color="#fff">
+      <v-card-text class="pa-0">
+        <v-row justify="center" align="center" no-gutters>
           <qrcode
             tag="img"
             :value="address"
             :options="{
-              color: { dark: '#00ea90', light: '#0000' },
+              color: { dark: '#000000', light: '#0000' },
               scale: 7,
             }"
           ></qrcode>
