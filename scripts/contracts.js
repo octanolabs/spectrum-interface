@@ -119,12 +119,29 @@ const functions = {
   '0x2e1a7d4d': 'withdraw(uint256 amount)',
   '0x3d18b912': 'getReward()',
   '0xe9fad8ee': 'exit()',
-  // ERC1155
+  // ERC1155 / Poster
   '0xa22cb465': 'setApprovalForAll(address operator, bool approved)',
   '0xf242432a':
     'safeTransferFrom(address from, address to, uint256 id, uint256 amount, bytes data)',
   '0x2eb2c2d6':
     'safeBatchTransferFrom(address from, address to, uint256[] ids, uint256[] amounts, bytes data)',
+  '0xf5298aca': 'burn(address account, uint256 id, uint256 value)',
+  '0x6b20c454': 'burnBatch(address account, uint256[] ids, uint256[] values)',
+  '0x2f2ff15d': 'grantRole(bytes32 role, address account)',
+  '0x731133e9': 'mint(address to, uint256 id, uint256 amount, bytes data)',
+  '0x1f7fdffa':
+    'mintBatch(address to, uint256[] ids, uint256[] values, bytes data)',
+  '0x8456cb59': 'pause()',
+  '0x36568abe': 'renounceRole(bytes role, address account)',
+  '0xd547741f': 'revokeRole(bytes role, address account)',
+  '0x3f4ba83a': 'upause()',
+  // PosterShop
+  '0xec8ac4d8': 'buyTokens(address beneficiary)',
+  '0x715018a6': 'renounceOwnership()',
+  '0x34fcf437': 'setRate(uint256 _rate)',
+  '0x144fa6d7': 'setToken(address _token)',
+  '0x8ee25267': 'setTokenID(uint256 _tokenID)',
+  '0xdeaa59df': 'setWallet(address _wallet)',
   // WUBQ
   '0xd0e30db0': 'deposit()',
 }
@@ -177,7 +194,7 @@ const events = {
   '0xd78ad95f':
     'Swap(index_topic_1 address sender, uint256 amount0In, uint256 amount1In, uint256 amount0Out uint256 amount1Out, index_topic_2 address to)',
   '0x1c411e9a': 'Sync(uint112 reserve0, uint112 reserve1)',
-  // ERC1155
+  // ERC1155 / Poster
   '0x17307eab':
     'ApprovalForAll(index_topic_1 address account, index_topic_2 address operator, bool approved)',
   '0x4a39dc06':
@@ -185,6 +202,21 @@ const events = {
   '0xc3d58168':
     'TransferSingle(index_topic_1 address operator, index_topic_2 address from, index_topic_3 address to, uint256 id, uint256 value)',
   '0x6bb7ff70': 'URI(string value, index_topic_1 uint256 id)',
+  '0x62e78cea': 'Paused(address account)',
+  '0xbd79b86f':
+    'RoleAdminChanged(index_topic_1 bytes32 role, index_topic_2 bytes32 previousAdminRole, index_topic_3 bytes32 newAdminRole)',
+  '0x2f878811':
+    'RoleGranted(index_topic_1 bytes32 role, index_topic_2 address account, index_topic_3 address sender)',
+  '0xf6391f5c':
+    'RoleRevoked(index_topic_1 bytes32 role, index_topic_2 address account, index_topic_3 address sender)',
+  '0x5db9ee0a': 'Unpaused(address account)',
+  // Posershop
+  '0xe65c987b': 'RateUpdated(uint256 newRate)',
+  '0x9842cf83': 'TokenIDUpdated(uint256 tokenID)',
+  '0x5ba6b30c': 'TokenUpdated(address token)',
+  '0x6faf9323':
+    'TokensPurchased(index_topic_1 address purchaser, index_topic_2 address beneficiary, uint256 value, uint256 amount)',
+  '0x4edbfac5': 'WalletUpdated(address wallet)',
   // WUBQ
   '0x7fcf532c': 'Withdrawal(index_topic_1 address src, uint256 wad)',
 }
