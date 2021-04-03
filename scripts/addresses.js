@@ -71,6 +71,11 @@ const misc = {
   // Shinobi
   '0xba831e62ac14d8500cef0367b14f383d7b1b1b0a': 'Shinobi (Factory)',
   '0xf3ce4655a44146c8eefbf45651f6479f9d67a77a': 'Shinobi (Router)',
+  // Poster shop
+  '0x0ec8ce8fcba64592286a2b3f31c0d4a5e54fd309': 'Ubiq Redeemable Poster',
+  '0x07786a37c664b1a8ed536204c6f93bf7195ed8f6': 'Ubiq Poster Reserve',
+  '0xdef0a14dd84962791ac4877e07b8e8cf6ac4854a': 'Ubiq Poster Shop #0',
+  '0x21dc859f6b054dcc82f019db139664026674cdd9': 'Ubiq Poster Shop #1',
 }
 
 export default {
