@@ -112,11 +112,7 @@
             <spectrum-list-item
               v-for="(token, index) of transfers"
               :key="index"
-              :title="
-                token.type === 'erc20'
-                  ? 'Token ' + token.action
-                  : 'Ubiq ' + token.action
-              "
+              :title="token.title + ' ' + token.action"
               :tooltip="
                 'Asset ' +
                 (token.action ? token.action.toLowerCase() : 'transferred') +
@@ -194,6 +190,11 @@
               <template v-slot:action2>
                 <v-row v-if="token.derivedUBQ && token.fetched" no-gutters>
                   ${{ nf.format(token.derivedUBQ) }}
+                </v-row>
+                <v-row v-else-if="token.description" no-gutters>
+                  <a :href="token.url" target="_blank">
+                    {{ token.description }}
+                  </a>
                 </v-row>
               </template>
             </spectrum-list-item>
@@ -449,8 +450,45 @@ export default {
           'function decimals() view returns (uint8)',
         ]
 
+        const erc1155Abi = ['function uri(uint256) view returns (string)']
+
         for (const transfer of this.transfers) {
-          if (transfer.type === 'erc20') {
+          if (transfer.type === 'erc1155') {
+            const tokenContract = new ethers.Contract(
+              transfer.contract,
+              erc1155Abi,
+              provider
+            )
+            let uri = await tokenContract.uri(transfer.id.toNumber())
+            if (uri && transfer.id) {
+              uri = uri.replace('{id}', transfer.id.toString())
+              if (uri.startsWith('https://poster.ubiqsmart.com')) {
+                uri = uri + '.json'
+              }
+              if (this.tokens[transfer.contract]) {
+                transfer.name = this.tokens[transfer.contract].name
+                transfer.symbol = this.tokens[transfer.contract].symbol
+              } else {
+                // const meta = await axios.get(uri)
+                const meta = {
+                  name: 'Hodler',
+                  description: 'Physically redeemable poster #1',
+                  external_url: 'https://poster.ubiqsmart.com',
+                  image: 'https://poster.ubiqsmart.com/preview/1.png',
+                }
+                transfer.name = meta.name
+                transfer.symbol = meta.name
+                transfer.description = meta.description
+                transfer.url = meta.external_url
+                this.$store.dispatch('tokens/addERC20', transfer)
+                transfer.checksumAddress = common.toChecksumAddress(
+                  transfer.contract
+                )
+              }
+            }
+            transfer.title = 'NFT'
+            transfer.fetched = true
+          } else if (transfer.type === 'erc20') {
             if (this.tokens[transfer.contract]) {
               // token info is already in state, use it.
               transfer.name = this.tokens[transfer.contract].name
@@ -489,6 +527,7 @@ export default {
 
               transfer.derivedUBQ = transfer.derivedUBQ.toFixed(4)
             }
+            transfer.title = 'Token'
             transfer.fetched = true
           } else {
             // assume native for now
@@ -504,6 +543,7 @@ export default {
             transfer.derivedUBQ =
               this.$store.state.tokens.ubqPrice * transfer.value
             transfer.derivedUBQ = transfer.derivedUBQ.toFixed(4)
+            transfer.title = 'Ubiq'
             transfer.fetched = true
           }
         }

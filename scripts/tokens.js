@@ -71,10 +71,19 @@ export default {
       let contract = null
       let value = txn.value
       let push = false
+      let id = null
       if (log.isKnown) {
         contract = log.address
         value = toBigNumber(log.data[0])
-        if (log.name.startsWith('Transfer')) {
+        // ERC1155 transferSingle
+        if (log.name.startsWith('TransferSingle')) {
+          from = toAddress(log.topics[2])
+          to = toAddress(log.topics[3])
+          type = 'erc1155'
+          id = toBigNumber(log.data[0])
+          value = toBigNumber(log.data[1])
+          push = true
+        } else if (log.name.startsWith('Transfer')) {
           // is a TransferEvent TODO: check TransferFrom - iquidus
           from = toAddress(log.topics[1])
           to = toAddress(log.topics[2])
@@ -129,6 +138,7 @@ export default {
             value,
             contract,
             action,
+            id,
           })
         }
       }
