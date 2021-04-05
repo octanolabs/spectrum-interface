@@ -283,6 +283,7 @@ p>code {
 }
 
 .v-main__wrap {
-  overflow:auto;
+  overflow-y:auto;
+  overflow-x:hidden;
   max-height: calc(100vh - 86px);
 }
