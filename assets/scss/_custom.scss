@@ -22,6 +22,11 @@
  * Scrollbar thumb styles
  */
 
+html, body {
+  overflow-x: hidden !important;
+  overflow-y: hidden !important;
+}
+
 .ps__rail-x {
   height:6px;
   border-radius: 6px;
@@ -229,4 +234,51 @@ footer a:hover {
 
 .abstract-drawer {
   background-color: #1e1e1e !important;
+}
+
+.v-navigation-drawer__border {
+  z-index: 2 !important;
+}
+
+pre {
+  max-width: 100%;
+  overflow-x: auto;
+  background-color: rgba(0,0,0,0);
+  padding: 6px 6px 0;
+}
+
+.v-application code {
+  font-size: 11px !important;
+  background-color: rgba(0,0,0,0) !important;
+  white-space: pre !important;
+}
+
+p>code {
+  display: inline !important;
+  padding: 0 3px !important;
+}
+
+.custom-highlight-row{
+  background-color: $ubiq-green;
+}
+
+.w-100 {
+  width: 100% !important;
+}
+
+.theme--dark.v-expansion-panels .v-expansion-panel .v-expansion-panel-header, .drawer-toolbar.theme--dark {
+  background-color: #2a2a2a;
+}
+
+.theme--light.v-expansion-panels .v-expansion-panel .v-expansion-panel-header,.drawer-toolbar.theme--light {
+  background-color: $code;
+}
+
+.v-expansion-panel-content__wrap {
+  padding: 0px !important;
+}
+
+.v-main__wrap {
+  overflow:auto;
+  max-height: calc(100vh - 86px);
 }

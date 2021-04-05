@@ -237,9 +237,23 @@ export default {
             ['Gas', 'mdi-gas-station-outline', '/analytics/gas'],
           ],
         ],
+        [
+          'APIs',
+          'mdi-code-json',
+          false,
+          [['go-ubiq', 'mdi-code-json', '/d0x/gubiq']],
+        ],
       ],
       number: new Intl.NumberFormat('en', {}),
     }
+  },
+  computed: {
+    blockHeight() {
+      return this.$store.state.summary.blocks[0]?.number | 0
+    },
+    summary() {
+      return this.$store.state.summary
+    },
   },
   async created() {
     await this.$store.dispatch('fetchStats')
@@ -252,14 +266,6 @@ export default {
       self.$store.dispatch('fetchChainSummary')
       self.$store.dispatch('tokens/getNativePriceUsd')
     }, process.env.config.pollData)
-  },
-  computed: {
-    blockHeight() {
-      return this.$store.state.summary.blocks[0]?.number | 0
-    },
-    summary() {
-      return this.$store.state.summary
-    },
   },
   methods: {
     handleEvent(e) {

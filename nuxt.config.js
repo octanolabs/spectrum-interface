@@ -38,7 +38,8 @@ export default {
     '~plugins/apexcharts.js',
     '~plugins/notifications.js',
     '~plugins/qrcode.js',
-    '~plugins/smoothreflow.js',
+    '~plugins/clipboard.js',
+    '~plugins/highlight.js',
   ],
   /*
    ** Nuxt.js dev-modules

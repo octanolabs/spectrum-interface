@@ -59,7 +59,7 @@ export default {
         if (index > 0) {
           let text = item
           let path = split[1]
-
+          let uppercase = true
           if (route.name === 'block-id') {
             if (item === 'block') {
               text = 'blocks'
@@ -69,6 +69,17 @@ export default {
                 text: item.substr(0, 12),
               })
               break
+            }
+          }
+          if (route.name === 'd0x-api') {
+            if (item === 'd0x') {
+              text = item
+              path = null
+              uppercase = false
+            } else if (item === 'gubiq') {
+              text = 'go-ubiq'
+              path = null
+              uppercase = false
             }
           }
           if (route.name === 'tx-hash') {
@@ -142,8 +153,11 @@ export default {
               break
             }
           }
+          if (uppercase) {
+            text = text.charAt(0).toUpperCase() + text.slice(1)
+          }
           const pathItem = {
-            text: text.charAt(0).toUpperCase() + text.slice(1),
+            text,
             to: path,
           }
 
