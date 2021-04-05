@@ -241,7 +241,10 @@ export default {
           'APIs',
           'mdi-code-json',
           false,
-          [['go-ubiq', 'mdi-code-json', '/d0x/gubiq']],
+          [
+            ['go-ubiq', 'mdi-code-json', '/d0x/gubiq'],
+            ['ubiq supply', 'mdi-calculator', '/docs/supply'],
+          ],
         ],
       ],
       number: new Intl.NumberFormat('en', {}),

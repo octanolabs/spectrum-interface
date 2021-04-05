@@ -1,6 +1,6 @@
 <template>
   <v-card class="ma-1" outlined>
-    <v-card-title>
+    <v-card-title v-if="name || item.name">
       <v-subheader class="pa-0">{{ name || item.name }}</v-subheader>
       <v-spacer />
       <v-tooltip v-if="schema.oneOf" left>
