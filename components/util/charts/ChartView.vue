@@ -253,7 +253,7 @@ export default {
         if (dates.length === 0) {
           this.dates = [
             this.$moment(earliestDate)
-              .subtract(1, 'years')
+              .subtract(6, 'months')
               .format('YYYY-MM-DD'),
             this.$moment(earliestDate).format('YYYY-MM-DD'),
           ]
