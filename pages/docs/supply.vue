@@ -6,7 +6,7 @@
         <v-list-item-content class="py-0">
           <v-list-item-title>Ubiq Supply API</v-list-item-title>
           <v-list-item-subtitle>
-            This APIs lets you retrieve the UBQ supply
+            This API lets you retrieve the UBQ supply
           </v-list-item-subtitle>
         </v-list-item-content>
         <v-list-item-action>
@@ -34,8 +34,9 @@
       </v-list-item>
     </v-list>
     <small class="px-4">
-      This GET API exists for marketcap and inflation calculations. Supply is
-      updated per block and returned in UBQ as a string.
+      This GET API exists for marketcap calculations. Supply is updated per
+      block and returned in whole UBQ as a string. Ubiq was fair launched,
+      circulating supply equals total supply.
     </small>
     <v-subheader>Response</v-subheader>
     <v-card class="ma-1 code-card" outlined>
