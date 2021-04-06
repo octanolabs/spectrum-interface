@@ -469,17 +469,24 @@ export default {
                 transfer.name = this.tokens[transfer.contract].name
                 transfer.symbol = this.tokens[transfer.contract].symbol
               } else {
-                // const meta = await axios.get(uri)
-                const meta = {
+                let meta = null
+                try {
+                  meta = await axios.get(uri)
+                  transfer.name = meta.name
+                  transfer.symbol = meta.name
+                  transfer.description = meta.description
+                  transfer.url = meta.external_url
+                } catch (e) {
+                  console.log(e)
+                }
+
+                /* const meta = {
                   name: 'Hodler',
                   description: 'Physically redeemable poster #1',
                   external_url: 'https://poster.ubiqsmart.com',
                   image: 'https://poster.ubiqsmart.com/preview/1.png',
-                }
-                transfer.name = meta.name
-                transfer.symbol = meta.name
-                transfer.description = meta.description
-                transfer.url = meta.external_url
+                } */
+
                 this.$store.dispatch('tokens/addERC20', transfer)
                 transfer.checksumAddress = common.toChecksumAddress(
                   transfer.contract
