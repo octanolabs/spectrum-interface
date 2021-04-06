@@ -59,6 +59,8 @@ export default {
         if (index > 0) {
           let text = item
           let path = split[1]
+          console.log(route)
+          console.log(text)
           let uppercase = true
           if (route.name === 'block-id') {
             if (item === 'block') {
@@ -112,6 +114,9 @@ export default {
               })
               break
             }
+          }
+          if (route.name === 'docs-supply') {
+            path = null
           }
           // path = split.slice(0, index + 1).join('/')
           if (route.name === 'transactions' && item === 'transactions') {
