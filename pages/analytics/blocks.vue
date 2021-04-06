@@ -14,8 +14,11 @@ import BlocksChart from '../../components/charts/BlocksChart'
 
 export default {
   components: { BlocksChart },
-  async fetch() {
-    await this.$store.dispatch('charts/fetchAll')
+  async middleware({ store }) {
+    await store.dispatch('charts/fetchTransactions')
+    await store.dispatch('charts/fetchAll')
+    await store.dispatch('fetchStats')
+    await store.dispatch('fetchChainSummary')
   },
   computed: {
     store() {
