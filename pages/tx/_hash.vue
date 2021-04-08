@@ -448,6 +448,7 @@ export default {
           'function name() view returns (string)',
           'function symbol() view returns (string)',
           'function decimals() view returns (uint8)',
+          'function totalSupply() view returns (uint256)',
         ]
 
         const erc1155Abi = ['function uri(uint256) view returns (string)']
@@ -513,9 +514,11 @@ export default {
                 erc20Abi,
                 provider
               )
+              transfer.id = transfer.contract
               transfer.name = await tokenContract.name()
               transfer.symbol = await tokenContract.symbol()
               transfer.decimals = await tokenContract.decimals()
+              transfer.totalSupply = await tokenContract.totalSupply()
               this.$store.dispatch('tokens/addERC20', transfer)
               const decimals = new BigNumber(10).pow(transfer.decimals)
               const value = new BigNumber(transfer.value)

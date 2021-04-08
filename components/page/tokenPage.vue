@@ -1,92 +1,137 @@
 <template>
-  <div class="d-flex flex-column">
-    <v-sheet>
-      <data-view
-        :item="{
-          supply: store.supply,
-          address: address,
-          transfersTotal: store.tokenTransfersTotal,
-          contractData: store.contractData,
-          token: store.token,
-          price: price,
-        }"
-      >
-        <template v-slot:overview.blockie.key="{ address: accountAddress }">
-          <blockie :address="accountAddress" size="md" inline></blockie>
-        </template>
-        <template
-          v-slot:overview.address.key="{
-            address: accountAddress,
-            token: { name },
-          }"
-        >
-          Showing token ({{ name }}) deployed at account {{ address }}
-        </template>
-        <template v-slot:overview.address="{ address: accountAddress }">
-          <qrcode-modal :address="accountAddress" />
-        </template>
-        <template v-slot:overview.symbol="{ token: { symbol } }">
-          {{ symbol }}
-        </template>
-        <template v-slot:overview.decimals="{ token: { decimals } }">
-          {{ decimals }}
-        </template>
-        <template v-slot:overview.hr />
-        <template v-slot:overview.supply="{ supply, token: { symbol } }">
-          {{ formatNumber(supply) }} {{ symbol }}
-        </template>
-        <template v-slot:overview.supply.key>
-          <!-- TODO: eventually swap this for reusable popout component -->
-          <v-tooltip attach="#info">
-            <template v-slot:activator="{ on }">
-              Supply <v-icon id="info" small v-on="on">mdi-information</v-icon>
+  <div class="d-flex flex-column pa-0">
+    <v-list class="pb-0 mb-0">
+      <v-list-item style="border-bottom: 1px solid #272727">
+        <v-list-item-avatar size="24">
+          <v-img
+            :src="
+              'https://raw.githubusercontent.com/octanolabs/assets/master/blockchains/ubiq/assets/' +
+              toChecksumAddress(address) +
+              '/logo.png'
+            "
+          >
+            <template v-slot:placeholder>
+              <blockie :address="address" size="sm" inline />
             </template>
-            <div class="d-block" style="width: 250px">
-              This value represents the total supply defined in the token
-              contract, it may not represent current circulating supply.
-            </div>
+          </v-img>
+        </v-list-item-avatar>
+        <v-list-item-content>
+          <v-list-item-title>
+            {{ toChecksumAddress(address) }}
+          </v-list-item-title>
+          <v-list-item-subtitle v-if="token">
+            {{ token.name }} - {{ token.symbol }}
+          </v-list-item-subtitle>
+        </v-list-item-content>
+        <v-list-item-action>
+          <qrcode-modal :address="address" />
+        </v-list-item-action>
+      </v-list-item>
+      <v-list-item style="border-bottom: 1px solid #272727">
+        <v-list-item-avatar tile size="24">
+          <v-img :src="require('~/assets/shinobi.svg')" width="24" />
+        </v-list-item-avatar>
+        <v-list-item-content>
+          <v-list-item-title>Price</v-list-item-title>
+          <v-list-item-subtitle>${{ price.toFixed(4) }}</v-list-item-subtitle>
+        </v-list-item-content>
+        <v-list-item-action>
+          <v-row class="justify-center">
+            <v-btn
+              fab
+              x-small
+              color="primary"
+              :href="'https://shinobi-info.ubiq.ninja/token/' + address"
+              target="_blank"
+            >
+              <v-icon small>mdi-arrow-right</v-icon>
+            </v-btn>
+          </v-row>
+        </v-list-item-action>
+      </v-list-item>
+      <v-list-item style="border-bottom: 1px solid #272727">
+        <v-list-item-avatar size="24" tile>
+          <v-icon size="24">mdi-cash-multiple</v-icon>
+        </v-list-item-avatar>
+        <v-list-item-content>
+          <v-list-item-title>Total {{ token.symbol }}</v-list-item-title>
+          <v-list-item-subtitle>
+            {{ nf.format(totalSupply.toString()) }}
+          </v-list-item-subtitle>
+        </v-list-item-content>
+        <v-list-item-action>
+          <v-tooltip right>
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon v-bind="attrs" v-on="on">
+                mdi-information-outline
+              </v-icon>
+            </template>
+            <span>
+              Total supply returned by token contract. May not reflect
+              circulating supply.
+            </span>
           </v-tooltip>
-        </template>
-        <template
-          v-if="price !== null"
-          v-slot:overview.marketCap="{ supply, bprice }"
-        >
-          {{ calcMarketcap(supply, bprice.btc) }} BTC
-        </template>
-        <template v-slot:overview.transfers="{ transfersTotal }">
-          {{ formatNumber(transfersTotal) }}
-        </template>
-      </data-view>
-      <data-view
-        :item="{
-          transfers: store.tokenTransfers,
-          contract: store.contractData,
-        }"
-        no-breadcrumbs
-      >
-        <template v-slot:tokenTransfers="{ transfers }">
-          <transfers-table
-            no-breadcrumbs
-            :transfers="transfers"
-            :total="store.tokenTransfersTotal"
-            :loading="loadingObject.tokenTransfers"
-            @refresh="$emit('refresh')"
-          />
-        </template>
-        <template v-slot:contractCode="{ contract }">
-          <v-card flat color="grey darken-4">
-            <v-card-title>Contract Bytecode</v-card-title>
-            <v-card-text>
-              {{ contract.contractByteCode }}
-            </v-card-text>
-          </v-card>
-        </template>
-      </data-view>
-    </v-sheet>
+        </v-list-item-action>
+      </v-list-item>
+      <v-list-item style="border-bottom: 1px solid #272727">
+        <v-list-item-avatar size="24" tile>
+          <v-icon size="24">mdi-chart-line</v-icon>
+        </v-list-item-avatar>
+        <v-list-item-content>
+          <v-list-item-title>Market Cap</v-list-item-title>
+          <v-list-item-subtitle>
+            ${{ nf.format(marketcap.toFixed(0)) }}
+          </v-list-item-subtitle>
+        </v-list-item-content>
+        <v-list-item-action>
+          <v-tooltip right>
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon v-bind="attrs" v-on="on">
+                mdi-information-outline
+              </v-icon>
+            </template>
+            <span>
+              This marketcap is calculated using total supply returned by token
+              contract. It may not reflect marketcap calculated using
+              circulating supply.
+            </span>
+          </v-tooltip>
+        </v-list-item-action>
+      </v-list-item>
+    </v-list>
+    <data-view
+      :item="{
+        transfers: store.tokenTransfers,
+        contract: store.contractData,
+      }"
+      no-breadcrumbs
+      no-title
+    >
+      <template v-slot:tokenTransfers="{ transfers }">
+        <transfers-table
+          no-breadcrumbs
+          :transfers="transfers"
+          :total="store.tokenTransfersTotal"
+          :loading="loadingObject.tokenTransfers"
+          @refresh="$emit('refresh')"
+        />
+      </template>
+      <template v-slot:contractCode="{ contract }">
+        <v-card flat color="grey darken-4">
+          <v-card-title>Contract Bytecode</v-card-title>
+          <v-card-text>
+            {{ contract.contractByteCode }}
+          </v-card-text>
+        </v-card>
+      </template>
+    </data-view>
   </div>
 </template>
 
 <script>
+import { ethers } from 'ethers'
+import BigNumber from 'bignumber.js'
+
 import DataView from '../util/DataView'
 import addresses from '../../scripts/addresses'
 import Blockie from '../util/misc/Blockie'
@@ -107,7 +152,7 @@ export default {
       required: true,
       default: '0x',
     },
-    price: {
+    token: {
       type: Object,
       required: true,
       default: () => null,
@@ -138,7 +183,23 @@ export default {
   data() {
     return {
       selectedToken: null,
+      totalSupply: new BigNumber(0),
+      nf: new Intl.NumberFormat('en', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 18,
+      }),
     }
+  },
+  computed: {
+    price() {
+      return this.token.derivedETH * this.$store.state.tokens.ubqPrice
+    },
+    marketcap() {
+      return this.totalSupply.times(this.price)
+    },
+  },
+  created() {
+    this.getTokenSupply(this.address)
   },
   methods: {
     getAddressTag(hash) {
@@ -157,6 +218,35 @@ export default {
     },
     calcMarketcap(supply, val) {
       return common.calcMarketcap(supply, val)
+    },
+    toChecksumAddress(hash) {
+      return common.toChecksumAddress(hash)
+    },
+    fromWei(val, roundTo) {
+      return common.fromWei(val, roundTo)
+    },
+    async getTokenSupply(address) {
+      if (address) {
+        const provider = await new ethers.providers.JsonRpcProvider(
+          'https://rpc.octano.dev'
+        )
+        const erc20Abi = ['function totalSupply() view returns (uint256)']
+        const tokenContract = await new ethers.Contract(
+          address,
+          erc20Abi,
+          provider
+        )
+        const ts = await tokenContract.totalSupply()
+        if (ts) {
+          const bn = new BigNumber(ts.toString())
+          const decimals = new BigNumber(10).pow(this.token.decimals)
+          const totalSupply = new BigNumber(bn).div(decimals)
+          this.totalSupply = totalSupply
+          console.log(bn.toString())
+        } else {
+          console.log('womp womp')
+        }
+      }
     },
   },
 }

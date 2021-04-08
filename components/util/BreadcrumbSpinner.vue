@@ -59,8 +59,6 @@ export default {
         if (index > 0) {
           let text = item
           let path = split[1]
-          console.log(route)
-          console.log(text)
           let uppercase = true
           if (route.name === 'block-id') {
             if (item === 'block') {

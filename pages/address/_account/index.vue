@@ -3,11 +3,11 @@
     <breadcrumbSpinner v-bind="$attrs" no-loading />
     <token-page
       v-if="isToken"
+      :token="token"
       :store="accountStore"
-      :price="tokenPrice"
       :address="$route.params.account"
       :loading-object="fetchStates"
-      @refresh="$fetch"
+      @refresh="$fetch()"
     />
 
     <account-page
@@ -16,16 +16,12 @@
       :price="ubqPrice"
       :address="$route.params.account"
       :loading-object="fetchStates"
-      @refresh="$fetch"
+      @refresh="$fetch()"
     />
   </v-col>
 </template>
 
-<!-- Todo: Default token balance view should only show echer balance, optional button to load all other token balances-->
-<!-- maybe it should be a small card component with balance + sparkline of n months of balance-->
-
 <script>
-import tokens from '../../../scripts/tokens'
 import accountPage from '~/components/page/accountPage.vue'
 import tokenPage from '~/components/page/tokenPage.vue'
 import BreadcrumbSpinner from '~/components/util/BreadcrumbSpinner.vue'
@@ -45,11 +41,17 @@ export default {
   },
   fetch() {
     const address = this.$route.params.account.toLowerCase()
+    const tokens = this.$store.state.tokens.erc20
+    const shinobi = this.$store.state.tokens.shinobi
     this.isToken = Object.keys(tokens).includes(address)
-
+    this.isShinobi = Object.keys(shinobi).includes(address)
+    let token = tokens[address]
     if (this.isToken) {
-      this.setToken(address)
-      this.fetchTokenSupply(address)
+      if (this.isShinobi) {
+        token = { ...shinobi[address], ...token }
+      }
+      this.token = token
+      console.log(token)
       this.fetchTransfersOfToken(address)
       this.fetchContractData(address)
     } else {
@@ -70,6 +72,8 @@ export default {
         contractData: false,
         mined: false,
         isToken: false,
+        isShinobi: false,
+        token: null,
       },
     }
   },
@@ -98,14 +102,6 @@ export default {
     return /^0x([A-Fa-f0-9]{40})$/.test(params.account)
   },
   methods: {
-    async setToken(address) {
-      await this.$store.dispatch('account/setToken', address)
-    },
-    async fetchTokenSupply(address) {
-      this.fetchStates.balance = true
-      await this.$store.dispatch('account/fetchTokenSupply', address)
-      this.fetchStates.balance = false
-    },
     async fetchTransfersOfToken(address) {
       this.fetchStates.tokenTransfers = true
       await this.$store.dispatch('account/fetchTransfersOfToken', address)
