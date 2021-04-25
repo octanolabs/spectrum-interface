@@ -49,7 +49,50 @@
 
 <script>
 export default {
-  props: ['copy', 'tooltip', 'btnSize', 'iconSize', 'color', 'type', 'content'],
+  props: {
+    copy: {
+      type: String,
+      default() {
+        return ''
+      },
+    },
+    tooltip: {
+      type: String,
+      default() {
+        return 'bottom'
+      },
+    },
+    btnSize: {
+      type: String,
+      default() {
+        return 'medium'
+      },
+    },
+    iconSize: {
+      type: String,
+      default() {
+        return 'medium'
+      },
+    },
+    color: {
+      type: String,
+      default() {
+        return 'primary'
+      },
+    },
+    type: {
+      type: String,
+      default() {
+        return 'text'
+      },
+    },
+    content: {
+      type: String,
+      default() {
+        return ''
+      },
+    },
+  },
   data() {
     return {
       success: false,

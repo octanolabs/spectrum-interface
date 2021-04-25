@@ -15,7 +15,14 @@
 
 <script>
 export default {
-  props: ['side'],
+  props: {
+    side: {
+      type: String,
+      default() {
+        return 'left'
+      },
+    },
+  },
   data: () => {
     return {
       shown: false,

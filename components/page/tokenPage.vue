@@ -242,9 +242,6 @@ export default {
           const decimals = new BigNumber(10).pow(this.token.decimals)
           const totalSupply = new BigNumber(bn).div(decimals)
           this.totalSupply = totalSupply
-          console.log(bn.toString())
-        } else {
-          console.log('womp womp')
         }
       }
     },

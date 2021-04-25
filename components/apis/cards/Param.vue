@@ -21,8 +21,8 @@
       </v-tooltip>
     </v-card-title>
     <v-card-text class="text-left">
-      <p v-if="item.description" v-html="item.description" />
-      <p v-else-if="desc" v-html="desc" />
+      <p v-if="item.description">{{ item.description }}</p>
+      <p v-else-if="desc">{{ desc }}</p>
     </v-card-text>
     <v-card-actions v-if="!schema.oneOf">
       <v-chip small label color="primary">{{ schema.type }}</v-chip>
@@ -35,23 +35,23 @@
       }}</v-chip>
     </v-card-actions>
     <v-flex v-if="schema.oneOf">
-      <v-card v-for="(item, i) in schema.oneOf" :key="i" class="ma-2" outlined>
+      <v-card v-for="(sitem, i) in schema.oneOf" :key="i" class="ma-2" outlined>
         <v-card-title class="pa-0">
-          <v-subheader class="pa-0">{{ item.name }}</v-subheader>
+          <v-subheader class="pa-0">{{ sitem.name }}</v-subheader>
         </v-card-title>
         <v-card-text class="text-left">
-          <p v-if="item.description" v-html="item.description" />
+          <p v-if="sitem.description">{{ sitem.description }}</p>
         </v-card-text>
         <v-card-actions>
-          <v-chip small label color="primary">{{ item.type }}</v-chip>
+          <v-chip small label color="primary">{{ sitem.type }}</v-chip>
           <v-spacer />
           <v-chip v-if="item.pattern" pill small color="secondary">{{
-            item.pattern
+            sitem.pattern
           }}</v-chip>
-          <v-flex v-if="item.enum" text-right>
+          <v-flex v-if="sitem.enum" text-right>
             <v-chip
-              v-for="(str, i) in item.enum"
-              :key="i"
+              v-for="(str, x) in sitem.enum"
+              :key="x"
               pill
               small
               color="secondary"

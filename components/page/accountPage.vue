@@ -67,7 +67,7 @@
               x-small
               color="primary"
               :disabled="totalShinobiPositions === 0"
-              :href="'https://shinobi-info.ubiq.ninja/account/' + this.address"
+              :href="'https://shinobi-info.ubiq.ninja/account/' + address"
               target="_blank"
             >
               {{ totalShinobiPositions }}
@@ -194,6 +194,7 @@ export default {
         minimumFractionDigits: 0,
         maximumFractionDigits: 18,
       }),
+      errors: [],
     }
   },
   computed: {
@@ -284,7 +285,7 @@ export default {
         this.totalShinobiPositions = count
         this.totalShinobiLiquidity = totalShinobiLiquidity.toFixed(2)
       } catch (e) {
-        console.log(e)
+        this.errors.push(e)
       }
     },
     async getBalances() {

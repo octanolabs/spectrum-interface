@@ -4,12 +4,12 @@
       <v-chip class="mb-2" label small color="secondary">
         {{ selected.name }}
       </v-chip>
-      <p
-        v-if="selected.description"
-        v-html="selected.description"
-        class="pa-0"
-      />
-      <p v-else v-html="selected.summary" class="pa-0" />
+      <p v-if="selected.description" class="pa-0">
+        {{ selected.description }}
+      </p>
+      <p v-else class="pa-0">
+        {{ selected.summary }}
+      </p>
     </v-sheet>
     <v-sheet style="width: 100%; overflow: hidden">
       <v-tabs v-model="apiTab" grow>
@@ -108,7 +108,18 @@ export default {
     OpenrpcRequest,
     OpenrpcResponse,
   },
-  props: ['selected', 'apiId'],
+  props: {
+    selected: {
+      type: Object,
+      default() {
+        return {}
+      },
+    },
+    apiId: {
+      type: String,
+      required: true,
+    },
+  },
   data() {
     return {
       apiTab: null,

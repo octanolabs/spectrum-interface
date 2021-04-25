@@ -30,7 +30,14 @@ export default {
   components: {
     CopyToClipboard,
   },
-  props: ['result'],
+  props: {
+    result: {
+      type: Object,
+      default() {
+        return {}
+      },
+    },
+  },
   data() {
     return {
       res: null,

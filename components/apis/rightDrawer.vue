@@ -20,7 +20,7 @@
     <method-details
       v-if="methods[selected]"
       :selected="methods[selected]"
-      :apiId="apiId"
+      :api-id="apiId"
     />
   </resizable-drawer>
 </template>
@@ -34,7 +34,12 @@ export default {
     MethodDetails,
     ResizableDrawer,
   },
-  props: ['apiId'],
+  props: {
+    apiId: {
+      type: String,
+      required: true,
+    },
+  },
   computed: {
     methods() {
       return this.$store.state.apis[this.apiId]

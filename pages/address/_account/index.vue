@@ -51,7 +51,6 @@ export default {
         token = { ...shinobi[address], ...token }
       }
       this.token = token
-      console.log(token)
       this.fetchTransfersOfToken(address)
       this.fetchContractData(address)
     } else {

@@ -88,7 +88,7 @@ import breadcrumbSpinner from '~/components/util/BreadcrumbSpinner.vue'
 import gubiq from '~/openrpc/gubiq.json'
 
 export default {
-  name: 'd0x',
+  name: 'D0x',
   components: {
     breadcrumbSpinner,
     CopyToClipboard,

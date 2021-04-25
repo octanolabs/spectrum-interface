@@ -331,7 +331,6 @@ export default {
           id: 88,
         }),
       ])
-      console.log(pending)
       this.pending = true
       await this.parseTxn(pending, true)
       this.txn = pending
@@ -357,6 +356,7 @@ export default {
         maximumFractionDigits: 18,
       }),
       pending: false,
+      errors: [],
     }
   },
   computed: {
@@ -478,16 +478,8 @@ export default {
                   transfer.description = meta.description
                   transfer.url = meta.external_url
                 } catch (e) {
-                  console.log(e)
+                  this.errors.push(e)
                 }
-
-                /* const meta = {
-                  name: 'Hodler',
-                  description: 'Physically redeemable poster #1',
-                  external_url: 'https://poster.ubiqsmart.com',
-                  image: 'https://poster.ubiqsmart.com/preview/1.png',
-                } */
-
                 this.$store.dispatch('tokens/addERC20', transfer)
                 transfer.checksumAddress = common.toChecksumAddress(
                   transfer.contract
