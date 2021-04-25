@@ -190,7 +190,7 @@ export default {
     return {
       search: '',
       errors: [],
-      drawer: true,
+      drawer: false,
       items: [
         [
           'Blocks', // title
@@ -258,10 +258,19 @@ export default {
       return this.$store.state.summary
     },
   },
+  mounted() {
+    this.onResize()
+
+    window.addEventListener('resize', this.onResize, { passive: true })
+  },
   async created() {
+    this.onResize()
     await this.$store.dispatch('fetchStats')
     await this.$store.dispatch('fetchChainSummary')
     await this.$store.dispatch('tokens/getNativePriceUsd')
+    if (!this.$store.state.mobile) {
+      this.drawer = true
+    }
     const self = this
     this.loop = setInterval(function () {
       self.now = self.$moment
@@ -364,6 +373,9 @@ export default {
           type: 'error',
         })
       }
+    },
+    onResize() {
+      this.$store.dispatch('set_mobile', window.innerWidth < 600)
     },
   },
 }

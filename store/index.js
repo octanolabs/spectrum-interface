@@ -41,6 +41,7 @@ export const state = () => ({
     blocktime: 0,
     difficulty: 0,
   },
+  mobile: false, // global isMobile
 })
 
 export const mutations = {
@@ -52,6 +53,9 @@ export const mutations = {
   },
   SET_STATS(state, payload) {
     state.stats = { ...payload }
+  },
+  SET_MOBILE(state, mobile) {
+    state.mobile = mobile
   },
 }
 
@@ -103,5 +107,10 @@ export const actions = {
       hashrate,
       difficulty,
     })
+  },
+  set_mobile({ commit, state }, isMobile) {
+    if (isMobile !== state.mobile) {
+      commit('SET_MOBILE', isMobile)
+    }
   },
 }
