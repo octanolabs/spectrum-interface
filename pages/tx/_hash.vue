@@ -220,12 +220,8 @@
               three-line
             >
               <template v-slot:subtitle>
-                Gas Price <v-icon small>mdi-gas-station</v-icon>
+                <v-icon small class="mr-1">mdi-gas-station</v-icon>Gas Price
                 {{ fromWeiToGwei(txn.gasPrice) }} gwei
-              </template>
-              <template v-if="txn.gasUsed" v-slot:subtitle2>
-                Gas Used <v-icon small>mdi-fire</v-icon>
-                {{ nf.format(txn.gasUsed) }}
               </template>
               <template v-if="txn.gasUsed" v-slot:action>
                 <v-row no-gutters>
@@ -251,14 +247,49 @@
               </template>
             </spectrum-list-item>
             <spectrum-list-item
-              title="Gas Limit"
+              three-line
               tooltip="Maximum amount of gas provided for the transaction. For normal UBQ transfers, the value is 21,000. For contracts this value is higher and bound by block gas limit."
             >
               <template v-slot:subtitle>
+                <v-icon small class="mr-1">mdi-battery</v-icon>Gas Limit
                 {{ nf.format(txn.gas) }}
               </template>
-              <template v-slot:action></template>
-              <template v-slot:action2></template>
+              <template v-if="txn.gasUsed" v-slot:subtitle2>
+                <v-icon class="mr-1" small>mdi-battery-70</v-icon>Gas Used
+                {{ nf.format(txn.gasUsed) }}
+              </template>
+            </spectrum-list-item>
+            <spectrum-list-item
+              v-if="!!txn.type && txn.type === '0x2'"
+              three-line
+              tooltip="Gas fees (EIP-1559)"
+            >
+              <template v-slot:subtitle>
+                <v-icon small class="mr-1">mdi-fire-circle</v-icon>Base
+                {{ txn.baseFeePerGas }} wei
+              </template>
+              <template v-slot:subtitle3>
+                <v-icon small class="mr-1">mdi-pickaxe</v-icon>Priority
+                {{ fromWeiToGwei(txn.maxPriorityFeePerGas) }} gwei
+              </template>
+              <template v-slot:subtitle2>
+                <v-icon class="mr-1" small>mdi-gauge-full</v-icon>Max
+                {{ fromWeiToGwei(txn.maxFeePerGas) }} gwei
+              </template>
+            </spectrum-list-item>
+            <spectrum-list-item
+              v-if="!!txn.type && txn.type === '0x2'"
+              tooltip="Fee breakdown (EIP-1559)"
+              three-line
+            >
+              <template v-slot:subtitle>
+                <v-icon small class="mr-1">mdi-fire</v-icon>Burned
+                {{ calcFeeBreakdown(txn.gasUsed, txn.baseFeePerGas) }} gwei
+              </template>
+              <template v-slot:subtitle2>
+                <v-icon small class="mr-1">mdi-pickaxe</v-icon>Miner
+                {{ calcTxFee(txn.gasUsed, txn.maxPriorityFeePerGas) }} UBQ
+              </template>
             </spectrum-list-item>
             <spectrum-list-item
               v-if="txn.nonce"
@@ -441,9 +472,7 @@ export default {
 
       this.transfers = tokens.processInputData(txn, this.inputData)
       if (this.transfers) {
-        const provider = new ethers.providers.JsonRpcProvider(
-          'https://rpc.octano.dev'
-        )
+        const provider = new ethers.providers.JsonRpcProvider(config.rpc)
         const erc20Abi = [
           'function name() view returns (string)',
           'function symbol() view returns (string)',
@@ -620,6 +649,9 @@ export default {
     },
     calcTxFee(gasUsed, gasPrice) {
       return common.fromWei(common.calcTxFee(gasUsed, gasPrice))
+    },
+    calcFeeBreakdown(gasUsed, gasPrice) {
+      return common.fromWeiToGwei(common.calcTxFee(gasUsed, gasPrice))
     },
     toDecimal(hex) {
       return common.hexToDecimal(hex)

@@ -132,6 +132,7 @@ import BlocksTable from '../tables/blocksTable'
 import transfersTable from '~/components/tables/tokenTransfersTable'
 import txnsTable from '~/components/tables/txnsTable'
 import TokenBalancesDialog from '~/components/dialogs/TokenBalances'
+import config from '~/params/config.json'
 
 export default {
   components: {
@@ -235,8 +236,7 @@ export default {
       try {
         const client = new ApolloClient({
           link: new HttpLink({
-            uri:
-              'https://graphnode.octano.dev/subgraphs/name/octanolabs/shinobi',
+            uri: 'https://graphnode.octano.dev/subgraphs/name/octanolabs/shinobi',
           }),
           cache: new InMemoryCache(),
           shouldBatch: true,
@@ -291,9 +291,7 @@ export default {
     async getBalances() {
       const singleCallContractAddress =
         '0x068841237e0efcfbd3201f1f321fc915987d94e3'
-      const provider = new ethers.providers.JsonRpcProvider(
-        'https://rpc.octano.dev'
-      )
+      const provider = new ethers.providers.JsonRpcProvider(config.rpc)
 
       const singleCallAbi = [
         'function balances(address[], address[]) view returns (uint256[])',

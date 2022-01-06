@@ -18,6 +18,9 @@
       <v-list-item-subtitle v-if="threeLine">
         <slot name="subtitle2" />
       </v-list-item-subtitle>
+      <v-list-item-subtitle v-if="threeLine">
+        <slot name="subtitle3" />
+      </v-list-item-subtitle>
     </v-list-item-content>
     <v-list-item-action>
       <v-list-item-action-text>

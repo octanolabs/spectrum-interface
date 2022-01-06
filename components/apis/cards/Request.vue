@@ -46,7 +46,7 @@ export default {
       default: 'curl',
     },
     endpoint: {
-      // api url endpoint e.g 'https://rpc.octano.dev'
+      // api url endpoint e.g 'http://127.0.0.1:8588' // 'https://rpc.octano.dev'
       type: String,
       default: '',
     },

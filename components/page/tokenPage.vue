@@ -138,6 +138,7 @@ import Blockie from '../util/misc/Blockie'
 import qrcodeModal from '../util/misc/qrcodeModal'
 import common from '../../scripts/common'
 import transfersTable from '~/components/tables/tokenTransfersTable'
+import config from '~/params/config.json'
 
 export default {
   components: {
@@ -227,9 +228,7 @@ export default {
     },
     async getTokenSupply(address) {
       if (address) {
-        const provider = await new ethers.providers.JsonRpcProvider(
-          'https://rpc.octano.dev'
-        )
+        const provider = await new ethers.providers.JsonRpcProvider(config.rpc)
         const erc20Abi = ['function totalSupply() view returns (uint256)']
         const tokenContract = await new ethers.Contract(
           address,
