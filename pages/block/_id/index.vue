@@ -201,6 +201,24 @@
                       mdi-information-outline
                     </v-icon>
                   </template>
+                  <span>Base fee per gas (EIP-1559)</span>
+                </v-tooltip>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>Base Fee</v-list-item-title>
+                <v-list-item-subtitle>
+                  {{ formatNumber(block.baseFeePerGas) }}
+                </v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item style="border-bottom: 1px solid #272727">
+              <v-list-item-action>
+                <v-tooltip right>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-icon v-bind="attrs" v-on="on">
+                      mdi-information-outline
+                    </v-icon>
+                  </template>
                   <span>
                     Total gas limit provided by all transactions in the block.
                   </span>
