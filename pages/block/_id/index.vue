@@ -211,6 +211,7 @@
                 </v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
+
             <v-list-item style="border-bottom: 1px solid #272727">
               <v-list-item-action>
                 <v-tooltip right>
@@ -411,6 +412,44 @@
                 <v-list-item-title>Minted</v-list-item-title>
                 <v-list-item-subtitle>
                   {{ fromWei(block.minted) }} UBQ
+                </v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item style="border-bottom: 1px solid #272727">
+              <v-list-item-action>
+                <v-tooltip right>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-icon v-bind="attrs" v-on="on">
+                      mdi-information-outline
+                    </v-icon>
+                  </template>
+                  <span>Amount of UBQ burned in this block (EIP-1559)</span>
+                </v-tooltip>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>Burned</v-list-item-title>
+                <v-list-item-subtitle>
+                  {{ fromWei(block.burned) }} UBQ
+                </v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item style="border-bottom: 1px solid #272727">
+              <v-list-item-action>
+                <v-tooltip right>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-icon v-bind="attrs" v-on="on">
+                      mdi-information-outline
+                    </v-icon>
+                  </template>
+                  <span>
+                    Total burned via EIP-1559 up to and including this block.
+                  </span>
+                </v-tooltip>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>Total Burned (EIP-1559)</v-list-item-title>
+                <v-list-item-subtitle>
+                  {{ fromWei(block.totalBurned) }} UBQ
                 </v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
