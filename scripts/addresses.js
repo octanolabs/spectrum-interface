@@ -30,6 +30,7 @@ const pools = {
   '0xf7f646c39f4af456b77eee3c38b74bcc5d0cffda': 'Minefitz.com',
   '0xe6057c46aab37d69fa30bb2975081f76ca7319be': 'EU-ubqpool.ddns.net',
   '0x43d09b75912dbf0fc804faad6255e3faa40630a2': 'CrazyPool.org',
+  '0x47fcd3d2565167f45671dd93a20d821c9782a006': 'DigiPools.org',
 }
 
 const misc = {
