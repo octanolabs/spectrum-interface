@@ -1,4 +1,5 @@
 const pools = {
+  '0x6B753b9Bc1f24ec88E485b5ACffB824A04d43309': 'pool-node.com',
   '0x8429ab69b8721ffb29f2e66fdf06b1c65d66eb58': 'UbiqPool.io',
   '0xa5786b319685e77ab8514fcec26d75557afa5c38': 'UbiqPool.fr',
   '0x6febea2097f777af4ee701e9a09cef1551a397e1': 'UbiqPool.com',
