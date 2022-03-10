@@ -60,7 +60,8 @@ const misc = {
   '0x5e1715bb79805bd672729760b3f7f34d6f485098': 'PickleRicks',
   '0x497e20586f86c35592ff8f65cde94f296514c387': 'Snarg01',
   '0xbc3e373d2b24faf1dfe5b3f3acff9d66a7b48869': 'WorldBit Token',
-  '0x1fa6a37c64804c0d797ba6bc1955e50068fbf362': 'Wrapped Ubiq (UBQ)',
+  '0x1fa6a37c64804c0d797ba6bc1955e50068fbf362': 'Wrapped UBQ',
+  '0x7845fcbe28ac19ab7ec1c1d9674e34fdcb4917db': 'Ink',
   // Contracts
   '0x256009e4687ab2183bbca3e4ea54ba6f0a7ad21e': 'ESCH Airdrop #1',
   '0x36ae3bdbbd19bc55f2fe3cccf41bf12c4c3afb42': 'ESCH Airdrop #2',

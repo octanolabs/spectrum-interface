@@ -30,7 +30,9 @@
       ~{{ calcTime(timestamp) }}
     </template>
     <template v-slot:block.transactions="{ transactions: txns }">
-      <template v-if="txns !== 0"> {{ txns }} transactions </template>
+      <template v-if="txns.length !== 0">
+        {{ txns.length }} transactions
+      </template>
       <template v-else>0 transactions</template>
     </template>
     <template v-slot:block.hash="{ hash }">

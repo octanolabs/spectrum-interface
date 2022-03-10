@@ -27,6 +27,7 @@ export const state = () => ({
       avgGasPrice: '',
       txFees: '',
       extraData: '',
+      supply: '',
     },
     txnCounts: {
       data: [],

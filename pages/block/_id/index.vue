@@ -5,7 +5,15 @@
       <v-tab href="#overview">Overview</v-tab>
       <v-tab href="#transactions">
         Transactions
-        <v-chip label small class="ml-1">{{ block.transactions }}</v-chip>
+        <v-chip label small class="ml-1">
+          {{ txnCount }}
+        </v-chip>
+      </v-tab>
+      <v-tab href="#itransactions">
+        Internal Txns
+        <v-chip label small class="ml-1">
+          {{ itxnCount }}
+        </v-chip>
       </v-tab>
       <v-tab-item eager value="overview">
         <!-- If the selected tab has at least one slot, use normal layout-->
@@ -483,6 +491,15 @@
           block
         />
       </v-tab-item>
+      <v-tab-item value="itransactions">
+        <itxns-table
+          :transactions="iTransactions"
+          :total="iTransactions.length"
+          :block-number="block.number"
+          no-breadcrumbs
+          block
+        />
+      </v-tab-item>
     </v-tabs>
   </v-col>
 </template>
@@ -491,6 +508,7 @@
 import axios from 'axios'
 import breadcrumbSpinner from '~/components/util/BreadcrumbSpinner.vue'
 import txnsTable from '~/components/tables/txnsTable.vue'
+import itxnsTable from '~/components/tables/itxnsTable.vue'
 import common from '~/scripts/common'
 import addresses from '~/scripts/addresses'
 
@@ -499,6 +517,7 @@ export default {
   components: {
     breadcrumbSpinner,
     txnsTable,
+    itxnsTable,
   },
   validate({ params }) {
     if (/^\d+$/.test(params.id)) {
@@ -519,30 +538,25 @@ export default {
 
     const {
       data: { result },
-    } = await axios
-      .post(process.env.config.apiUrl, {
-        jsonrpc: '2.0',
-        method,
-        params: [id],
-        id: 88,
-      })
-      .then(({ data: { result: block } }) => {
-        this.block = block
-
-        return axios.post(process.env.config.apiUrl, {
-          jsonrpc: '2.0',
-          method: 'explorer_transactionsByBlockNumber',
-          params: [block.number],
-          id: 88,
-        })
-      })
-
-    this.transactions = result
+    } = await axios.post(process.env.config.apiUrl, {
+      jsonrpc: '2.0',
+      method,
+      params: [id],
+      id: 88,
+    })
+    console.log(result)
+    this.block = result
+    this.transactions = result.transactions
+    this.iTransactions = []
+    if (result.iTransactions) {
+      this.iTransactions = result.iTransactions
+    }
   },
   data() {
     return {
       block: {},
       transactions: [],
+      iTransactions: [],
     }
   },
   computed: {
@@ -556,6 +570,12 @@ export default {
       get() {
         return this.$route.query.tab
       },
+    },
+    txnCount() {
+      return this.transactions?.length || 0
+    },
+    itxnCount() {
+      return this.iTransactions?.length || 0
     },
   },
   middleware({ store }) {

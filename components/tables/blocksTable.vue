@@ -20,13 +20,13 @@
       }}</nuxt-link>
     </template>
     <template v-slot:item.transactions="data">
-      <template v-if="data.value !== 0">
+      <template v-if="data.value.length !== 0">
         <nuxt-link :to="`/block/${data.item.number}?tab=transactions`">
-          {{ data.value }}
+          {{ data.value.length }}
         </nuxt-link>
       </template>
       <template v-else>
-        <span>{{ data.value }}</span>
+        <span>{{ data.value.length }}</span>
       </template>
     </template>
     <template v-slot:item.hash="data">

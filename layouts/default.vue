@@ -97,6 +97,16 @@
             </v-list-item-avatar>
             <v-list-item-title>Shinobi Info</v-list-item-title>
           </v-list-item>
+          <v-list-item
+            link
+            :href="'https://watchtheburn.ubiqsmart.com'"
+            target="_blank"
+          >
+            <v-list-item-avatar tile size="24">
+              <v-icon>mdi-fire</v-icon>
+            </v-list-item-avatar>
+            <v-list-item-title>Gas Monitor</v-list-item-title>
+          </v-list-item>
           <v-list-item link :href="'https://stats.ubiqscan.io'" target="_blank">
             <v-list-item-avatar tile size="24">
               <v-icon>mdi-gauge</v-icon>
@@ -106,6 +116,7 @@
         </v-list>
       </template>
     </v-navigation-drawer>
+
     <notifications position="bottom right" group="normal" />
 
     <!-- Sizes your content based upon application components -->
@@ -192,6 +203,15 @@ export default {
       errors: [],
       drawer: false,
       items: [
+        [
+          'Accounts',
+          'mdi-account-group',
+          false,
+          [
+            ['Rich List', 'mdi-account-cash', '/accounts/richlist'],
+            ['Latest', 'mdi-account-clock', '/accounts/latest'],
+          ],
+        ],
         [
           'Blocks', // title
           'mdi-cube-scan', // icon

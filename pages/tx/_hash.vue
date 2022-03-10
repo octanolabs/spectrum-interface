@@ -3,6 +3,12 @@
     <breadcrumbSpinner v-bind="$attrs" no-loading />
     <v-tabs v-model="tab" grow show-arrows>
       <v-tab>Overview</v-tab>
+      <v-tab v-if="showITxns">
+        Internal Txns
+        <v-chip v-if="!!txn.logs" label small class="ml-1">
+          {{ txn.iTransactions.length }}
+        </v-chip>
+      </v-tab>
       <v-tab v-if="showLogs">
         Events
         <v-chip v-if="!!txn.logs" label small class="ml-1">
@@ -304,6 +310,15 @@
           <input-data-card :input-string="txn.input" />
         </v-col>
       </v-tab-item>
+      <v-tab-item v-if="showITxns">
+        <itxns-table
+          :transactions="iTransactions"
+          :total="iTransactions.length"
+          :block-number="txn.blockNumber"
+          no-breadcrumbs
+          block
+        />
+      </v-tab-item>
       <v-tab-item v-if="showLogs">
         <tx-logs-card :event-logs="eventLogs" />
       </v-tab-item>
@@ -323,6 +338,7 @@ import SpectrumListItem from '~/components/util/misc/ListItem.vue'
 import inputDataCard from '~/components/util/cards/inputDataCard.vue'
 import txTraceCard from '~/components/util/cards/txTraceCard.vue'
 import txLogsCard from '~/components/util/cards/txLogsCard.vue'
+import itxnsTable from '~/components/tables/itxnsTable.vue'
 import Blockie from '~/components/util/misc/Blockie'
 import addresses from '~/scripts/addresses'
 import contracts from '~/scripts/contracts'
@@ -336,6 +352,7 @@ export default {
     breadcrumbSpinner,
     SpectrumListItem,
     inputDataCard,
+    itxnsTable,
     txLogsCard,
     txTraceCard,
     Blockie,
@@ -379,7 +396,9 @@ export default {
       transfers: null,
       inputData: {},
       eventLogs: [],
+      iTransactions: [],
       showLogs: false,
+      showITxns: false,
       computedInputData: false,
       tab: null,
       nf: new Intl.NumberFormat('en', {
@@ -463,6 +482,10 @@ export default {
         if (txn.logs && txn.logs.length > 0) {
           this.showLogs = true
           this.eventLogs = contracts.processEventLogs(txn.logs)
+        }
+        if (!!txn.iTransactions && txn.iTransactions.length > 0) {
+          this.iTransactions = txn.iTransactions
+          this.showITxns = true
         }
       }
 

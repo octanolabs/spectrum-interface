@@ -1,5 +1,11 @@
 import config from './params/config.json'
 
+const locales = [{ code: 'en', name: 'English' }]
+const msgs = {}
+for (const l of locales) {
+  msgs[l.code] = require('./i18n/' + l.code + '.json')
+}
+
 export default {
   // Disable server-side rendering (https://go.nuxtjs.dev/ssr-mode)
   ssr: false,
@@ -57,6 +63,7 @@ export default {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
+    '@nuxtjs/i18n',
   ],
   /*
    *  Global App-wide variables
@@ -104,5 +111,17 @@ export default {
      ** You can extend webpack config here
      */
     extend(config, ctx) {},
+  },
+  /*
+   ** Locale configuration
+   */
+  i18n: {
+    strategy: 'no_prefix',
+    locales: ['en'],
+    defaultLocale: 'en',
+    vueI18n: {
+      fallbackLocale: 'en',
+      messages: msgs,
+    },
   },
 }

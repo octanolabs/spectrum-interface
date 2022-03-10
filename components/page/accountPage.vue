@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex flex-column pa-0">
     <v-list class="pb-0 mb-0">
-      <v-list-item style="border-bottom: 1px solid #272727">
+      <!-- <v-list-item style="border-bottom: 1px solid #272727">
         <v-list-item-avatar size="24">
           <blockie :address="address" size="sm" inline></blockie>
         </v-list-item-avatar>
@@ -16,9 +16,12 @@
         <v-list-item-action>
           <qrcode-modal :address="address" />
         </v-list-item-action>
-      </v-list-item>
-      <v-list-item style="border-bottom: 1px solid #272727">
-        <v-list-item-avatar size="24">
+      </v-list-item> -->
+      <account-list-item :address="address" :name="getAddressTitle(address)" />
+      <v-list-item
+        style="border-bottom: 1px solid #272727; border-top: 1px solid #272727"
+      >
+        <v-list-item-avatar size="42">
           <v-img
             :src="
               'https://raw.githubusercontent.com/octanolabs/assets/master/blockchains/ubiq/assets/' +
@@ -37,8 +40,8 @@
         </v-list-item-content>
       </v-list-item>
       <v-list-item style="border-bottom: 1px solid #272727">
-        <v-list-item-avatar size="24">
-          <v-icon size="24">mdi-diamond-stone</v-icon>
+        <v-list-item-avatar size="42">
+          <v-icon size="42">mdi-diamond-stone</v-icon>
         </v-list-item-avatar>
         <v-list-item-content>
           <v-list-item-title>ERC20 Tokens</v-list-item-title>
@@ -51,8 +54,8 @@
         </v-list-item-action>
       </v-list-item>
       <v-list-item style="border-bottom: 1px solid #272727">
-        <v-list-item-avatar tile size="24">
-          <v-img :src="require('~/assets/shinobi.svg')" width="24" />
+        <v-list-item-avatar tile size="42">
+          <v-img :src="require('~/assets/shinobi.svg')" width="42" />
         </v-list-item-avatar>
         <v-list-item-content>
           <v-list-item-title>Shinobi Liquidity</v-list-item-title>
@@ -123,11 +126,10 @@ import { ApolloClient } from 'apollo-client'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { HttpLink } from 'apollo-link-http'
 
+import AccountListItem from '../AccountListItem.vue'
 import DataView from '../util/DataView'
 import common from '../../scripts/common'
 import addresses from '../../scripts/addresses'
-import Blockie from '../util/misc/Blockie'
-import qrcodeModal from '../util/misc/qrcodeModal'
 import BlocksTable from '../tables/blocksTable'
 import transfersTable from '~/components/tables/tokenTransfersTable'
 import txnsTable from '~/components/tables/txnsTable'
@@ -136,9 +138,8 @@ import config from '~/params/config.json'
 
 export default {
   components: {
+    AccountListItem,
     BlocksTable,
-    qrcodeModal,
-    Blockie,
     DataView,
     transfersTable,
     txnsTable,

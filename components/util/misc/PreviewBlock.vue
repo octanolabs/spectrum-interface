@@ -19,12 +19,12 @@
         </nuxt-link>
       </v-list-item-title>
       <v-list-item-subtitle>
-        <label v-if="txns > 0">
+        <label v-if="txns.length > 0">
           <nuxt-link :to="`/block/${number}?tab=transactions`">
-            {{ txns }} txns
+            {{ txns.length }} txns
           </nuxt-link>
         </label>
-        <label v-else> {{ txns }} txns </label>
+        <label v-else> {{ txns.length }} txns </label>
       </v-list-item-subtitle>
     </v-list-item-content>
     <v-list-item-action>

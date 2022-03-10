@@ -1,0 +1,18 @@
+{
+  "persona": {
+    "male": "Masculine",
+    "female": "Feminine",
+    "aquarius": "Aquarius",
+    "aries": "Aries",
+    "cancer": "Cancer",
+    "capricorn": "Capricorn",
+    "gemini": "Gemini",
+    "leo": "Leo",
+    "libra": "Libra",
+    "pisces": "Pisces",
+    "sagittarius": "Sagittarius",
+    "scorpio": "Scorpio",
+    "taurus": "Taurus",
+    "virgo": "Virgo"
+  }
+}
