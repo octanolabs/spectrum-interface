@@ -35,7 +35,7 @@
     </template>
     <template v-if="deploysContracts" v-slot:header.contractAddress>
       <v-icon color="#333333">mdi-script</v-icon>
-      Contract Address
+      Contract
     </template>
     <template
       v-if="deploysContracts"

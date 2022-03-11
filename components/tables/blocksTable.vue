@@ -59,6 +59,7 @@
 </template>
 
 <script>
+import { getPersona } from '@octano/persona'
 import tableView from '~/components/util/TableView.vue'
 import common from '~/scripts/common'
 import addresses from '~/scripts/addresses'
@@ -154,7 +155,13 @@ export default {
       return common.addTxFees(reward, txFees)
     },
     getAddressTag(hash) {
-      return addresses.getAddressTag(hash) || hash.substring(0, 17) + '...'
+      const tag = addresses.getAddressTag(hash)
+      if (tag) {
+        return tag
+      }
+
+      const persona = getPersona(hash)
+      return persona.name.given + ' ' + persona.name.family
     },
     calcGasUsed(gasUsed, gasLimit) {
       return ((gasUsed / gasLimit) * 100).toFixed(2) + '%'

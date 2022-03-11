@@ -34,8 +34,8 @@
 </template>
 
 <script>
+import { getPersona } from '@octano/persona'
 import addresses from '../../../scripts/addresses'
-import common from '../../../scripts/common'
 import rewards from '../../../scripts/rewards'
 export default {
   props: {
@@ -77,11 +77,13 @@ export default {
   },
   methods: {
     getAddressTag(hash) {
-      const checksum = common.toChecksumAddress(hash)
-      return (
-        addresses.getAddressTag(hash) ||
-        checksum.substr(0, 8) + '...' + checksum.substr(hash.length - 6)
-      )
+      const tag = addresses.getAddressTag(hash)
+      if (tag) {
+        return tag
+      }
+
+      const persona = getPersona(hash)
+      return persona.name.given + ' ' + persona.name.family
     },
     setData(val) {
       this.hash = val.hash

@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import { getPersona } from '@octano/persona'
 import tableView from '~/components/util/TableView.vue'
 import common from '~/scripts/common'
 import addresses from '~/scripts/addresses'
@@ -99,7 +100,13 @@ export default {
       return common.fromWei(value)
     },
     getAddressTag(hash) {
-      return addresses.getAddressTag(hash) || hash.substring(0, 17) + '...'
+      const tag = addresses.getAddressTag(hash)
+      if (tag) {
+        return tag
+      }
+
+      const persona = getPersona(hash)
+      return persona.name.given + ' ' + persona.name.family
     },
     calcTime(timestamp) {
       return this.$moment().to(timestamp * 1000)

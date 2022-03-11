@@ -113,6 +113,7 @@
 </template>
 
 <script>
+import { getPersona } from '@octano/persona'
 import BigNumber from 'bignumber.js'
 import config from '~/params/config.json'
 import common from '~/scripts/common'
@@ -203,11 +204,23 @@ export default {
       return items.length
     },
     getAddressTag(hash) {
-      const checksum = common.toChecksumAddress(hash)
-      return (
-        addresses.getAddressTag(hash) ||
-        checksum.substr(0, 8) + '...' + checksum.substr(hash.length - 6)
-      )
+      if (hash) {
+        const tag = addresses.getAddressTag(hash)
+        if (tag) {
+          return tag
+        }
+
+        const persona = getPersona(hash)
+        if (persona.success) {
+          return persona.name.given + ' ' + persona.name.family
+        }
+
+        const checksum = common.toChecksumAddress(hash)
+        return (
+          checksum.substr(0, 8) + '...' + checksum.substr(checksum.length - 6)
+        )
+      }
+      return hash
     },
     calcTime(timestamp) {
       return this.$moment().to(timestamp * 1000)

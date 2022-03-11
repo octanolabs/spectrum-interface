@@ -36,6 +36,7 @@
 </template>
 
 <script>
+import { getPersona } from '@octano/persona'
 import common from '../../../scripts/common.js'
 import addresses from '../../../scripts/addresses.js'
 
@@ -78,11 +79,13 @@ export default {
   },
   methods: {
     getAddressTag(hash) {
-      const checksum = common.toChecksumAddress(hash)
-      return (
-        addresses.getAddressTag(hash) ||
-        checksum.substr(0, 8) + '...' + checksum.substr(hash.length - 6)
-      )
+      const tag = addresses.getAddressTag(hash)
+      if (tag) {
+        return tag
+      }
+
+      const persona = getPersona(hash)
+      return persona.name.given + ' ' + persona.name.family
     },
   },
 }
