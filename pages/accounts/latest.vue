@@ -5,6 +5,8 @@
       :price="price"
       :supply="supply"
       :total="totalAccounts"
+      :loading="$fetchState.pending"
+      @refresh="$fetch"
     />
   </v-col>
 </template>
@@ -16,8 +18,8 @@ export default {
   components: {
     accountsTable,
   },
-  async middleware({ store }) {
-    await store.dispatch('accounts/fetchByLastSeen')
+  async fetch() {
+    await this.$store.dispatch('accounts/fetchByLastSeen')
   },
   computed: {
     accounts() {

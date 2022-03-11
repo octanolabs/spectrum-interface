@@ -1,14 +1,16 @@
 <template>
   <table-view
-    no-loading
     :headers="headers"
     :items="accounts"
+    :loading="loading"
+    v-bind="$attrs"
     item-key="address"
     disable-pagination
     :options="{ itemsPerPage: -1 }"
     :footer-props="{
       disableItemsPerPage: true,
     }"
+    @refresh="$emit('refresh')"
   >
     <template v-slot:topMessage>
       Showing {{ nf0.format(accounts.length) }} accounts from a total of
@@ -21,6 +23,7 @@
       <account-list-item
         :address="item.address"
         :name="getAddressTitle(item.address)"
+        :fetch-icon="false"
         link
         style="margin-left: -15px"
       />
@@ -88,6 +91,13 @@ export default {
         return '0'
       },
     },
+    loading: {
+      type: Boolean,
+      required: false,
+      default: () => {
+        return false
+      },
+    },
   },
   data() {
     return {
@@ -150,9 +160,6 @@ export default {
     },
     fromWei(wei) {
       return common.fromWei(wei)
-    },
-    handleClick(item) {
-      console.log(item)
     },
   },
 }

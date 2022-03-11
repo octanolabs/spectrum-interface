@@ -6,7 +6,12 @@
   >
     <v-list-item>
       <template v-if="showIdenticon">
-        <v-list-item-avatar style="cursor: pointer" class="my-auto" tile>
+        <v-list-item-avatar
+          v-if="fetchIcon"
+          style="cursor: pointer"
+          class="my-auto"
+          tile
+        >
           <v-img
             :src="
               'https://raw.githubusercontent.com/octanolabs/assets/master/blockchains/ubiq/assets/' +
@@ -19,6 +24,9 @@
             </template>
           </v-img>
           <!-- <blockie :address="address" size="md" inline /> -->
+        </v-list-item-avatar>
+        <v-list-item-avatar v-else style="cursor: pointer" class="my-auto" tile>
+          <blockie :address="address" size="fourty" inline />
         </v-list-item-avatar>
       </template>
       <v-list-item-content>
@@ -98,6 +106,12 @@ export default {
       type: Boolean,
       default() {
         return false
+      },
+    },
+    fetchIcon: {
+      type: Boolean,
+      default() {
+        return true
       },
     },
   },
