@@ -18,6 +18,26 @@ const client = new ApolloClient({
   shouldBatch: true,
 })
 
+// I hate to have to add this but, people, so...
+const tokenBlacklist = {
+  '0x996fd5e4500eeb8af930b12f4c215e0f9aa76562': 'GetgleCoin - GLEE',
+  '0x90940ee32f3590d571ec97c7cf1a23c78fd85064': 'Farting - FART',
+  '0x27e9db81e49307687e6a9b1190825dd5c438b45e': 'Piss Coin - PISS',
+  '0x3e607a939fd243b8c1666d4aff3af4a52d536633': 'rapecoin - RAPE',
+  '0x85f81ace89ffafbde99ad7a2400f664a93d3c886': 'Child Molestation Coin - CMC',
+  '0x929ef9ae80fa0fe24713734f4a0f7ae79bb80dd5': 'BuckBreakingCoin - BBC',
+  '0xc54269b4b98a84812e12f8e2392d41a1a3ea5f77': 'Pedophile Coin - PEDO',
+  '0xcf4a5aefdc0b25ecefad43eefbd8021678cb3765': 'Nigger Coin - NIGGER',
+  '0xd364159f3f0ba87a993806c74f68b0a1fba72946': 'Homosexual Coin - GAY',
+}
+
+const isBlacklisted = function (contractAddress) {
+  if (tokenBlacklist[contractAddress.toLowerCase()]) {
+    return true
+  }
+  return false
+}
+
 export const getDefaultState = () => ({
   erc20: {},
   shinobi: {},
@@ -151,9 +171,11 @@ export const actions = {
           ) {
             shinobiTokens[i].name = 'Expanse (Wrapped)'
           }
-          payload.object[shinobiTokens[i].id] = shinobiTokens[i]
+          if (!isBlacklisted(shinobiTokens[i].id)) {
+            payload.object[shinobiTokens[i].id] = shinobiTokens[i]
+            payload.array.push(shinobiTokens[i])
+          }
         }
-        payload.array = shinobiTokens
         commit('SET_SHINOBI_TOKENS', payload)
       } catch (e) {
         consola.log(e)
