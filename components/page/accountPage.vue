@@ -1,23 +1,17 @@
 <template>
   <div class="d-flex flex-column pa-0">
     <v-list class="pb-0 mb-0">
-      <!-- <v-list-item style="border-bottom: 1px solid #272727">
-        <v-list-item-avatar size="24">
-          <blockie :address="address" size="sm" inline></blockie>
-        </v-list-item-avatar>
-        <v-list-item-content>
-          <v-list-item-title>
-            {{ toChecksumAddress(address) }}
-          </v-list-item-title>
-          <v-list-item-subtitle v-if="getAddressTitle(address)">
-            {{ getAddressTitle(address) }}
-          </v-list-item-subtitle>
-        </v-list-item-content>
-        <v-list-item-action>
-          <qrcode-modal :address="address" />
+      <account-list-item :address="address" :name="getAddressTitle(address)">
+        <v-list-item-action class="mt-6">
+          <copy-to-clipboard
+            :copy="toChecksumAddress(address)"
+            tooltip="left"
+            color="primary"
+            type="icon"
+            icon-size="small"
+          />
         </v-list-item-action>
-      </v-list-item> -->
-      <account-list-item :address="address" :name="getAddressTitle(address)" />
+      </account-list-item>
       <v-list-item
         style="border-bottom: 1px solid #272727; border-top: 1px solid #272727"
       >
@@ -131,6 +125,7 @@ import DataView from '../util/DataView'
 import common from '../../scripts/common'
 import addresses from '../../scripts/addresses'
 import BlocksTable from '../tables/blocksTable'
+import CopyToClipboard from '~/components/apis/copy2clipboard'
 import transfersTable from '~/components/tables/tokenTransfersTable'
 import txnsTable from '~/components/tables/txnsTable'
 import TokenBalancesDialog from '~/components/dialogs/TokenBalances'
@@ -140,6 +135,7 @@ export default {
   components: {
     AccountListItem,
     BlocksTable,
+    CopyToClipboard,
     DataView,
     transfersTable,
     txnsTable,
