@@ -5,7 +5,7 @@
       <v-tab>Overview</v-tab>
       <v-tab v-if="showITxns">
         Internal Txns
-        <v-chip v-if="!!txn.logs" label small class="ml-1">
+        <v-chip v-if="!!txn.iTransactions" label small class="ml-1">
           {{ txn.iTransactions.length }}
         </v-chip>
       </v-tab>
@@ -272,7 +272,7 @@
             >
               <template v-slot:subtitle>
                 <v-icon small class="mr-1">mdi-fire-circle</v-icon>Base
-                {{ txn.baseFeePerGas }} wei
+                {{ fromWeiToGwei(txn.baseFeePerGas) }} gwei
               </template>
               <template v-slot:subtitle3>
                 <v-icon small class="mr-1">mdi-pickaxe</v-icon>Priority
@@ -333,6 +333,7 @@
 import axios from 'axios'
 import { ethers } from 'ethers'
 import BigNumber from 'bignumber.js'
+import { getPersona } from '@octano/persona'
 import breadcrumbSpinner from '~/components/util/BreadcrumbSpinner.vue'
 import SpectrumListItem from '~/components/util/misc/ListItem.vue'
 import inputDataCard from '~/components/util/cards/inputDataCard.vue'
@@ -357,13 +358,11 @@ export default {
     txTraceCard,
     Blockie,
   },
-  async middleware({ store }) {
-    await store.dispatch('tokens/getNativePriceUsd')
-    await store.dispatch('tokens/getDefaultTokens')
-    await store.dispatch('tokens/getShinobiTokens')
-    await store.dispatch('tokens/getShinobiPairs')
-  },
   async fetch() {
+    await this.$store.dispatch('tokens/getNativePriceUsd')
+    await this.$store.dispatch('tokens/getDefaultTokens')
+    await this.$store.dispatch('tokens/getShinobiTokens')
+    await this.$store.dispatch('tokens/getShinobiPairs')
     const txn = await this.fetchTxn()
     if (txn === undefined) {
       // maybe its pending?
@@ -390,8 +389,8 @@ export default {
   },
   data() {
     return {
-      txFee: 0,
       txn: {},
+      txFee: 0,
       txnTrace: null,
       transfers: null,
       inputData: {},
@@ -478,7 +477,6 @@ export default {
     },
     async parseTxn(txn, pending) {
       if (!pending) {
-        this.txFee = this.calcTxFee(txn.gasUsed, txn.gasPrice)
         if (txn.logs && txn.logs.length > 0) {
           this.showLogs = true
           this.eventLogs = contracts.processEventLogs(txn.logs)
@@ -487,6 +485,7 @@ export default {
           this.iTransactions = txn.iTransactions
           this.showITxns = true
         }
+        this.txFee = this.calcTxFee(txn.gasUsed, txn.gasPrice)
       }
 
       if (txn.input !== '0x') {
@@ -602,21 +601,7 @@ export default {
           }
         }
       }
-      const [
-        {
-          data: { result: trace },
-        },
-      ] = await Promise.all([
-        axios.post(process.env.config.apiUrl, {
-          jsonrpc: '2.0',
-          method: 'explorer_txTrace',
-          params: [this.$route.params.hash],
-          id: 88,
-        }),
-      ])
-      if (trace) {
-        this.txnTrace = trace
-      }
+      this.txnTrace = txn.trace
     },
     formatAddress(hash, len) {
       if (hash) {
@@ -639,7 +624,10 @@ export default {
             ')'
           )
         }
-
+        const persona = getPersona(hash)
+        if (persona.success) {
+          return persona.name.given + ' ' + persona.name.family
+        }
         let account = common.toChecksumAddress(hash)
         if (len) {
           account = account.substr(0, len)
