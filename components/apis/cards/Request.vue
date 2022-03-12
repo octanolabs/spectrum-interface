@@ -19,7 +19,13 @@
         </template>
         <span>Refresh</span>
       </v-tooltip>
-      <copy-to-clipboard :copy="format(mode)" tooltip="left" color="primary" />
+      <copy-to-clipboard
+        :copy="format(mode)"
+        tooltip="left"
+        color="primary"
+        type="icon"
+        icon-size="small"
+      />
     </v-card-actions>
     <v-divider />
     <v-card-text class="pa-0">
