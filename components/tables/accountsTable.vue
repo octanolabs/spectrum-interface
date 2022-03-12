@@ -25,6 +25,7 @@
         :name="getAddressTitle(item.address)"
         :fetch-icon="false"
         link
+        basic
         style="margin-left: -15px"
       />
     </template>

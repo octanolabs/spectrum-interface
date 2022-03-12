@@ -1,6 +1,6 @@
 <template>
   <v-list
-    :three-line="!!addressBook && showPersona && showAddressBookName"
+    :three-line="!!addressBook && showPersona && showAddressBookName && !basic"
     style="width: 100%; background-color: rgba(0, 0, 0, 0)"
     class="pa-0"
   >
@@ -35,13 +35,13 @@
         </v-list-item-title>
         <v-list-item-title v-else-if="showPersona && !!persona">
           {{ persona.name.given }} {{ persona.name.family }}
-          <v-tooltip top>
+          <v-tooltip v-if="!basic" top>
             <template v-slot:activator="{ on, attrs }">
               <v-icon v-bind="attrs" small v-on="on">{{ sexIcon }}</v-icon>
             </template>
             <span>{{ $t('persona.' + persona.sex) }}</span>
           </v-tooltip>
-          <v-tooltip top>
+          <v-tooltip v-if="!basic" top>
             <template v-slot:activator="{ on, attrs }">
               <v-icon v-bind="attrs" small v-on="on">{{ zodiacIcon }}</v-icon>
             </template>
@@ -49,7 +49,7 @@
           </v-tooltip>
         </v-list-item-title>
         <v-list-item-subtitle
-          v-if="showPersona && !!addressBook && showAddressBookName"
+          v-if="showPersona && !!addressBook && showAddressBookName && !basic"
         >
           {{ persona.name.given }} {{ persona.name.family }}
           <v-tooltip top>
@@ -112,6 +112,12 @@ export default {
       type: Boolean,
       default() {
         return true
+      },
+    },
+    basic: {
+      type: Boolean,
+      default() {
+        return false
       },
     },
   },
