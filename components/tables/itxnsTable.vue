@@ -90,6 +90,7 @@
 </template>
 
 <script>
+import { getPersona } from '@octano/persona'
 import tableView from '../util/TableView.vue'
 import common from '~/scripts/common'
 import addresses from '~/scripts/addresses'
@@ -193,14 +194,22 @@ export default {
     },
     getAddressTag(hash) {
       if (hash) {
+        const tag = addresses.getAddressTag(hash)
+        if (tag) {
+          return tag
+        }
+
+        const persona = getPersona(hash)
+        if (persona.success) {
+          return persona.name.given + ' ' + persona.name.family
+        }
+
         const checksum = common.toChecksumAddress(hash)
         return (
-          addresses.getAddressTag(hash) ||
-          checksum.substr(0, 8) + '...' + checksum.substr(hash.length - 6)
+          checksum.substr(0, 8) + '...' + checksum.substr(checksum.length - 6)
         )
-      } else {
-        return ''
       }
+      return hash
     },
     calcTxFee(gasUsed, gasPrice) {
       return common.fromWei(common.calcTxFee(gasUsed, gasPrice))
@@ -215,6 +224,9 @@ export default {
       return this.$moment().to(timestamp * 1000)
     },
     formatHash(hash) {
+      if (hash === '0x') {
+        return '0x'
+      }
       return hash.substr(0, 10) + '...' + hash.substr(hash.length - 8)
     },
   },
