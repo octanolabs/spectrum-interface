@@ -3,19 +3,21 @@ import { toChecksumAddress } from 'ethereumjs-util'
 import utf8 from 'utf8'
 import moment from 'moment'
 
+BigNumber.config({ DECIMAL_PLACES: 18 })
+
 export default {
   fromWei(value, roundTo = -1) {
-    if (roundTo !== -1) {
-      BigNumber.config({ DECIMAL_PLACES: roundTo })
-    }
-
+    // if (roundTo !== -1) {
+    //   BigNumber.config({ DECIMAL_PLACES: roundTo })
+    // }
+    BigNumber.config({ DECIMAL_PLACES: 18 })
     return new BigNumber(value).div(1000000000000000000).toString()
   },
   fromWeiToGwei(value, roundTo = -1) {
-    if (roundTo !== -1) {
-      BigNumber.config({ DECIMAL_PLACES: roundTo })
-    }
-
+    // if (roundTo !== -1) {
+    //   BigNumber.config({ DECIMAL_PLACES: roundTo })
+    // }
+    BigNumber.config({ DECIMAL_PLACES: 18 })
     return new BigNumber(value).div(1000000000).toString()
   },
   calcTxFee(gasUsed, gasPrice) {
