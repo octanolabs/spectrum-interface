@@ -208,8 +208,8 @@ export default {
           'mdi-account-group',
           false,
           [
-            ['Rich List', 'mdi-account-cash', '/accounts/richlist'],
-            ['Latest', 'mdi-account-clock', '/accounts/latest'],
+            ['Top', 'mdi-account-cash', '/accounts/top'],
+            ['Recent', 'mdi-account-clock', '/accounts/recent'],
           ],
         ],
         [
