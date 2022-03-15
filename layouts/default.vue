@@ -18,16 +18,16 @@
         </v-text-field>
       </v-input>
       <v-avatar size="36" class="ml-4">
-        <v-img :src="require('~/assets/ubiq.png')" />
+        <v-img :src="require('~/assets/logo.svg')" />
       </v-avatar>
     </v-app-bar>
     <!-- nav drawer -->
     <v-navigation-drawer v-model="drawer" fixed app class="abstract-drawer">
       <v-toolbar style="background-color: #272727">
         <v-list dense class="pa-0">
-          <v-list-item>
-            <v-list-item-avatar>
-              <img src="../assets/logo.svg" height="24" width="24" />
+          <v-list-item class="pl-0">
+            <v-list-item-avatar size="48">
+              <img src="../assets/ubiq.png" height="24" width="24" size="24" />
             </v-list-item-avatar>
             <v-list-item-content class="text-right">
               <h1 style="color: #6fceb7">ubiqscan</h1>
