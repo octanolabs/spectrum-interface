@@ -258,12 +258,13 @@ export default {
           ],
         ],
         [
-          'APIs',
+          'Developers',
           'mdi-code-json',
           false,
           [
-            ['go-ubiq', 'mdi-code-json', '/d0x/gubiq'],
-            ['ubiq supply', 'mdi-calculator', '/docs/supply'],
+            ['Gubiq API', 'mdi-code-json', '/d0x/gubiq'],
+            ['Supply API', 'mdi-calculator', '/docs/supply'],
+            ['Persona', 'mdi-drama-masks', '/docs/persona'],
           ],
         ],
       ],
