@@ -10,7 +10,7 @@
     no-bar
   >
     <template v-slot:item.name="{ item }">
-      <v-avatar size="24">
+      <v-avatar size="24" tile>
         <v-img
           :src="
             'https://raw.githubusercontent.com/octanolabs/assets/master/blockchains/ubiq/assets/' +
@@ -19,7 +19,7 @@
           "
         >
           <template v-slot:placeholder>
-            <blockie :address="item.id" size="sm" inline />
+            <blockie :address="item.id" size="small" inline />
           </template>
         </v-img>
       </v-avatar>
