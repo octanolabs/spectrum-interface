@@ -56,6 +56,7 @@ export default {
     } else {
       this.fetchBalance(address)
       this.fetchTransactions(address)
+      this.fetchITransactions(address)
       this.fetchMinedBlocks(address)
       this.fetchTokenTransfers(address)
       this.fetchContractData(address)
@@ -67,6 +68,7 @@ export default {
         balance: false,
         tokenBalances: false,
         transactions: false,
+        internalTxns: false,
         tokenTransfers: false,
         contractData: false,
         mined: false,
@@ -116,6 +118,11 @@ export default {
       this.fetchStates.transactions = true
       await this.$store.dispatch('account/fetchTransactions', address)
       this.fetchStates.transactions = false
+    },
+    async fetchITransactions(address) {
+      this.fetchStates.internalTxns = true
+      await this.$store.dispatch('account/fetchITransactions', address)
+      this.fetchStates.internalTxns = false
     },
     async fetchMinedBlocks(address) {
       this.fetchStates.mined = true

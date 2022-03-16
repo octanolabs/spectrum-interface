@@ -11,6 +11,9 @@ export const getDefaultState = () => ({
   txns: [],
   txnsTotal: 0,
 
+  itxns: [],
+  itxnsTotal: 0,
+
   mined: [],
   minedTotal: 0,
 
@@ -41,6 +44,10 @@ export const mutations = {
   SET_TRANSACTIONS(state, { txns, total }) {
     state.txns = txns
     state.txnsTotal = total
+  },
+  SET_ITRANSACTIONS(state, { itxns, total }) {
+    state.itxns = itxns
+    state.itxnsTotal = total
   },
   SET_MINED(state, { blocks, total }) {
     state.mined = blocks
@@ -129,6 +136,18 @@ export const actions = {
     })
 
     commit('SET_TRANSACTIONS', result)
+  },
+  async fetchITransactions({ commit }, address) {
+    const {
+      data: { result },
+    } = await axios.post(process.env.config.apiUrl, {
+      jsonrpc: '2.0',
+      method: 'explorer_latestITransactionsByAccount',
+      params: [address],
+      id: 88,
+    })
+
+    commit('SET_ITRANSACTIONS', result)
   },
   async fetchMinedBlocks({ commit }, address) {
     const {

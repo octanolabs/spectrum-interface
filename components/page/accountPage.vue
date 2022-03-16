@@ -83,7 +83,16 @@
           @refresh="$emit('refresh')"
         />
       </template>
-      <template v-slot:tokenTransfers>
+      <template v-if="store.itxnsTotal > 0" v-slot:internalTxns>
+        <itxns-table
+          no-breadcrumbs
+          :transactions="store.itxns"
+          :total="store.itxnsTotal"
+          :loading="loadingObject.internalTxns"
+          @refresh="$emit('refresh')"
+        />
+      </template>
+      <template v-if="store.tokenTransfersTotal > 0" v-slot:tokenTransfers>
         <transfers-table
           no-breadcrumbs
           :transfers="store.tokenTransfers"
@@ -128,6 +137,7 @@ import BlocksTable from '../tables/blocksTable'
 import CopyToClipboard from '~/components/apis/copy2clipboard'
 import transfersTable from '~/components/tables/tokenTransfersTable'
 import txnsTable from '~/components/tables/txnsTable'
+import itxnsTable from '~/components/tables/itxnsTable.vue'
 import TokenBalancesDialog from '~/components/dialogs/TokenBalances'
 import config from '~/params/config.json'
 
@@ -140,6 +150,7 @@ export default {
     transfersTable,
     txnsTable,
     TokenBalancesDialog,
+    itxnsTable,
   },
   props: {
     address: {
@@ -159,6 +170,8 @@ export default {
         balance: '0',
         txns: [],
         txnsTotal: 0,
+        itxns: [],
+        itxnsTotal: 0,
         mined: [],
         minedTotal: 0,
         tokenTransfers: [],
@@ -176,6 +189,7 @@ export default {
         balance: false,
         tokenBalances: false,
         transactions: false,
+        internalTxns: false,
         tokenTransfers: false,
         contractData: false,
       }),
