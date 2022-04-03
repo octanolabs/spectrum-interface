@@ -25,6 +25,7 @@ const pools = {
   '0x0ebf873b343ab004d5a95479c58645bd75f4c42b': 'ReiDoCoin.com.br',
   '0x59b5ff7ef75bdbbf78f341eeb1bcbc2a908edd67': 'Mole-pool.net',
   '0xab36ab822061b832f3415d4f03c279c33c372b81': 'WattPool.net',
+  '0x445da4f490dc72b864cf4b6073c955de3d146469': 'WattPool.net - solo',
   '0x444431cc65abe2d63d32831f53da9911ad5e2771': 'Kryptex.org',
   '0xc41c97958872dc4e041985ec7812d3fb9e6bdfc9': 'Phoenixmax.org',
   '0xf7f646c39f4af456b77eee3c38b74bcc5d0cffda': 'Minefitz.com',
