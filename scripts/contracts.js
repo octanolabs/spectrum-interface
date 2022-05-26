@@ -149,7 +149,6 @@ const functions = {
   // 0x - OwnableFeature
   '0x261fe679': 'migrate(address,bytes,address)',
   '0x8da5cb5b': 'owner()',
-  '0xf2fde38b': 'transferOwnership(address)',
   // 0x - BootstrapFeature
   '0x73f208d5': 'bootstrap(address,bytes)',
   '0x35f46994': 'die()',
@@ -162,43 +161,69 @@ const functions = {
   '0xfb969b0a': 'bootstrap()',
   '0x8fd3ab80': 'migrate()',
   // 0x - ERC721OrdersFeature
-  '0xeae93ee7': 'batchBuyERC721s((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[])[],(uint8,uint8,bytes32,bytes32)[],bytes[],bool)',
+  '0xeae93ee7':
+    'batchBuyERC721s((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[])[],(uint8,uint8,bytes32,bytes32)[],bytes[],bool)',
   '0x86219940': 'batchCancelERC721Orders(uint256[])',
-  '0x7da9e2cf': 'batchMatchERC721Orders((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[])[],(uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[])[],(uint8,uint8,bytes32,bytes32)[],(uint8,uint8,bytes32,bytes32)[])',
-  '0xfbee349d': 'buyERC721((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[]),(uint8,uint8,bytes32,bytes32),bytes)',
+  '0x7da9e2cf':
+    'batchMatchERC721Orders((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[])[],(uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[])[],(uint8,uint8,bytes32,bytes32)[],(uint8,uint8,bytes32,bytes32)[])',
+  '0xfbee349d':
+    'buyERC721((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[]),(uint8,uint8,bytes32,bytes32),bytes)',
   '0xbe167b9d': 'cancelERC721Order(uint256)',
-  '0xb73a6027': 'getERC721OrderHash((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[]))',
-  '0xfbc4a518': 'getERC721OrderStatus((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[]))',
+  '0xb73a6027':
+    'getERC721OrderHash((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[]))',
+  '0xfbc4a518':
+    'getERC721OrderStatus((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[]))',
   '0x030b2730': 'getERC721OrderStatusBitVector(address,uint248)',
-  '0x0d8261eb': 'matchERC721Orders((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[]),(uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[]),(uint8,uint8,bytes32,bytes32),(uint8,uint8,bytes32,bytes32))',
+  '0x0d8261eb':
+    'matchERC721Orders((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[]),(uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[]),(uint8,uint8,bytes32,bytes32),(uint8,uint8,bytes32,bytes32))',
   '0x150b7a02': 'onERC721Received(address,address,uint256,bytes)',
-  '0x462103af': 'preSignERC721Order((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[]))',
-  '0xafde1b3c': 'sellERC721((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[]),(uint8,uint8,bytes32,bytes32),uint256,bool,bytes)',
-  '0x4a13d797': 'validateERC721OrderProperties((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[]),uint256)',
-  '0xd1ca183b': 'validateERC721OrderSignature((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[]),(uint8,uint8,bytes32,bytes32))',
+  '0x462103af':
+    'preSignERC721Order((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[]))',
+  '0xafde1b3c':
+    'sellERC721((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[]),(uint8,uint8,bytes32,bytes32),uint256,bool,bytes)',
+  '0x4a13d797':
+    'validateERC721OrderProperties((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[]),uint256)',
+  '0xd1ca183b':
+    'validateERC721OrderSignature((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[]),(uint8,uint8,bytes32,bytes32))',
   // 0x - ERC1155OrdersFeature
-  '0x84680615': 'batchBuyERC1155s((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[],uint128)[],(uint8,uint8,bytes32,bytes32)[],uint128[],bytes[],bool)',
+  '0x84680615':
+    'batchBuyERC1155s((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[],uint128)[],(uint8,uint8,bytes32,bytes32)[],uint128[],bytes[],bool)',
   '0xa1865d6f': 'batchCancelERC1155Orders(uint256[])',
-  '0x7cdb54d8': 'buyERC1155((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[],uint128),(uint8,uint8,bytes32,bytes32),uint128,bytes)',
+  '0x7cdb54d8':
+    'buyERC1155((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[],uint128),(uint8,uint8,bytes32,bytes32),uint128,bytes)',
   '0x06d2596b': 'cancelERC1155Order(uint256)',
-  '0x1de3a7ac': 'getERC1155OrderHash((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[],uint128))',
-  '0x4991fd72': 'getERC1155OrderInfo((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[],uint128))',
+  '0x1de3a7ac':
+    'getERC1155OrderHash((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[],uint128))',
+  '0x4991fd72':
+    'getERC1155OrderInfo((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[],uint128))',
   '0xf23a6e61': 'onERC1155Received(address,address,uint256,uint256,bytes)',
-  '0x7b757d97': 'preSignERC1155Order((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[],uint128))',
-  '0x6e2eec9e': 'sellERC1155((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[],uint128),(uint8,uint8,bytes32,bytes32),uint256,uint128,bool,bytes)',
-  '0x2ac6f62a': 'validateERC1155OrderProperties((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[],uint128),uint256)',
-  '0x0d32a531': 'validateERC1155OrderSignature((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[],uint128),(uint8,uint8,bytes32,bytes32))',
+  '0x7b757d97':
+    'preSignERC1155Order((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[],uint128))',
+  '0x6e2eec9e':
+    'sellERC1155((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[],uint128),(uint8,uint8,bytes32,bytes32),uint256,uint128,bool,bytes)',
+  '0x2ac6f62a':
+    'validateERC1155OrderProperties((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[],uint128),uint256)',
+  '0x0d32a531':
+    'validateERC1155OrderSignature((uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[],uint128),(uint8,uint8,bytes32,bytes32))',
   // 0x - ERC165Feature
   '0x75e79be6': 'supportInterface(bytes4)',
   // 0x - OtcOrdersFeature
-  '0xe52d1764': 'batchFillTakerSignedOtcOrders((address,address,uint128,uint128,address,address,address,uint256)[],(uint8,uint8,bytes32,bytes32)[],(uint8,uint8,bytes32,bytes32)[],bool[])',
-  '0xdac748d4': 'fillOtcOrder((address,address,uint128,uint128,address,address,address,uint256),(uint8,uint8,bytes32,bytes32),uint128)',
-  '0xa578efaf': 'fillOtcOrderForEth((address,address,uint128,uint128,address,address,address,uint256),(uint8,uint8,bytes32,bytes32),uint128)',
-  '0x706394d5': 'fillOtcOrderWithEth((address,address,uint128,uint128,address,address,address,uint256),(uint8,uint8,bytes32,bytes32))',
-  '0x4f948110': 'fillTakerSignedOtcOrder((address,address,uint128,uint128,address,address,address,uint256),(uint8,uint8,bytes32,bytes32),(uint8,uint8,bytes32,bytes32))',
-  '0x724d3953': 'fillTakerSignedOtcOrderForEth((address,address,uint128,uint128,address,address,address,uint256),(uint8,uint8,bytes32,bytes32),(uint8,uint8,bytes32,bytes32))',
-  '0x53476b89': 'getOtcOrderHash((address,address,uint128,uint128,address,address,address,uint256))',
-  '0x8c807c43': 'getOtcOrderInfo((address,address,uint128,uint128,address,address,address,uint256))',
+  '0xe52d1764':
+    'batchFillTakerSignedOtcOrders((address,address,uint128,uint128,address,address,address,uint256)[],(uint8,uint8,bytes32,bytes32)[],(uint8,uint8,bytes32,bytes32)[],bool[])',
+  '0xdac748d4':
+    'fillOtcOrder((address,address,uint128,uint128,address,address,address,uint256),(uint8,uint8,bytes32,bytes32),uint128)',
+  '0xa578efaf':
+    'fillOtcOrderForEth((address,address,uint128,uint128,address,address,address,uint256),(uint8,uint8,bytes32,bytes32),uint128)',
+  '0x706394d5':
+    'fillOtcOrderWithEth((address,address,uint128,uint128,address,address,address,uint256),(uint8,uint8,bytes32,bytes32))',
+  '0x4f948110':
+    'fillTakerSignedOtcOrder((address,address,uint128,uint128,address,address,address,uint256),(uint8,uint8,bytes32,bytes32),(uint8,uint8,bytes32,bytes32))',
+  '0x724d3953':
+    'fillTakerSignedOtcOrderForEth((address,address,uint128,uint128,address,address,address,uint256),(uint8,uint8,bytes32,bytes32),(uint8,uint8,bytes32,bytes32))',
+  '0x53476b89':
+    'getOtcOrderHash((address,address,uint128,uint128,address,address,address,uint256))',
+  '0x8c807c43':
+    'getOtcOrderInfo((address,address,uint128,uint128,address,address,address,uint256))',
   '0x59ebfb45': 'lastOtcTxOriginNonce(address,uint64)',
 }
 
@@ -277,19 +302,23 @@ const events = {
   '0x7fcf532c': 'Withdrawal(index_topic_1 address src, uint256 wad)',
   // 0x - OwnableFeature
   '0xe1b831b0': 'Migrated(address,address,address)',
-  '0x8be0079c': 'OwnershipTransferred(address,address)',
   // 0x - SimpleFunctionRegistryFeature
   '0x2ae22108': 'ProxyFunctionUpdated(bytes4,address,address)',
   // 0x - ERC721OrdersFeature
   '0xa015ad2d': 'ERC721OrderCancelled(address,uint256)',
-  '0x50273fa0': 'ERC721OrderFilled(uint8,address,address,uint256,address,uint256,address,uint256,address)',
-  '0x8c5d0c41': 'ERC721OrderPreSigned(uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[])',
+  '0x50273fa0':
+    'ERC721OrderFilled(uint8,address,address,uint256,address,uint256,address,uint256,address)',
+  '0x8c5d0c41':
+    'ERC721OrderPreSigned(uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[])',
   // 0x - ERC1155OrdersFeature
   '0x4d5ea7da': 'ERC1155OrderCancelled(address,uint256)',
-  '0x20cca81b': 'ERC1155OrderFilled(uint8,address,address,uint256,address,uint256,address,uint256,uint128,address)',
-  '0x5e91ddfe': 'ERC1155OrderPreSigned(uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[],uint128)',
+  '0x20cca81b':
+    'ERC1155OrderFilled(uint8,address,address,uint256,address,uint256,address,uint256,uint128,address)',
+  '0x5e91ddfe':
+    'ERC1155OrderPreSigned(uint8,address,address,uint256,uint256,address,uint256,(address,uint256,bytes)[],address,uint256,(address,bytes)[],uint128)',
   // 0x - OtcOrdersFeature
-  '0xac75f773': 'OtcOrderFilled(bytes32,address,address,address,address,uint128,uint128)',
+  '0xac75f773':
+    'OtcOrderFilled(bytes32,address,address,address,address,uint128,uint128)',
 }
 
 export default {
