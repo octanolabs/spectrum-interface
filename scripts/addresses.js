@@ -32,6 +32,7 @@ const pools = {
   '0xe6057c46aab37d69fa30bb2975081f76ca7319be': 'EU-ubqpool.ddns.net',
   '0x43d09b75912dbf0fc804faad6255e3faa40630a2': 'CrazyPool.org',
   '0x47fcd3d2565167f45671dd93a20d821c9782a006': 'DigiPools.org',
+  '0x0f4ba412d100d02831df46e5a965700632ac92f2': 'Ubiqpro.com',
 }
 
 const misc = {
